@@ -2,7 +2,7 @@
   <view class="content">
     <image class="logo" src="/static/logo.png" />
     <view class="text-area">
-      <text class="title">用户ID{{ loginStore.userID }}</text>
+      <text class="title">用户IDhhhh{{ loginStore.userID }}</text>
       <view @tap="goLogin" v-if="loginStore.userID == -1">去登录</view>
       <view class="input-box">
         <input v-model="segementText" /><button @click="segement">添加账单</button>
