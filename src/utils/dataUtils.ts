@@ -37,16 +37,19 @@ export default {
     // 处理时间
     dateFormattere(date: Date, type: string = "date") {
         var year = date.getFullYear()// 获取完整的年份(4位,1970)
-        var month = date.getMonth() + 1 // 获取月份(0-11,0代表1月,进行显示的时候要加一)
-        var day = date.getDate() // 获取日(1-31)
-        var hour = date.getHours() // 获取小时数(0-23)，
-        var min = date.getMinutes() // 获取分钟数(0-59)
-        var seconds = date.getSeconds() // 获取秒数(0-59)
+        var month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1// 获取月份(0-11,0代表1月,进行显示的时候要加一)
+        var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()// 获取日(1-31)
+        var hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours() // 获取小时数(0-23)，
+        var min = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()// 获取分钟数(0-59)
+        var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds() // 获取秒数(0-59)
         if (type == "date") {
             return year + '年' + month + '月' + day + '日'
         }
         else if (type == 'time') {
             return hour + ':' + min;
+        }
+        else {
+            return year + '-' + month + '-' + day + ' ' + hour + ":" + min + ":" + seconds
         }
     },
     // 测试
