@@ -7,11 +7,13 @@
       <view class="input-box">
         <input v-model="segementText" /><button @click="segement">添加账单</button>
         <button @click="testAddBill">增加账单</button>
-        <button @click="testDeleteBill">删除账单</button>
+        <!-- <button @click="testDeleteBill">删除账单</button>
         <button @click="testUpdateBill">修改账单</button>
         <button @click="testGetBill">查找账单</button>
         <button @click="testGetBillCondition">条件查找</button>
-        <button @click="testGetBillPage">分页查找</button>
+        <button @click="testGetBillPage">分页查找</button> -->
+        <u-button>哈哈</u-button>
+        <u-icon name="photo"></u-icon>
       </view>
     </view>
   </view>
@@ -23,6 +25,7 @@ import { ref, onMounted } from 'vue'
 import { getSegement } from '@/api/TestApi'
 import { addBill, deleteBill, updateBill, getBillList, getBillPage, getBillCondition } from '@/api/billApi'
 import { useloginStore } from '@/pinia-store/login'
+import { uniBadge } from '@dcloudio/uni-ui'
 import formattereTools from '@/utils/dataUtils'
 const loginStore = useloginStore()
 

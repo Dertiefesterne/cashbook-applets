@@ -1,0 +1,1 @@
+"use strict";const e=require("../common/vendor.js"),t=e.defineStore({id:"login",state:()=>({info:{},userID:e.index.getStorageSync("userID")?e.index.getStorageSync("userID"):-1}),actions:{login(t){e.index.setStorageSync("userID",t),this.userID=t},logout(){e.index.clearStorage(),this.userID=-1}}});exports.useloginStore=t;

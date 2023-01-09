@@ -16,5 +16,5 @@
       "@/*": ["src/*"]
   }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/pinia-store/index.ts", "src/pinia-store/index.ts"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/pinia-store/index.ts", "src/pinia-store/index.ts", "src/main.js", "src/main.js"]
 }

@@ -1,11 +1,12 @@
 <template>
 	<view class="content">
+		<h1>我的界面</h1>
 		<view class="text-area">
 			<view @tap="loginOut" v-if="loginStore.userID != -1">退出登录</view>
 		</view>
 	</view>
 </template>
-  
+
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { login, getInformation, getSegement } from '@/api/TestApi'
@@ -36,8 +37,11 @@ onMounted(() => {
 })
 
 </script>
-  
-<style lang="less" scoped>
 
+<style lang="less" scoped>
+.content {
+	border: 1px solid red;
+	width: 100%;
+	height: 100%;
+}
 </style>
-  
