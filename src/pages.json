@@ -14,27 +14,27 @@
 		}
 	],
 	"tabBar": {
-		"color": "#7A7E83", // tab 上的文字默认颜色
-		"selectedColor": "#000", // tab 上的文字选中时的颜色
+		"color": "#bfbfbf", // tab 上的文字默认颜色
+		"selectedColor": "#3376e5", // tab 上的文字选中时的颜色
 		"borderStyle": "black", // tabbar 上边框的颜色，可选值 black/white
 		"backgroundColor": "#ffffff", // tab 的背景色
 		"list": [
 			{ // 最少2个、最多5个 tab
 				"pagePath": "pages/index/index", // 页面路径，必须在 pages 中先定义
-				"iconPath": "static/tabbar/add.png", // 图片路径，icon 大小限制为40kb，建议尺寸为 81px * 81px
-				"selectedIconPath": "static/tabbar/addFilled.png", // 选中时的图片路径
+				"iconPath": "static/tabbar/index.png", // 图片路径，icon 大小限制为40kb，建议尺寸为 81px * 81px
+				"selectedIconPath": "static/tabbar/indexFilled.png", // 选中时的图片路径
 				"text": "记账" // tab 上按钮文字
 			},
 			{
 				"pagePath": "pages/statistics/index",
-				"iconPath": "static/tabbar/time.png",
-				"selectedIconPath": "static/tabbar/timeFilled.png",
+				"iconPath": "static/tabbar/static.png",
+				"selectedIconPath": "static/tabbar/staticFilled.png",
 				"text": "统计"
 			},
 			{
 				"pagePath": "pages/my/index",
-				"iconPath": "static/tabbar/my.png",
-				"selectedIconPath": "static/tabbar/myFilled.png",
+				"iconPath": "static/tabbar/my2.png",
+				"selectedIconPath": "static/tabbar/my2Filled.png",
 				"text": "我的"
 			}
 		]

@@ -40,10 +40,17 @@
         data
       })
   }
+  export function getBillTime(data:any){
+    return http.request({
+        url: '/bill/billList/byTime',
+        method: 'GET',
+        data
+      })
+  }
   export function getBillCondition(data:any){
     return http.request({
         url: '/bill/billList/byCondition',
-        method: 'POST',
+        method: 'GET',
         data
       })
   }
