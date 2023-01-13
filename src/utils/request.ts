@@ -70,7 +70,7 @@ http.interceptors.response.use(
 function formatData(data: any) {
     switch (data.code) {
         case 200:
-            return data.data
+            return data
         case 400:
             uni.showToast({
                 title: data.msg,

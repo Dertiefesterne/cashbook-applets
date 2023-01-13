@@ -35,7 +35,9 @@ export default {
         return '刚刚'
     },
     // 处理时间
-    dateFormattere(date: Date, type: string = "date") {
+    dateFormattere(ms: string, type: string = "date") {
+        var timestamp: number = Number(ms)
+        var date = new Date(timestamp)
         var year = date.getFullYear()// 获取完整的年份(4位,1970)
         var month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1// 获取月份(0-11,0代表1月,进行显示的时候要加一)
         var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()// 获取日(1-31)
