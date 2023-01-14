@@ -54,6 +54,23 @@ export default {
             return year + '-' + month + '-' + day + ' ' + hour + ":" + min + ":" + seconds
         }
     },
+    dateFormatString(date: string, type: string = "date") {
+        var year = date.slice(0, 4)
+        var month = date.slice(5, 7)
+        var day = date.slice(8, 10)
+        var hour = date.slice(11, 13)
+        var min = date.slice(14, 16)
+        var seconds = date.slice(17, 19)
+        if (type == "date") {
+            return year + '年' + month + '月' + day + '日'
+        }
+        else if (type == 'time') {
+            return hour + ':' + min;
+        }
+        else {
+            return year + '-' + month + '-' + day + ' ' + hour + ":" + min + ":" + seconds
+        }
+    },
     // 测试
     testYy(val: number) {
         let yy = val + 1

@@ -40,6 +40,14 @@
         data
       })
   }
+  export function getBillGroup(data:any){
+    return http.request({
+        url: '/bill/billList/byGroup',
+        method: 'GET',
+        data
+      })
+  }
+
   export function getBillTime(data:any){
     return http.request({
         url: '/bill/billList/byTime',

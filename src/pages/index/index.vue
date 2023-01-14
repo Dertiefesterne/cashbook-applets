@@ -6,7 +6,10 @@
     </view>
     <view class="content pt-100rpx w-full">
       <billSum :isEdit="isEdit"></billSum>
-      <billDay :isEdit="isEdit" @chooseValue="allChoose" :day-date="list"></billDay>
+      <view v-for="item in list">
+        <billDate :day-date="item"></billDate>
+      </view>
+      <!-- <billDay :isEdit="isEdit" @chooseValue="allChoose" :day-date="list"></billDay> -->
       <!-- <test></test> -->
     </view>
     <button @click="testAddBill">增加账单</button>
@@ -38,13 +41,27 @@ import {
   onShow,
 } from '@dcloudio/uni-app';
 import { getSegement } from '@/api/TestApi'
-import { addBill, deleteBill, updateBill, getBillList, getBillPage, getBillCondition, getBillTime } from '@/api/billApi'
+import { addBill, deleteBill, updateBill, getBillList, getBillPage, getBillGroup, getBillCondition, getBillTime } from '@/api/billApi'
 import { useloginStore } from '@/pinia-store/login'
-import { Bill } from '@/entity/bill'
+import { Bill, groupBill } from '@/entity/bill'
 import formattereTools from '@/utils/dataUtils'
 import billSum from './component/billSum.vue'
 import billDay from './component/billDay.vue'
+import billDate from './component/billDate.vue'
 const loginStore = useloginStore()
+
+
+const testList = [[
+  { bill_id: 1, matter: "哈哈" },
+  { bill_id: 2, matter: "哈哈" },
+  { bill_id: 3, matter: "哈哈" }
+],
+[{ bill_id: 4, matter: "哈哈" },
+{ bill_id: 5, matter: "哈哈" }],
+[{ bill_id: 6, matter: "哈哈" },
+{ bill_id: 7, matter: "哈哈" },
+{ bill_id: 8, matter: "哈哈" },
+{ bill_id: 9, matter: "哈哈" }]]
 
 
 /** 分页传参对象 */
@@ -55,14 +72,17 @@ interface PageParams {
   userID: number
 }
 
-// 
+// 账单列表
 const list = ref<Bill[]>([]),
+  // 分页列表
+  groupList = ref<groupBill[]>([]),
   page = ref<PageParams>({
     pageCurrent: 0,
     pageSize: 10,
     notMore: false,
     userID: loginStore.userID
   })
+
 
 /** 页面触底 */
 onReachBottom(() => {
@@ -110,43 +130,28 @@ const segement = async () => {
     const res = await addBill({ userID: 1, billType: -1, datetime: dd, time: time, money: money, matter: "烦死了!!", classify: 0, notes: "无" })
     console.log('res:', res)
   },
-  testDeleteBill = async () => {
-    const res = await deleteBill({ userID: 1, billID: 2 })
-    console.log('res:', res)
-  },
-  testUpdateBill = async () => {
-    var date = new Date()
-    var dd = formattereTools.dateFormattere(date, "full")
-    var time = new Date().getTime() + ''
-    var money: number = 12;
-    const res = await updateBill({ userID: 1, billID: 4, matter: "哈哈哈", notes: "备注备注" })
-    console.log('res:', res)
-  },
-  testGetBill = async () => {
-    const res = await getBillList({ userID: 1 })
-
-    console.log('res:', res)
-  },
-  testGetBillCondition = async () => {
-    var date = new Date()
-    var dd = formattereTools.dateFormattere(date, "full")
-    const res = await getBillCondition({ userID: 1, money: 12, matter: "烦死了", notes: "备注1" })
-    console.log('res:', res)
-  },
   GetBillByPage = async () => {
-    console.log('分页查找', page.value)
     const res = await getBillPage(page.value)
-    list.value = res.data;
+    console.log('分页查找', res.data)
+    let index = 0
+    for (let i = 0; i < groupList.value.length; i++) {
+      let arr = []
+      console.log(index, index + groupList.value[i].count)
+      arr = res.data.slice(index, index + groupList.value[i].count)
+      index = index + groupList.value[i].count
+      console.log("分组后", arr)
+      list.value.push(arr)
+    }
     console.log('list.value:', list.value)
   },
-  testGetBillTime = async () => {
-    var date = new Date()
-    var dd = formattereTools.dateFormattere(date, "full")
-    var hh: string = "2023-01-09 00:00:00"
-    var hh1: string = "2023-01-09 23:59:59"
-    const res = await getBillTime({ userID: 1, beginDate: hh, endDate: hh1 })
-    console.log('res:', res)
+  GetBillByGroup = async () => {
+    console.log('账单分组', page.value)
+    const res = await getBillGroup(page.value)
+    groupList.value = res.data;
+    console.log('groupList.value:', groupList.value)
+    GetBillByPage()
   }
+
 
 /** 获取分页 */
 async function getNextList() {
@@ -158,15 +163,16 @@ async function getNextList() {
     page.value.notMore = true
     uni.showToast({ title: '没有更多了', icon: 'none', duration: 800, mask: true })
   } else {
-    list.value = list.value.concat(res.data)
+
+    // list.value = list.value.concat(res.data)
   }
-  console.log('list.value:', list.value)
+  // console.log('list.value:', list.value)
   uni.hideLoading()
 }
 
 onMounted(() => {
   // console.log("homestorage", uni.getStorageSync("USER_INFORMATION"))
-  GetBillByPage()
+  GetBillByGroup()
 })
 
 
