@@ -7,7 +7,7 @@
     <view class="content pt-100rpx w-full">
       <billSum :isEdit="isEdit"></billSum>
       <view v-for="item in list">
-        <billDate :day-date="item"></billDate>
+        <billDate :day-date="item" v-if="item.length"></billDate>
       </view>
       <!-- <billDay :isEdit="isEdit" @chooseValue="allChoose" :day-date="list"></billDay> -->
       <!-- <test></test> -->
@@ -51,19 +51,6 @@ import billDate from './component/billDate.vue'
 const loginStore = useloginStore()
 
 
-const testList = [[
-  { bill_id: 1, matter: "哈哈" },
-  { bill_id: 2, matter: "哈哈" },
-  { bill_id: 3, matter: "哈哈" }
-],
-[{ bill_id: 4, matter: "哈哈" },
-{ bill_id: 5, matter: "哈哈" }],
-[{ bill_id: 6, matter: "哈哈" },
-{ bill_id: 7, matter: "哈哈" },
-{ bill_id: 8, matter: "哈哈" },
-{ bill_id: 9, matter: "哈哈" }]]
-
-
 /** 分页传参对象 */
 interface PageParams {
   pageCurrent: number // 当前分页
@@ -72,8 +59,8 @@ interface PageParams {
   userID: number
 }
 
-// 账单列表
-const list = ref<Bill[]>([]),
+// 账单列表----嵌套数组
+const list = ref<[Bill[]]>([[]]),
   // 分页列表
   groupList = ref<groupBill[]>([]),
   page = ref<PageParams>({
@@ -94,7 +81,6 @@ onReachBottom(() => {
 })
 
 
-
 const segementText = ref(''),
   isEdit = ref(false),
   choseeBill = ref<number[]>([])
@@ -107,7 +93,6 @@ const change = () => {
   choseeBill.value.push(...e)
   console.log('all', choseeBill.value)
 }
-
 
 /*请求测试*/
 const segement = async () => {
@@ -123,7 +108,7 @@ const segement = async () => {
     })
   },
   testAddBill = async () => {
-    var date = new Date()
+    var date = new Date().toString()
     var dd = formattereTools.dateFormattere(date, "full")
     var time = new Date().getTime() + ''
     var money: number = 12;
@@ -132,45 +117,76 @@ const segement = async () => {
   },
   GetBillByPage = async () => {
     const res = await getBillPage(page.value)
-    console.log('分页查找', res.data)
     let index = 0
     for (let i = 0; i < groupList.value.length; i++) {
       let arr = []
-      console.log(index, index + groupList.value[i].count)
       arr = res.data.slice(index, index + groupList.value[i].count)
       index = index + groupList.value[i].count
-      console.log("分组后", arr)
-      list.value.push(arr)
+      if (list.value[0].length == 0) {
+        list.value[0] = arr
+      }
+      else
+        list.value.push(arr)
     }
-    console.log('list.value:', list.value)
   },
   GetBillByGroup = async () => {
-    console.log('账单分组', page.value)
+    console.log("第一次获取数据", list.value)
     const res = await getBillGroup(page.value)
     groupList.value = res.data;
     console.log('groupList.value:', groupList.value)
     GetBillByPage()
   }
-
+/**根据新的分组，将账单列表分组插入大数组中 */
+function grouping(group: Array<groupBill>, data: Array<Bill>) {
+  let index = 0
+  for (let i = 0; i < group.length; i++) {
+    let arr = []
+    arr = data.slice(index, index + group[i].count)
+    index = index + group[i].count
+    list.value.push(arr)
+  }
+  console.log("加上后dataList", list.value)
+}
 
 /** 获取分页 */
 async function getNextList() {
   uni.showLoading({ title: '加载中' })
   ++page.value.pageCurrent!
-  console.log('触底请求', page.value)
-  const res = await getBillPage(page.value)
-  if (res.data && res.data.length == 0) {
+  // 新分页的分组结果
+  const res_group = await getBillGroup(page.value)
+  // 新分页的账单数据
+  const res_data = await getBillPage(page.value)
+  console.log("触底请求结果", res_group.data, res_data.data)
+  // 没有更多数据了
+  if (res_group.data && res_group.data.length == 0) {
     page.value.notMore = true
     uni.showToast({ title: '没有更多了', icon: 'none', duration: 800, mask: true })
   } else {
-
-    // list.value = list.value.concat(res.data)
+    // 新分页的分组结果中第一组和上一页最后一组是属于同一个组的
+    if (groupList.value[groupList.value.length - 1].date == res_group.data[0].date) {
+      // 总分组结果处理------将相同组的结果合在一起=（更新总分组结果的最后一组的相关数据）
+      groupList.value[groupList.value.length - 1].sums += res_group.data[0].sums
+      groupList.value[groupList.value.length - 1].count += res_group.data[0].count
+      // 总账单数据处理------将相同组的结果合在同一组（及上个分组结果的最后一组加入新数据）
+      for (let i = 0; i < res_group.data[0].count; i++) { list.value[list.value.length - 1].push(res_data.data[i]) }
+      // 除去与上一页相同一组的信息
+      let leftGroupList = res_group.data.slice(1)
+      let leftDataList = res_data.data.slice(res_group.data[0].count)
+      console.log("除去相同的", leftGroupList, leftDataList)
+      // 将新的分组信息连接上总的分组信息
+      groupList.value.concat(leftGroupList)
+      console.log("加上后groupList", groupList.value)
+      grouping(leftGroupList, leftDataList)
+    } else {
+      groupList.value.concat(res_group.data)
+      list.value.push(res_data.data)
+    }
   }
-  // console.log('list.value:', list.value)
   uni.hideLoading()
 }
 
 onMounted(() => {
+  console.log("初始化", list.value)
   // console.log("homestorage", uni.getStorageSync("USER_INFORMATION"))
   GetBillByGroup()
 })
@@ -182,7 +198,5 @@ onMounted(() => {
 .content {
   display: flex;
   flex-direction: column;
-
-  .head {}
 }
 </style>

@@ -32,6 +32,13 @@
       data
     })
   }
+  export function getBillDetial(data:any) {
+    return http.request({
+      url: '/bill/billDetial',
+      method: 'GET',
+      data
+    })
+  }
 
   export function getBillPage(data:any){
     return http.request({

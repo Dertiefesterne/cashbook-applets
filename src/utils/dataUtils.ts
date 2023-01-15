@@ -54,6 +54,7 @@ export default {
             return year + '-' + month + '-' + day + ' ' + hour + ":" + min + ":" + seconds
         }
     },
+    // String日期
     dateFormatString(date: string, type: string = "date") {
         var year = date.slice(0, 4)
         var month = date.slice(5, 7)
