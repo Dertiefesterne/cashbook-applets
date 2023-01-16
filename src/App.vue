@@ -13,4 +13,5 @@ onHide(() => {
 <style lang="scss">
 /* 注意要写在第一行，同时给style标签加入lang="scss"属性 */
 @import "./uni_modules/vk-uview-ui/index.scss";
+// @import './style/iconfont/iconfont.css';
 </style>

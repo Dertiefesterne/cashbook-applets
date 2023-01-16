@@ -108,12 +108,34 @@ const segement = async () => {
     })
   },
   testAddBill = async () => {
-    var date = new Date().toString()
+    var date = new Date()
     var dd = formattereTools.dateFormattere(date, "full")
     var time = new Date().getTime() + ''
     var money: number = 12;
-    const res = await addBill({ userID: 1, billType: -1, datetime: dd, time: time, money: money, matter: "烦死了!!", classify: 0, notes: "无" })
-    console.log('res:', res)
+    const res = await addBill({ userID: 1, billType: -1, datetime: dd, time: time, money: 42.8, matter: "过年饼干", classify: 1, notes: "无" })
+    refreshData(new Date().getTime())
+  },
+  refreshData = (timestamp: number) => {
+    // 检查是否需要重新刷新页面
+    // uni.pageScrollTo({
+    //   scrollTop: 0
+    // });
+    if (formattereTools.dateFormatterDispose(timestamp)) {
+      console.log("重新刷新首页数据")
+      // 当前添加的账单距离当前时间没有超过7天，需要重新刷新首页数据（新增加的账单可能会出现在首页）
+      // 重置数据列表
+      list.value = [[]]
+      // 重置页面参数
+      page.value.pageCurrent = 0
+      page.value.notMore = false
+      // 重新获取新的分组信息
+      GetBillByGroup()
+      // 
+      // uni.pageScrollTo({
+      //   scrollTop: 0,
+      //   duration: 300
+      // });
+    }
   },
   GetBillByPage = async () => {
     const res = await getBillPage(page.value)
@@ -130,7 +152,7 @@ const segement = async () => {
     }
   },
   GetBillByGroup = async () => {
-    console.log("第一次获取数据", list.value)
+    console.log("第一次获取数据", page.value)
     const res = await getBillGroup(page.value)
     groupList.value = res.data;
     console.log('groupList.value:', groupList.value)

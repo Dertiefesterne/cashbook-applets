@@ -1,0 +1,75 @@
+@font-face {
+  font-family: "iconfont";
+  /* Project id 3860764 */
+  src: url('iconfont.woff2?t=1673874371108') format('woff2'),
+    url('iconfont.woff?t=1673874371108') format('woff'),
+    url('iconfont.ttf?t=1673874371108') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-gouwu:before {
+  content: "\e6d5";
+}
+
+.icon-yule:before {
+  content: "\e639";
+}
+
+.icon-jiaotong:before {
+  content: "\e634";
+}
+
+.icon-canyin:before {
+  content: "\e8a4";
+}
+
+.icon-jiaoyu:before {
+  content: "\e601";
+}
+
+.icon-yiliao:before {
+  content: "\e6ee";
+}
+
+.icon-yule1:before {
+  content: "\e662";
+}
+
+.icon-zhuyezhufang:before {
+  content: "\e61b";
+}
+
+.icon-xianxing-15:before {
+  content: "\e655";
+}
+
+.icon-xianxing-12:before {
+  content: "\e656";
+}
+
+.icon-a-xianxing_anquanbaozhangfuben13:before {
+  content: "\e657";
+}
+
+.icon-a-xianxing_anquanbaozhangfuben24:before {
+  content: "\e658";
+}
+
+.icon-a-xianxing_anquanbaozhangfuben41:before {
+  content: "\e65a";
+}
+
+.icon-xianxing_shangdian:before {
+  content: "\e65c";
+}
+
+.icon-xianxing-09:before {
+  content: "\e654";
+}
