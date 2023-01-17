@@ -37,7 +37,7 @@ import { useloginStore } from '@/pinia-store/login'
 import formattereTools from '@/utils/dataUtils'
 import { Bill, groupBill } from '@/entity/bill'
 import filters from '@/utils/filters'
-import billTypeIconVue from './billTypeIcon.vue'
+import billTypeIconVue from '../../../components/billTypeIcon.vue'
 const loginStore = useloginStore()
 
 

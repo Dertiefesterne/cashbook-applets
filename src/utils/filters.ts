@@ -48,7 +48,7 @@ export default {
 	billTypeColor(index: number) {
 		switch (index) {
 			case 1:
-				return 'background:#fce681';
+				return 'background:#fce681;';
 			case 2:
 				return 'background:#f5cffe';
 			case 3:

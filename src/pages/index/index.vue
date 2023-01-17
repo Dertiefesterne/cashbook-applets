@@ -1,6 +1,6 @@
 <template>
   <view>
-    <view class="head flex justify-between items-center w-full h-100rpx px-40rpx fixed top-0 bg-#fff z-2">
+    <view class="flex justify-between items-center w-full h-100rpx px-40rpx fixed top-0 bg-#999 z-2">
       <p>记账</p>
       <p @click="change">{{ isEdit? '取消': '批量管理' }}</p>
     </view>
@@ -152,7 +152,6 @@ const segement = async () => {
     }
   },
   GetBillByGroup = async () => {
-    console.log("第一次获取数据", page.value)
     const res = await getBillGroup(page.value)
     groupList.value = res.data;
     console.log('groupList.value:', groupList.value)
@@ -191,17 +190,18 @@ async function getNextList() {
       groupList.value[groupList.value.length - 1].count += res_group.data[0].count
       // 总账单数据处理------将相同组的结果合在同一组（及上个分组结果的最后一组加入新数据）
       for (let i = 0; i < res_group.data[0].count; i++) { list.value[list.value.length - 1].push(res_data.data[i]) }
-      // 除去与上一页相同一组的信息
+      // 除去与上一页相同一组的信息,剩下的分组信息和分组数据
       let leftGroupList = res_group.data.slice(1)
       let leftDataList = res_data.data.slice(res_group.data[0].count)
       console.log("除去相同的", leftGroupList, leftDataList)
       // 将新的分组信息连接上总的分组信息
-      groupList.value.concat(leftGroupList)
-      console.log("加上后groupList", groupList.value)
+      for (let i = 0; i < leftGroupList.length; i++) { groupList.value.push(leftGroupList[i]) }
+      // 将新的分组数据连接上总的分组数据
       grouping(leftGroupList, leftDataList)
     } else {
-      groupList.value.concat(res_group.data)
-      list.value.push(res_data.data)
+      for (let i = 0; i < res_group.data.length; i++) { groupList.value.push(res_group.data[i]) }
+      grouping(res_group.data, res_data.data)
+      // list.value.push(res_data.data)
     }
   }
   uni.hideLoading()
