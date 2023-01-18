@@ -1,6 +1,6 @@
 <template>
   <view>
-    <view class="flex justify-between items-center w-full h-100rpx px-40rpx fixed top-0 bg-#999 z-2">
+    <view class="flex justify-between items-center w-full h-100rpx px-40rpx fixed top-0 bg-#dfdfe1 z-2">
       <p>记账</p>
       <p @click="change">{{ isEdit? '取消': '批量管理' }}</p>
     </view>
