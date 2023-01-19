@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { getSegement } from '@/api/TestApi'
-import { addBill, deleteBill, updateBill, getBillList, getBillPage, getBillCondition, getBillTime } from '@/api/billApi'
+import billServer from '@/api/billApi'
 import { useloginStore } from '@/pinia-store/login'
 import formattereTools from '@/utils/dataUtils'
 const loginStore = useloginStore()

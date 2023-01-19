@@ -41,7 +41,7 @@ import {
   onShow,
 } from '@dcloudio/uni-app';
 import { getSegement } from '@/api/TestApi'
-import { addBill, deleteBill, updateBill, getBillList, getBillPage, getBillGroup, getBillCondition, getBillTime } from '@/api/billApi'
+import billServer from '@/api/billApi'
 import { useloginStore } from '@/pinia-store/login'
 import { Bill, groupBill } from '@/entity/bill'
 import formattereTools from '@/utils/dataUtils'
@@ -112,7 +112,7 @@ const segement = async () => {
     var dd = formattereTools.dateFormattere(date, "full")
     var time = new Date().getTime() + ''
     var money: number = 12;
-    const res = await addBill({ userID: 1, billType: -1, datetime: dd, time: time, money: 42.8, matter: "过年饼干", classify: 1, notes: "无" })
+    const res = await billServer.addBill({ userID: 1, billType: -1, datetime: dd, time: time, money: 42.8, matter: "过年饼干", classify: 1, notes: "无" })
     refreshData(new Date().getTime())
   },
   refreshData = (timestamp: number) => {
@@ -138,7 +138,7 @@ const segement = async () => {
     }
   },
   GetBillByPage = async () => {
-    const res = await getBillPage(page.value)
+    const res = await billServer.getBillPage(page.value)
     let index = 0
     for (let i = 0; i < groupList.value.length; i++) {
       let arr = []
@@ -152,7 +152,7 @@ const segement = async () => {
     }
   },
   GetBillByGroup = async () => {
-    const res = await getBillGroup(page.value)
+    const res = await billServer.getBillGroup(page.value)
     groupList.value = res.data;
     console.log('groupList.value:', groupList.value)
     GetBillByPage()
@@ -174,9 +174,9 @@ async function getNextList() {
   uni.showLoading({ title: '加载中' })
   ++page.value.pageCurrent!
   // 新分页的分组结果
-  const res_group = await getBillGroup(page.value)
+  const res_group = await billServer.getBillGroup(page.value)
   // 新分页的账单数据
-  const res_data = await getBillPage(page.value)
+  const res_data = await billServer.getBillPage(page.value)
   console.log("触底请求结果", res_group.data, res_data.data)
   // 没有更多数据了
   if (res_group.data && res_group.data.length == 0) {

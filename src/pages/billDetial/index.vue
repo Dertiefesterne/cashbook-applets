@@ -62,7 +62,7 @@
                         <view class="number-box">
                             <button hover-class='none' class="rd-7" v-for="item in buttons"
                                 @click="changeMoney(item)">{{ item }}</button>
-                            <button hover-class='none' class="rd-7 flex justify-center" @click="changeMoney('x')">
+                            <button hover-class='none' class="rd-7 flex justify-center" @click="subMoney">
                                 <u-icon name="backspace" size="35"></u-icon>
                             </button>
                         </view>
@@ -89,7 +89,7 @@ import { ref, reactive, onMounted } from 'vue'
 // 引入 
 import { onLoad } from '@dcloudio/uni-app';
 import { getSegement } from '@/api/TestApi'
-import { deleteBill, updateBill, getBillDetial } from '@/api/billApi'
+import billServer from '@/api/billApi'
 import { Bill, groupBill } from '@/entity/bill'
 import filters from '@/utils/filters'
 import { useloginStore } from '@/pinia-store/login'
@@ -154,7 +154,7 @@ onLoad((option) => {
  * 获取获取账单详情
  */
 const getBillDetail = async () => {
-    const res = await getBillDetial({ userID: loginStore.userID, billID: billID.value })
+    const res = await billServer.getBillDetial({ userID: loginStore.userID, billID: billID.value })
     console.log("获取获取账单详情", res.data)
     billDetial.value = res.data
     moneyDisplay.value = billDetial.value.money + ''
@@ -191,6 +191,10 @@ const getBillDetail = async () => {
             setProp(billDetial.value, 'matter', matter)
         }
     },
+    subMoney = () => {
+        moneyDisplay.value = moneyDisplay.value.slice(0, moneyDisplay.value.length - 1)
+        console.log(moneyDisplay.value)
+    },
     changeMoney = (e: string) => {
         if (moneyDisplay.value.length > 15) {
             uni.showToast({ title: '运算式长度超出上限', icon: 'none', duration: 800 })
@@ -202,28 +206,63 @@ const getBillDetail = async () => {
         //     return
         // }
         if (e == '=') {
-            let arr = []
-            var x = moneyDisplay.value.indexOf('+');
-            if (x != -1) {
-                arr.push(x)
-                for (let i = moneyDisplay.value.indexOf('+'); i < moneyDisplay.value.length; i++) {
-                    x = moneyDisplay.value.indexOf('+', x + 1);
-                    console.log(moneyDisplay.value.indexOf('+'), i, x)
-                    // if (x != -1 && x != arr[arr.length - 1])
-                    // arr.push(x)
+            let lastNum = moneyDisplay.value[moneyDisplay.value.length - 1]
+            if (lastNum == '+' || lastNum == '-' || lastNum == '.') {
+                moneyDisplay.value = moneyDisplay.value.slice(0, moneyDisplay.value.length - 1)
+            }
+            // 一个简单算式的左边数字
+            let preNum: number = 0
+            // 一个简单算式的右边数字
+            let afterNum: number = 0
+            // 一个简单算式的运算符
+            let operator = ''
+            let preIndex: number = 0
+            for (let i = 0; i < moneyDisplay.value.length; i++) {
+                console.log(i, moneyDisplay.value[i])
+                if (moneyDisplay.value[i] == '+' || moneyDisplay.value[i] == '-') {
+                    if (preNum == 0) {
+                        preNum = Number(moneyDisplay.value.slice(0, i))
+                        operator = moneyDisplay.value[i]
+                        preIndex = i + 1
+                        console.log('first-prenum', preNum)
+                    }
+                    else {
+                        console.log('中间index', preIndex, i)
+                        afterNum = Number(moneyDisplay.value.slice(preIndex, i))
+                        console.log('中间', afterNum)
+                        if (operator == '+') {
+                            preNum = preNum + afterNum
+                        }
+                        else if (operator == '-') {
+                            preNum = preNum - afterNum
+                        }
+                        // 算好前面第一个运算符（第一个算式），再记录下一个运算符和运算符索引位置
+                        operator = moneyDisplay.value[i]
+                        preIndex = i + 1
+                    }
+                }
+                // 最后面一个字符了，作为afterNum
+                if (i == moneyDisplay.value.length - 1 && preNum != 0 && operator != '') {
+                    afterNum = Number(moneyDisplay.value.slice(preIndex))
+                    if (operator == '+') {
+                        preNum = preNum + afterNum
+                    }
+                    else if (operator == '-') {
+                        preNum = preNum - afterNum
+                    }
                 }
             }
-            console.log('x', arr)
+            if (Math.floor(preNum) == preNum)
+                moneyDisplay.value = preNum + ''
+            else
+                moneyDisplay.value = preNum.toFixed(2) + ''
         }
+        // 点击完成
         else if (e == '完成') {
             let money = Number(moneyDisplay.value)
             setProp(billDetial.value, 'money', money)
         }
-        else if (e == 'x') {
-            moneyDisplay.value = moneyDisplay.value.slice(0, moneyDisplay.value.length - 1)
-            console.log(moneyDisplay.value)
-        }
-        // 运算符不能一起
+        // 运算符不能一起,如果最后一位是运算符就不能再输入运算符
         else if (e == '+' || e == '-' || e == '.') {
             let str = moneyDisplay.value.slice(moneyDisplay.value.length - 1)
             if (str == '+' || str == '-' || str == '.')
@@ -231,12 +270,15 @@ const getBillDetail = async () => {
             else
                 moneyDisplay.value += e
         }
+        // 点击数字
         else {
+            // 初始数字为空的话代替
             if (moneyDisplay.value == '0')
                 moneyDisplay.value = e
             else
                 moneyDisplay.value += e
         }
+        // 如果删完了显示0
         if (moneyDisplay.value == '')
             moneyDisplay.value = '0'
     },
@@ -246,21 +288,18 @@ const getBillDetail = async () => {
             content: '确定删除该账单吗？',
             success: async (res) => {
                 if (res.confirm) {
-                    uni.showToast({ title: '删除成功', duration: 800 })
-                    uni.switchTab({
-                        url: '/pages/index/index'
-                    })
                     const params = {
                         userID: loginStore.userID,
                         billID: billDetial.value.bill_id,
                     }
                     console.log('删除参数', params)
-                    // positionServer.removeEnterpriseRecruitPosition(params, (res) => {
-                    // 	if (!res.code) {
-                    // 		uni.showToast({ title: '删除成功', duration: 800 })
-                    // 		list.value = list.value.filter((item1) => item1.id !== params.id)
-                    // 	}
-                    // })
+                    const res = billServer.deleteBill(params)
+                    if ((await res).data == '删除成功') {
+                        uni.showToast({ title: '删除成功', duration: 800 })
+                        uni.switchTab({
+                            url: '/pages/index/index'
+                        })
+                    }
                 }
             },
         })

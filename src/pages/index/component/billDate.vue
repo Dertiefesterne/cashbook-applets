@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, computed } from 'vue'
 import { getSegement } from '@/api/TestApi'
-import { addBill, deleteBill, updateBill, getBillList, getBillPage, getBillCondition, getBillTime } from '@/api/billApi'
+import billServer from '@/api/billApi'
 import { useloginStore } from '@/pinia-store/login'
 import formattereTools from '@/utils/dataUtils'
 import { Bill, groupBill } from '@/entity/bill'
