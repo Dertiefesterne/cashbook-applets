@@ -1,17 +1,14 @@
 <template>
-    <view v-if="billDetial">
-        <!-- <view class="flex justify-center items-center w-full h-100rpx px-40rpx fixed top-0 bg-#dfdfe1 z-2">
-            <view class="mx-20rpx h-full lh-100rpx" :class="{ 'chooseBorder': chooseType == -1 }"
+    <view>
+        <view class="head flex justify-center items-center w-full h-100rpx px-40rpx fixed top-0 bg-#dfdfe1 z-2">
+            <view class="mx-40rpx h-full lh-100rpx" :class="{ 'chooseBorder': chooseType == -1 }"
                 @click="changeChoose(-1)">
                 支出</view>
-            <view class="mx-20rpx h-full lh-100rpx" :class="{ 'chooseBorder': chooseType == 1 }"
+            <view class="mx-40rpx h-full lh-100rpx" :class="{ 'chooseBorder': chooseType == 1 }"
                 @click="changeChoose(1)">
                 收入</view>
-        </view> -->
-        <view class="head w-full h-100rpx px-40rpx fixed top-0 bg-#dfdfe1 z-2">
-            <text class="lh-100rpx">账单详情</text>
-            <view class="icon h-full flex" @click="deleteBill">
-                <u-icon name="trash" class="mr-20rpx" size="20"></u-icon>
+            <view class="icon" @click="savaBill">
+                <u-icon name="checkmark" class="mr-20rpx" size="20"></u-icon>
             </view>
         </view>
         <view class="pt-100rpx w-full ">
@@ -22,7 +19,7 @@
             <!-- 图标 -->
             <view class="gaid-box">
                 <view v-for="index of 8" class="flex flex-col items-center bg-" @click="changeClassify(index - 1)">
-                    <BillTypeIconVue :classify="index - 1" :choose="(index - 1) == billDetial.classify" />
+                    <BillTypeIconVue :classify="index - 1" :choose="(index - 1) == billForm.classify" />
                     <p>{{ filters.billTypeFilter(index - 1) }}</p>
                 </view>
             </view>
@@ -30,23 +27,23 @@
                 <!-- 时间 -->
                 <view class="flex mb-25rpx text-32rpx">
                     <u-icon name="edit-pen" class="mr-20rpx" size="20"></u-icon>
-                    <input placeholder="备注...（最多15个字）" v-model="billDetial.matter"
-                        @input="changeText(billDetial.matter)" maxlength="15" class="matter-input" />
+                    <input placeholder="备注...（最多15个字）" v-model="billForm.matter" @input="changeText(billForm.matter)"
+                        maxlength="15" class="matter-input" />
                 </view>
                 <view class="flex text-32rpx">
                     <u-icon name="clock" class="mr-20rpx" size="20"></u-icon>
                     <text class="mr-10rpx" @click="showDate = true">
-                        {{ billDetial.time.slice(0, 10) }}
+                        {{ billForm.data_time.slice(0, 10) }}
                     </text>
                     <text @click="showTime = true">
-                        {{ billDetial.time.slice(10, 16) }}
+                        {{ billForm.data_time.slice(10, 16) }}
                     </text>
                 </view>
             </view>
             <u-calendar :show="showDate" mode="single" @confirm="confirmDate" minDate="2022-12-17" maxDate="2023-02-13"
                 monthNum="3" closeOnClickOverlay @close="showDate = false"></u-calendar>
-            <u-datetime-picker :show="showTime" v-model="value1" mode="time" @confirm="confirmTime" closeOnClickOverlay
-                @cancel="showTime = false"></u-datetime-picker>
+            <u-datetime-picker :show="showTime" v-model="datetimeValue" mode="time" @confirm="confirmTime"
+                closeOnClickOverlay @cancel="showTime = false"></u-datetime-picker>
             <view class="absolute bottom-0  w-full">
                 <view class="w-full">
                     <view class="flex tagsBox bg-#d0e2fa p-20rpx w-full">
@@ -75,10 +72,6 @@
                         </view>
                     </view>
                 </view>
-                <!-- <view class="flex ">
-                    <button class="w-50% bg-#b1b1b1">删除</button>
-                    <button class="w-50% bg-#ff6b8b">完成</button>
-                </view> -->
             </view>
         </view>
     </view>
@@ -99,31 +92,26 @@ const loginStore = useloginStore()
 
 const billID = ref(),
     billDetial = ref(),
-    chooseType = ref<number>(),
-    moneyDisplay = ref(''),
+    chooseType = ref<number>(-1),
+    moneyDisplay = ref('0'),
     showDate = ref(false),
     showTime = ref(false),
-    value1 = ref(),
+    datetimeValue = ref(),
     time = ref(),
     maxDate = ref()
 
-const tags = ['外卖', '淘宝', '打车', '吃饭', '零食', '超市', '买菜', '旅游', '机票']
-const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0']
-
 // 保存参数信息
-const billForm: Bill = {
+const billForm = reactive({
     /**  账单ID*/
     bill_id: 0,
     /**  用户ID */
-    user_id: 0,
+    user_id: Number(loginStore.userID),
     /**  账单类型 */
     bill_type: -1,
     /**  账单时间 */
-    data_time: new Date(),
-    /**  账单时间 yy-mm-dd hh:mm:ss 格式*/
-    time: '',
+    data_time: formattereTools.dateFormattere(new Date(), 'full'),
     /**  账单时间戳 */
-    timestamp: '',
+    timestamp: new Date().getTime() + '',
     /**  账单金额 */
     money: 0,
     /**  账单事项 */
@@ -133,21 +121,10 @@ const billForm: Bill = {
     /**  账单备注 */
     notes: '',
     full_sentences: ''
-}
-
-
-onLoad((option) => {
-    if (option)
-        billID.value = option.billID
-    // 获取账单详情
-    getBillDetail()
-    // const d = new Date()
-    // const year = d.getFullYear()
-    // let month = d.getMonth() + 1 < 10 ? `0${d.getMonth() + 1}` : d.getMonth() + 1
-    // const date = d.getDate()
-    // maxDate.value = `${year + 1}-${month}-${date}`
 })
 
+const tags = ['外卖', '淘宝', '打车', '吃饭', '零食', '超市', '买菜', '旅游', '机票']
+const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0']
 
 
 /**
@@ -163,37 +140,34 @@ const getBillDetail = async () => {
         chooseType.value = type
     },
     changeClassify = (type: number) => {
-        setProp(billDetial.value, 'classify', type)
+        billForm.classify = type
     },
     confirmDate = (e: Event) => {
         showDate.value = false
         const Data = JSON.parse(JSON.stringify(e));
-        let time = Data[0] + billDetial.value.time.slice(10)
-        setProp(billDetial.value, 'time', time)
-        console.log('11', time)
+        let data_time = Data[0] + billForm.data_time.slice(10)
+        billForm.data_time = data_time
     },
     confirmTime = (e: Event) => {
         showTime.value = false
         const Time = JSON.parse(JSON.stringify(e));
-        let time = billDetial.value.time.slice(0, 11) + Time.value + ":00"
-        setProp(billDetial.value, 'time', time)
-        console.log('11', time)
+        let data_time = billForm.data_time.slice(0, 11) + Time.value + ":00"
+        billForm.data_time = data_time
     },
     changeText = (e: string) => {
         let matter = e.replace(/ /g, '')
-        setProp(billDetial.value, 'matter', matter)
+        billForm.matter = matter
     },
     changeMatter = (e: string) => {
-        if (billDetial.value.matter == '')
-            setProp(billDetial.value, 'matter', e)
+        if (billForm.matter == '')
+            billForm.matter = e
         else {
-            let matter = billDetial.value.matter + e
-            setProp(billDetial.value, 'matter', matter)
+            let matter = billForm.matter + e
+            billForm.matter = matter
         }
     },
     subMoney = () => {
         moneyDisplay.value = moneyDisplay.value.slice(0, moneyDisplay.value.length - 1)
-        console.log(moneyDisplay.value)
     },
     changeMoney = (e: string) => {
         if (moneyDisplay.value.length > 15) {
@@ -260,7 +234,9 @@ const getBillDetail = async () => {
         // 点击完成
         else if (e == '完成') {
             let money = Number(moneyDisplay.value)
-            setProp(billDetial.value, 'money', money)
+            billForm.money = money
+            // 保存该账单
+            savaBill()
         }
         // 运算符不能一起,如果最后一位是运算符就不能再输入运算符
         else if (e == '+' || e == '-' || e == '.') {
@@ -282,31 +258,20 @@ const getBillDetail = async () => {
         if (moneyDisplay.value == '')
             moneyDisplay.value = '0'
     },
-    deleteBill = () => {
-        uni.showModal({
-            title: '提示',
-            content: '确定删除该账单吗？',
-            success: async (res) => {
-                if (res.confirm) {
-                    const params = {
-                        userID: loginStore.userID,
-                        billID: billDetial.value.bill_id,
-                    }
-                    console.log('删除参数', params)
-                    const res = billServer.deleteBill(params)
-                    if ((await res).data == '删除成功') {
-                        uni.showToast({ title: '删除成功', duration: 800 })
-                        // uni.switchTab({
-                        //     url: '/pages/index/index'
-                        // })
-                        uni.reLaunch({
-                            url: 'pages/index/index'
-                            // url: `/pages/index/index?billID=${billDetial.value.bill_id}&date=${formattereTools.dateFormatString(billDetial.value.time)}`
-                        });
-                    }
-                }
-            },
-        })
+    savaBill = async () => {
+        if (billForm.money == 0) {
+            uni.showToast({ title: '请输入该账单金额', icon: 'none' })
+            return
+        }
+        const params = billForm
+        console.log('保存参数', { ...params })
+        const res = await billServer.addBill({ ...params })
+        if (res.data == '添加成功') {
+            uni.showToast({ title: '添加成功', duration: 800 })
+            uni.switchTab({
+                url: '/pages/index/index'
+            })
+        }
     }
 
 function inCalc() {
@@ -318,17 +283,16 @@ function inCalc() {
         return '完成'
 }
 
-function setProp<T, K extends keyof T>(foo: T, key: K, val: T[K]) {
-    foo[key] = val;
-}
 
 </script>
 
 <style lang="less" scoped>
 .head {
+    position: relative;
 
     .icon {
-        float: right;
+        position: absolute;
+        right: 0;
     }
 }
 

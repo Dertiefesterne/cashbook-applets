@@ -5,9 +5,10 @@ export default {
     charactersTonumber(chnStr: string) {
     },
     // 处理时间
-    dateFormatterDispose(val: number) {
+    dateFormatterDispose(str: string, val: number) {
         var stime = val
-        var etime = new Date().getTime()
+        // var etime = new Date().getTime()
+        var etime = Number(str)
         var usedTime = etime - stime //两个时间戳相差的毫秒数
         var days = Math.floor(usedTime / (24 * 3600 * 1000))
         // //计算出小时数
@@ -79,6 +80,8 @@ export default {
     },
     // String日期
     dateFormatString(date: string, type: string = "date") {
+        var today = new Date()
+        var thisYear = today.getFullYear() + ''
         var year = date.slice(0, 4)
         var month = date.slice(5, 7)
         var day = date.slice(8, 10)
@@ -86,7 +89,11 @@ export default {
         var min = date.slice(14, 16)
         var seconds = date.slice(17, 19)
         if (type == "date") {
-            return year + '年' + month + '月' + day + '日'
+            // 如果是今年就不显示年份
+            if (year == thisYear)
+                return month + '月' + day + '日'
+            else
+                return year + '年' + month + '月' + day + '日'
         }
         else if (type == 'time') {
             return hour + ':' + min;

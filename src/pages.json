@@ -18,6 +18,9 @@
 		},
 		{
 			"path": "pages/billDetial/index"
+		},
+		{
+			"path": "pages/addBill/index"
 		}
 	],
 	"tabBar": {

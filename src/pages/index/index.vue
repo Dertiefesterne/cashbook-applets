@@ -1,5 +1,5 @@
 <template>
-  <view>
+  <view class="big-container">
     <view class="flex justify-between items-center w-full h-100rpx px-40rpx fixed top-0 bg-#dfdfe1 z-2">
       <p>记账</p>
       <p @click="change">{{ isEdit? '取消': '批量管理' }}</p>
@@ -9,10 +9,10 @@
       <view v-for="item in list">
         <billDate :day-date="item" v-if="item.length"></billDate>
       </view>
-      <!-- <billDay :isEdit="isEdit" @chooseValue="allChoose" :day-date="list"></billDay> -->
-      <!-- <test></test> -->
     </view>
-    <button @click="testAddBill">增加账单</button>
+    <view class="add-bill" @click.stop="toAddBill"><u-icon name="plus" color="#2979ff" class="font-700"
+        size="40"></u-icon>
+    </view>
     <!-- <view class="text-area">
       <text class="title mt-10">用户IDhhhh{{ loginStore.userID }}</text>
       <view @tap="goLogin" v-if="loginStore.userID == -1">去登录</view>
@@ -39,6 +39,7 @@ import { ref, onMounted, nextTick } from 'vue'
 import {
   onReachBottom,
   onShow,
+  onLoad
 } from '@dcloudio/uni-app';
 import { getSegement } from '@/api/TestApi'
 import billServer from '@/api/billApi'
@@ -48,6 +49,7 @@ import formattereTools from '@/utils/dataUtils'
 import billSum from './component/billSum.vue'
 import billDay from './component/billDay.vue'
 import billDate from './component/billDate.vue'
+import { ListDynamicSlotIterator } from '@vue/compiler-core';
 const loginStore = useloginStore()
 
 
@@ -63,12 +65,25 @@ interface PageParams {
 const list = ref<[Bill[]]>([[]]),
   // 分页列表
   groupList = ref<groupBill[]>([]),
+  allData = ref<Bill[]>([]),
   page = ref<PageParams>({
     pageCurrent: 0,
     pageSize: 10,
     notMore: false,
     userID: loginStore.userID
   })
+
+onLoad((option) => {
+  // if (option)
+  // // billID.value = option.billID
+  // {
+  //   console.log('获取删除参数', option.billID, option.date)
+  //   // 获取账单详情
+  //   // if (option.billID)
+  //   // deleteBill(option.billID, option.date)
+  // }
+})
+
 
 
 /** 页面触底 */
@@ -115,14 +130,16 @@ const segement = async () => {
     const res = await billServer.addBill({ userID: 1, billType: -1, datetime: dd, time: time, money: 42.8, matter: "过年饼干", classify: 1, notes: "无" })
     refreshData(new Date().getTime())
   },
+  toAddBill = () => {
+    uni.navigateTo({
+      url: '/pages/addBill/index'
+    })
+  },
   refreshData = (timestamp: number) => {
     // 检查是否需要重新刷新页面
-    // uni.pageScrollTo({
-    //   scrollTop: 0
-    // });
-    if (formattereTools.dateFormatterDispose(timestamp)) {
+    if (formattereTools.dateFormatterDispose(allData.value[0].timestamp, timestamp)) {
       console.log("重新刷新首页数据")
-      // 当前添加的账单距离当前时间没有超过7天，需要重新刷新首页数据（新增加的账单可能会出现在首页）
+      // 当前添加的账单距离当前时间(更准确的是距离最新的一条账单的时间)没有超过7天，需要重新刷新首页数据（新增加的账单可能会出现在首页）
       // 重置数据列表
       list.value = [[]]
       // 重置页面参数
@@ -139,6 +156,7 @@ const segement = async () => {
   },
   GetBillByPage = async () => {
     const res = await billServer.getBillPage(page.value)
+    allData.value = res.data
     let index = 0
     for (let i = 0; i < groupList.value.length; i++) {
       let arr = []
@@ -156,6 +174,16 @@ const segement = async () => {
     groupList.value = res.data;
     console.log('groupList.value:', groupList.value)
     GetBillByPage()
+  }, deleteBill = (id: number, date: string) => {
+    for (let i = 0; i < list.value.length; i++) {
+      if (formattereTools.dateFormatString(list.value[i][0].time) == date) {
+        console.log('删除前的组', list.value[i])
+        list.value[i].filter(item => item.bill_id != id)
+        console.log('删除后的组', list.value[i])
+        break
+      }
+    }
+
   }
 /**根据新的分组，将账单列表分组插入大数组中 */
 function grouping(group: Array<groupBill>, data: Array<Bill>) {
@@ -217,8 +245,18 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
-.content {
-  display: flex;
-  flex-direction: column;
+.big-container {
+  position: relative;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .add-bill {
+    position: fixed;
+    right: 100rpx;
+    bottom: 300rpx;
+  }
 }
 </style>
