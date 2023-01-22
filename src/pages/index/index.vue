@@ -1,17 +1,20 @@
 <template>
   <view class="big-container">
-    <view class="flex justify-between items-center w-full h-100rpx px-40rpx fixed top-0 bg-#dfdfe1 z-2">
+    <view class="flex justify-between items-center w-full h-100rpx px-40rpx fixed top-0 bg-#bccdd6 z-2">
       <p>记账</p>
       <p @click="change">{{ isEdit? '取消': '批量管理' }}</p>
     </view>
     <view class="content pt-100rpx w-full">
       <billSum :isEdit="isEdit"></billSum>
+      <view class="w-full px-40rpx mb-40rpx">
+        <button class="addBtn bg-#bcd4e7" hover-class='none' @click.stop="toAddBill">增加一条新记账</button>
+      </view>
       <view v-for="item in list">
         <billDate :day-date="item" v-if="item.length"></billDate>
       </view>
     </view>
-    <view class="add-bill" @click.stop="toAddBill"><u-icon name="plus" color="#2979ff" class="font-700"
-        size="40"></u-icon>
+    <view class="add-bill">
+      <billAnalyse />
     </view>
     <!-- <view class="text-area">
       <text class="title mt-10">用户IDhhhh{{ loginStore.userID }}</text>
@@ -47,9 +50,8 @@ import { useloginStore } from '@/pinia-store/login'
 import { Bill, groupBill } from '@/entity/bill'
 import formattereTools from '@/utils/dataUtils'
 import billSum from './component/billSum.vue'
-import billDay from './component/billDay.vue'
 import billDate from './component/billDate.vue'
-import { ListDynamicSlotIterator } from '@vue/compiler-core';
+import billAnalyse from './component/billAnalyse.vue';
 const loginStore = useloginStore()
 
 
@@ -251,12 +253,24 @@ onMounted(() => {
   .content {
     display: flex;
     flex-direction: column;
+
+    button::after {
+      border: none;
+    }
+
+    .addBtn {}
   }
 
   .add-bill {
     position: fixed;
     right: 100rpx;
     bottom: 300rpx;
+    width: 100rpx;
+    height: 100rpx;
+    background-color: #bcd4e7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>

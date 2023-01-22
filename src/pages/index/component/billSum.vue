@@ -1,6 +1,6 @@
 <template>
     <view>
-        <view class="main p-40rpx">
+        <view class="main px-40rpx pt-40rpx pb-20rpx">
             <view class="p-40rpx bg-#d0e2fa b-rd-4 content">
                 <!-- 第一行 -->
                 <view class="flex justify-between mb-40rpx">

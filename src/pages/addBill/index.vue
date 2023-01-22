@@ -25,10 +25,13 @@
             </view>
             <view class="mt-50rpx px-40rpx">
                 <!-- 时间 -->
-                <view class="flex mb-25rpx text-32rpx">
+                <view class="flex items-center mb-25rpx text-32rpx">
                     <u-icon name="edit-pen" class="mr-20rpx" size="20"></u-icon>
                     <input placeholder="备注...（最多15个字）" v-model="billForm.matter" @input="changeText(billForm.matter)"
                         maxlength="15" class="matter-input" />
+                    <span v-if="billForm.matter.length" class="text-28rpx text-#999">{{
+                        billForm.matter.length
+                    }}/15</span>
                 </view>
                 <view class="flex text-32rpx">
                     <u-icon name="clock" class="mr-20rpx" size="20"></u-icon>
@@ -130,15 +133,9 @@ const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0']
 /**
  * 获取获取账单详情
  */
-const getBillDetail = async () => {
-    const res = await billServer.getBillDetial({ userID: loginStore.userID, billID: billID.value })
-    console.log("获取获取账单详情", res.data)
-    billDetial.value = res.data
-    moneyDisplay.value = billDetial.value.money + ''
+const changeChoose = (type: number) => {
+    chooseType.value = type
 },
-    changeChoose = (type: number) => {
-        chooseType.value = type
-    },
     changeClassify = (type: number) => {
         billForm.classify = type
     },
@@ -233,8 +230,6 @@ const getBillDetail = async () => {
         }
         // 点击完成
         else if (e == '完成') {
-            let money = Number(moneyDisplay.value)
-            billForm.money = money
             // 保存该账单
             savaBill()
         }
@@ -259,6 +254,8 @@ const getBillDetail = async () => {
             moneyDisplay.value = '0'
     },
     savaBill = async () => {
+        let money = Number(moneyDisplay.value)
+        billForm.money = money
         if (billForm.money == 0) {
             uni.showToast({ title: '请输入该账单金额', icon: 'none' })
             return
@@ -268,7 +265,7 @@ const getBillDetail = async () => {
         const res = await billServer.addBill({ ...params })
         if (res.data == '添加成功') {
             uni.showToast({ title: '添加成功', duration: 800 })
-            uni.switchTab({
+            uni.reLaunch({
                 url: '/pages/index/index'
             })
         }
