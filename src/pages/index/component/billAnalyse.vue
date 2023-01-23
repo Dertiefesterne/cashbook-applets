@@ -6,11 +6,19 @@
         </view>
         <view class="picker-modal" v-if="show" @click="_close"></view>
         <view class="picker-content" :style="{ transform: show ? 'translateY(0)' : 'translateY(100%)' }">
-            <view>顶部</view>
+            <!-- <view>顶部</view> -->
             <picker-view class="picker-view">
-                <view class="label-box">
+                <view class="w-full p-40rpx ">
                     <!-- 标签展示栏 -->
-                    <view>内容</view>
+                    <view class="flex items-center w-full mb-10rpx">
+                        <textarea :placeholder="placeholder" v-model="inputText" maxlength="15" auto-focus
+                            class="w-full" :style="inputText.length ? 'height:40rpx' : 'height:80rpx'" />
+                        <u-icon name="grid" size="25" @click="toAddBill"></u-icon>
+                    </view>
+                    <view class="flex w-full justify-between ">
+                        <i class="iconfont icon-rili" style="font-size:40rpx"></i>
+                        <i class="iconfont icon-send-s mr-6rpx" style="font-size:50rpx" @click="anylyseBill"></i>
+                    </view>
                 </view>
             </picker-view>
         </view>
@@ -31,16 +39,11 @@ const loginStore = useloginStore()
 
 
 const billID = ref(),
-    billDetial = ref(),
-    chooseType = ref<number>(-1),
-    moneyDisplay = ref('0'),
-    showDate = ref(false),
-    showTime = ref(false),
-    datetimeValue = ref(),
-    time = ref(),
-    maxDate = ref(), show = ref(false) // 是否显示下拉框
+    inputText = ref(''),
+    show = ref(false),
+    placeholder = ref("试试输入“打车22块”、“逛超市买菜58.3元”、“买资料39.9”、“工资收入1万”")
 
-const emit = defineEmits(['update:modelValue', 'change']),
+const emit = defineEmits(['update:modelValue', 'addBill']),
     props = defineProps({
         label: { type: String },
         placeholder: { type: String, default: '请选择' },
@@ -75,6 +78,20 @@ const billForm = reactive({
 // 点击关闭
 const _close = () => {
     show.value = false
+}, toAddBill = () => {
+    uni.navigateTo({
+        url: '/pages/addBill/index'
+    })
+}, anylyseBill = async () => {
+    if (inputText.value == '') {
+        return
+    }
+    const res = await billServer.analyzeBill({ analyzeText: inputText.value, userID: loginStore.userID })
+    console.log('请求结果', res)
+    if (res.statusCode == 200) {
+        show.value = false
+        emit('addBill', Number(res.data.time))
+    }
 }
 
 </script>
@@ -110,26 +127,7 @@ const _close = () => {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 700rpx;
+    padding-bottom: 100rpx;
     background-color: rgba(255, 255, 255, 1);
-
-    .label-box {
-        width: 100%;
-        padding: 20rpx 37rpx;
-
-        .check {
-            border: 1px solid #4d699a;
-            box-sizing: border-box;
-        }
-
-        .itemLabel {
-            min-width: 240rpx;
-            padding: 0 40rpx;
-
-            &:nth-of-type(1) {
-                margin-right: 30rpx;
-            }
-        }
-    }
 }
 </style>

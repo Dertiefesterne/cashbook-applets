@@ -68,7 +68,7 @@ http.interceptors.response.use(
 )
 
 function formatData(data: any) {
-    switch (data.code) {
+    switch (data.statusCode) {
         case 200:
             return data
         case 400:

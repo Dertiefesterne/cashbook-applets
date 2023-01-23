@@ -14,7 +14,7 @@
       </view>
     </view>
     <view class="add-bill">
-      <billAnalyse />
+      <billAnalyse @add-bill="ifRefresh" />
     </view>
     <!-- <view class="text-area">
       <text class="title mt-10">用户IDhhhh{{ loginStore.userID }}</text>
@@ -136,6 +136,10 @@ const segement = async () => {
     uni.navigateTo({
       url: '/pages/addBill/index'
     })
+  },
+  ifRefresh = (e: any) => {
+    console.log(e, typeof e)
+    refreshData(e)
   },
   refreshData = (timestamp: number) => {
     // 检查是否需要重新刷新页面

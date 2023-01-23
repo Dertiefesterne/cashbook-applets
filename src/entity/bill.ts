@@ -34,4 +34,12 @@ export interface groupBill {
 	count: number
 }
 
+// 请求返回信息
+export interface responseType {
+	/**  日期，按天分组 */
+	code: number,
+	/**  该组金额总数 */
+	data: any
+}
+
 

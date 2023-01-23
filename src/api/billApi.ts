@@ -1,7 +1,16 @@
 
  import http from '@/utils/request'
+ import { Bill, groupBill,responseType } from '@/entity/bill'
 
  export default {
+
+  analyzeBill(data:any) {
+    return http.request({
+        url: '/analyze/tokenizer/nlp',
+        method: 'GET',
+        data
+    })
+  },
  
  addBill(data:any) {
      return http.request({
