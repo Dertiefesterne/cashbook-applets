@@ -300,9 +300,11 @@ const getBillDetail = async () => {
                         //     url: '/pages/index/index'
                         // })
                         uni.reLaunch({
-                            url: 'pages/index/index'
-                            // url: `/pages/index/index?billID=${billDetial.value.bill_id}&date=${formattereTools.dateFormatString(billDetial.value.time)}`
-                        });
+                            url: '/pages/index/index'
+                        })
+                        // uni.reLaunch({
+                        //     // url: `/pages/index/index?billID=${billDetial.value.bill_id}&date=${formattereTools.dateFormatString(billDetial.value.time)}`
+                        // });
                     }
                 }
             },

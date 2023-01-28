@@ -6,7 +6,7 @@
                 <view class="flex justify-between mb-40rpx">
                     <view>
                         <p>今天支出</p>
-                        <p>0.00</p>
+                        <p>{{ sumData.daySum }}￥</p>
                     </view>
                     <view>点击设置预算
                         <i class="icon xianxing-15"></i>
@@ -16,10 +16,10 @@
                 <view class="flex justify-between">
                     <view>
                         <p>本月支出</p>
-                        <p>0.00</p>
+                        <p>{{ sumData.monthSum.toFixed(2) }}￥</p>
                     </view>
                     <view>
-                        <p>本月结余</p>
+                        <p>剩余预算</p>
                         <p>0.00</p>
                     </view>
                 </view>
@@ -44,6 +44,10 @@ const props = defineProps({
     isEdit: {
         type: Boolean,
         default: false
+    },
+    sumData: {
+        type: Object,
+        default: () => { }
     }
 })
 

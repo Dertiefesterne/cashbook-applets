@@ -1,6 +1,9 @@
 <template>
-	<view class="content">
+	<view class="content w-full">
 		统计页面页面
+		<histogram />
+		<LineChart></LineChart>
+		<sectorChart />
 		<view class="text-area">
 			<view @tap="loginOut" v-if="loginStore.userID != -1">退出登录</view>
 		</view>
@@ -11,6 +14,12 @@
 import { ref, onMounted } from 'vue'
 import { login, getInformation, getSegement } from '@/api/TestApi'
 import { useloginStore } from '@/pinia-store/login'
+import histogram from './component/histogramChart.vue'
+import LineChart from './component/LineChart.vue';
+import sectorChart from './component/sectorChart.vue';
+
+
+
 const loginStore = useloginStore()
 
 const loginOut = () => {

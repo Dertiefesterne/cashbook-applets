@@ -5,9 +5,9 @@
       <p @click="change">{{ isEdit? '取消': '批量管理' }}</p>
     </view>
     <view class="content pt-100rpx w-full">
-      <billSum :isEdit="isEdit"></billSum>
+      <billSum :isEdit="isEdit" :sumData="moneySum"></billSum>
       <view class="w-full px-40rpx mb-40rpx">
-        <button class="addBtn bg-#bcd4e7" hover-class='none' @click.stop="toAddBill">增加一条新记账</button>
+        <button class="addBtn bg-#bcd4e7" hover-class='none' @click="toAddBill">增加一条新记账</button>
       </view>
       <view v-for="item in list">
         <billDate :day-date="item" v-if="item.length"></billDate>
@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, reactive, onMounted, nextTick } from 'vue'
 // 引入 
 import {
   onReachBottom,
@@ -63,6 +63,13 @@ interface PageParams {
   userID: number
 }
 
+/** 分页传参对象 */
+interface sumParams {
+  daySum: number // 当前分页
+  monthSum: number // 分页大小
+  yearSum: number // 是否不再加载更多
+}
+
 // 账单列表----嵌套数组
 const list = ref<[Bill[]]>([[]]),
   // 分页列表
@@ -73,6 +80,11 @@ const list = ref<[Bill[]]>([[]]),
     pageSize: 10,
     notMore: false,
     userID: loginStore.userID
+  }),
+  moneySum = ref<sumParams>({
+    daySum: 0,// 当前分页
+    monthSum: 0,// 分页大小
+    yearSum: 0 // 是否不再加载更多
   })
 
 onLoad((option) => {
@@ -189,8 +201,22 @@ const segement = async () => {
         break
       }
     }
-
+  },
+  GetBillSum = async () => {
+    const res = billServer.getBillSum({ userID: loginStore.userID })
+    moneySum.value = (await res).data
+    console.log('账单总数', moneySum.value)
   }
+
+
+
+
+
+
+
+
+
+
 /**根据新的分组，将账单列表分组插入大数组中 */
 function grouping(group: Array<groupBill>, data: Array<Bill>) {
   let index = 0
@@ -245,6 +271,7 @@ onMounted(() => {
   console.log("初始化", list.value)
   // console.log("homestorage", uni.getStorageSync("USER_INFORMATION"))
   GetBillByGroup()
+  GetBillSum()
 })
 
 

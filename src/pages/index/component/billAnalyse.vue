@@ -90,6 +90,7 @@ const _close = () => {
     console.log('请求结果', res)
     if (res.statusCode == 200) {
         show.value = false
+        inputText.value = ''
         emit('addBill', Number(res.data.time))
     }
 }

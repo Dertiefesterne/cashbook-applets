@@ -1,0 +1,126 @@
+<template>
+    <view class="big-contaniner">
+        折线图
+        <!-- <scroll-view class="uni-swiper-tab" scroll-x style="height:500rpx">
+            <view class="scrollx_items">
+                <qiun-data-charts type="line" width="5" :chartData="chartData1" />
+            </view>
+            <view class="scrollx_items">
+                <qiun-data-charts type="line" width="5" :chartData="chartData" />
+            </view>
+        </scroll-view> -->
+        <view class="scrollx_items">
+            <qiun-data-charts type="line" width="5" :chartData="chartData2" :opts="opts2" />
+        </view>
+    </view>
+</template>
+
+
+<script setup lang="ts">
+const chartData = {
+    categories: ['7月', '8月', '9月', '10月', '11月', '12月'],
+    series: [
+        {
+            name: '支出',
+            data: [5036, 4831, 3933, 4513, 4934, 6782]
+        }
+    ]
+}, chartData1 = {
+    categories: ['1月', '2月', '3月', '4月', '5月', '6月'],
+    series: [
+        {
+            name: '支出',
+            data: [13835, 5036, 4831, 3933, 4513, 4934]
+        }
+    ]
+}, chartData2 = {
+    categories: ['12/1', '12/2', '12/3', '12/4', '12/5', '12/6', '12/7', '12/8', '12/9', '12/10', '12/11', '12/12', '12/13', '12/14', '12/15', '12/16', '12/17', '12/18', '12/19', '12/20', '12/21', '12/22', '12/23', '12/24', '12/25', '12/26', '12/27', '12/28', '12/29', '12/30', '12/31'],
+    series: [
+        {
+            name: '支出',
+            data: [45, 67, 10, 89, 23, 76, 123, 56, 38, 95, 26, 72, 33, 75, 12, 44, 56, 86, 13, 465, 90, 53, 23, 65, 88, 346, 65, 134, 76, 12, 98]
+        }
+    ]
+}, opts2 = {
+    dataLabel: false, // 是否显示图表区域内数据点上方的数据文案
+}, opts = {
+    color: ["#1890FF"],
+    padding: [15, 25, 10, 10],
+    rotate: false, //横屏模式
+    animation: true, // 是否动画展示图表
+    dataLabel: false, // 是否显示图表区域内数据点上方的数据文案
+    dataPointShape: true, //是否显示数据点的图形标识
+    dataPointShapeType: 'hollow', //图形标识点显示类型，可选值：'solid'实心,'hollow'空心
+    legend: {
+        show: false
+    },
+    xAxis: {
+        disabled: false, // 不绘制X轴 默认false
+        disableGrid: true, // 不绘制纵向网格
+        axisLineColor: '#0f5681', // 坐标轴轴线颜色
+        calibration: false, // 坐标轴刻度线
+        fontColor: '#FFFFFF', // 字体颜色
+        fontSize: 13, // 字体大小
+        rotateLabel: false, //【旋转】数据点（刻度点）文字
+        rotateAngle: 45, //开启上面旋转功能后，文字旋转的角度，取值范围(-90至90)
+        // labelCount: ,//数据点文字（刻度点）单屏幕限制显示的数量
+        scrollShow: false, // 是否显示滚动条，配合拖拽滚动使用（即仅在启用【基本配置】的 enableScroll 时有效）
+        boundaryGap: 'justify', //折线图、区域图起画点结束点方法，可选值：'center'两端留空,'justify'两端对齐
+    },
+    yAxis: {
+        disabled: false, //不绘制Y轴
+        disableGrid: false,//不绘制横向向网格(即默认绘制网格)
+        gridType: "dash", // 横向向网格线型，可选值：'solid'实线,'dash'虚线
+        dashLength: 8, //横向网格为虚线时，单段虚线长度
+        gridColor: '#0f5681',
+        showTitle: true,
+        data: [ // 多Y轴配置
+            {
+                axisLineColor: '#0f5681', // 坐标轴轴线颜色，默认#CCCCCC
+                calibration: false, // 刻度线是否显示
+                fontColor: '#FFFFFF', // 数据点（刻度点）字体颜色，默认#666666
+                fontSize: 13, // 数据点（刻度点）字体大小
+                textAlign: 'right', //数据点（刻度点）相对轴线的对齐方式，可选值：'left','right','center'
+                title: 'PUE值', // 当前Y轴标题（需要上面showTitle设置为true）
+                titleFontSize: 13, // 标题字体大小
+                titleOffsetY: -2, // 标题纵向偏移距离，负数为向上偏移，正数向下偏移
+                titleOffsetX: 0, // 标题横向偏移距离，负数为向左偏移，正数向右偏移
+                titleFontColor: '#FFFFFF', //标题字体颜色，默认#666666
+                unit: '', //Y轴刻度值后附加单位
+            }
+        ]
+    },
+    extra: {
+        area: {
+            type: "straight", // 区域图类型，可选值："straight"尖角折线模式,"curve"曲线圆滑模式,"step"时序图模式
+            opacity: 0.1, // 	区域图透明度
+            addLine: true, // 是否叠加相应的折线
+            width: 2, // 叠加的折线宽度
+            gradient: true, // 是否开启区域图渐变色
+            activeType: "hollow" // 激活指示点类型，可选值："none"不启用激活指示点,"hollow"空心点模式,"solid"实心点模式
+        }
+    }
+}
+
+</script>
+
+<style lang="less" scoped>
+.big-contaniner {
+
+    .charts-box {
+        // width: 100%;
+        height: 500rpx;
+    }
+
+    .uni-swiper-tab {
+        white-space: nowrap;
+    }
+
+    .scrollx_items {
+        text-align: center;
+        display: inline-block;
+        width: 100%;
+        height: 500rpx;
+    }
+}
+</style>

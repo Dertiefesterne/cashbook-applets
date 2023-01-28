@@ -42,6 +42,13 @@
       data
     })
   },
+  getBillSum(data:any){
+    return http.request({
+      url:'/bill/billList/billSum',
+      method: 'GET',
+      data
+    })
+  },
   getBillDetial(data:any) {
     return http.request({
       url: '/bill/billDetial',
