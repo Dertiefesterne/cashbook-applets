@@ -1,5 +1,6 @@
 <template>
     <view class="big-contaniner">
+
         折线图
         <!-- <scroll-view class="uni-swiper-tab" scroll-x style="height:500rpx">
             <view class="scrollx_items">

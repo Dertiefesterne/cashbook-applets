@@ -21,7 +21,7 @@
             </view>
             <!-- 图标 -->
             <view class="gaid-box">
-                <view v-for="index of 8" class="flex flex-col items-center bg-" @click="changeClassify(index - 1)">
+                <view v-for="index of 8" class="flex flex-col items-center" @click="changeClassify(index - 1)">
                     <BillTypeIconVue :classify="index - 1" :choose="(index - 1) == billDetial.classify" />
                     <p>{{ filters.billTypeFilter(index - 1) }}</p>
                 </view>
@@ -50,10 +50,12 @@
             <view class="absolute bottom-0  w-full">
                 <view class="w-full">
                     <view class="flex tagsBox bg-#d0e2fa p-20rpx w-full">
-                        <text v-for="item in tags" class="px-15rpx py-5rpx bg-#fff rd-3 mr-10rpx"
-                            @click="changeMatter(item)">{{
-                                item
-                            }}</text>
+                        <scroll-view class="uni-swiper-tab" scroll-x>
+                            <text v-for="item in tags" class="px-15rpx bg-#fff rd-3 mr-10rpx"
+                                @click="changeMatter(item)">{{
+                                    item
+                                }}</text>
+                        </scroll-view>
                         <view class="bg-#d0e2fa  iconBox">
                             <u-icon name="more-circle" size="20"></u-icon>
                         </view>
@@ -103,37 +105,11 @@ const billID = ref(),
     moneyDisplay = ref(''),
     showDate = ref(false),
     showTime = ref(false),
-    value1 = ref(),
-    time = ref(),
-    maxDate = ref()
+    value1 = ref()
 
-const tags = ['外卖', '淘宝', '打车', '吃饭', '零食', '超市', '买菜', '旅游', '机票']
+const tags = ['外卖', '淘宝', '打车', '吃饭', '零食', '超市', '买菜', '旅游', '机票', '房租']
 const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0']
 
-// 保存参数信息
-const billForm: Bill = {
-    /**  账单ID*/
-    bill_id: 0,
-    /**  用户ID */
-    user_id: 0,
-    /**  账单类型 */
-    bill_type: -1,
-    /**  账单时间 */
-    data_time: new Date(),
-    /**  账单时间 yy-mm-dd hh:mm:ss 格式*/
-    time: '',
-    /**  账单时间戳 */
-    timestamp: '',
-    /**  账单金额 */
-    money: 0,
-    /**  账单事项 */
-    matter: '',
-    /**  账单分类 */
-    classify: 0,
-    /**  账单备注 */
-    notes: '',
-    full_sentences: ''
-}
 
 
 onLoad((option) => {
@@ -141,11 +117,6 @@ onLoad((option) => {
         billID.value = option.billID
     // 获取账单详情
     getBillDetail()
-    // const d = new Date()
-    // const year = d.getFullYear()
-    // let month = d.getMonth() + 1 < 10 ? `0${d.getMonth() + 1}` : d.getMonth() + 1
-    // const date = d.getDate()
-    // maxDate.value = `${year + 1}-${month}-${date}`
 })
 
 
@@ -170,14 +141,14 @@ const getBillDetail = async () => {
         const Data = JSON.parse(JSON.stringify(e));
         let time = Data[0] + billDetial.value.time.slice(10)
         setProp(billDetial.value, 'time', time)
-        console.log('11', time)
+        console.log('11confirmDate ', time)
     },
     confirmTime = (e: Event) => {
         showTime.value = false
         const Time = JSON.parse(JSON.stringify(e));
         let time = billDetial.value.time.slice(0, 11) + Time.value + ":00"
         setProp(billDetial.value, 'time', time)
-        console.log('11', time)
+        console.log('11confirmTime', time)
     },
     changeText = (e: string) => {
         let matter = e.replace(/ /g, '')
@@ -261,6 +232,8 @@ const getBillDetail = async () => {
         else if (e == '完成') {
             let money = Number(moneyDisplay.value)
             setProp(billDetial.value, 'money', money)
+            // 修改了其他的，保存
+            modifyBill()
         }
         // 运算符不能一起,如果最后一位是运算符就不能再输入运算符
         else if (e == '+' || e == '-' || e == '.') {
@@ -309,6 +282,22 @@ const getBillDetail = async () => {
                 }
             },
         })
+    },
+    modifyBill = async () => {
+        // 保存修改后的账单
+        console.log('修改后的账单', billDetial.value)
+        const params = { userID: Number(loginStore.userID), billID: billDetial.value.bill_id, datetime: billDetial.value.time, money: billDetial.value.money, matter: billDetial.value.matter }
+        const res = billServer.updateBill(params)
+        console.log('请求结果', res)
+        if ((await res).statusCode == 200) {
+            uni.showToast({ title: '修改成功', duration: 800 })
+            // uni.switchTab({
+            //     url: '/pages/index/index'
+            // })
+            uni.reLaunch({
+                url: '/pages/index/index'
+            })
+        }
     }
 
 function inCalc() {
@@ -358,6 +347,7 @@ function setProp<T, K extends keyof T>(foo: T, key: K, val: T[K]) {
 .tagsBox {
     overflow: hidden;
     position: relative;
+    width: 100%;
 
     text {
         white-space: nowrap;
@@ -368,6 +358,11 @@ function setProp<T, K extends keyof T>(foo: T, key: K, val: T[K]) {
         right: 0;
         top: 0;
         padding: 25rpx 25rpx;
+    }
+
+    .uni-swiper-tab {
+        white-space: nowrap;
+        width: 90%;
     }
 }
 

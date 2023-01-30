@@ -44,7 +44,7 @@ import {
   onShow,
   onLoad
 } from '@dcloudio/uni-app';
-import { getSegement } from '@/api/TestApi'
+import userServer from '@/api/userApi'
 import billServer from '@/api/billApi'
 import { useloginStore } from '@/pinia-store/login'
 import { Bill, groupBill } from '@/entity/bill'
@@ -127,11 +127,11 @@ const change = () => {
 const segement = async () => {
   let text = segementText.value
   segementText.value = ''
-  const res = await getSegement({ analyzeText: text, userID: 1 })
+  const res = await userServer.getSegement({ analyzeText: text, userID: 1 })
   console.log('res:', res)
 },
   goLogin = () => {
-    console.log('去登录页')
+    console.log('去登录页la')
     uni.navigateTo({
       url: '/pages/login/index'
     })

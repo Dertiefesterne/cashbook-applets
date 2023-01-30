@@ -1,61 +1,76 @@
 <template>
-  <view class="content">
+  <view class="content ">
     <view class="top">
       <h3>登录页</h3>
-      <view class="title">登录用户ID{{ loginStore.userID }}</view>
     </view>
     <view class="table">
-      <view class="table-input">账号<input type="number" maxlength="15" v-model="acount" /></view>
-      <view class="table-input">密码<input maxlength="15" v-model="passWord" /></view>
+      <!-- <view class="table-input">账号<input type="number" maxlength="15" v-model="acount" />
+      </view> -->
+      <view><input maxlength="15" placeholder="用户名" v-model="userName" @input="ifRegister(userName)" />
+      </view>
+      <view class="info-warn flex px py-2 w-full bg-#fef5ec lh-35rpx text-26rpx text-red"
+        v-if="noRegister && userName.length">
+        <u-icon name="info-circle" color="red" class="mr-10rpx"></u-icon>该账号尚未注册
+      </view>
+      <view><input maxlength="15" placeholder="密码" v-model="passWord" /></view>
     </view>
-    <view class="login">
-      <button @click="confirmLogin">登录</button>
-      <button @click="registerUser">注册</button>
+    <view class="login-btn">
+      <button @click="confirmLogin" hover-class='none' :disabled="noRegister" class=" rd-6">登录</button>
+      <button @click="registerUser" hover-class='none' :disabled="!noRegister" class="rd-6">注册</button>
     </view>
   </view>
 </template>
-  
+
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { login, register } from '@/api/TestApi'
+import userServer from '@/api/userApi'
 import { useloginStore } from '@/pinia-store/login'
 const loginStore = useloginStore()
 
 const acount = ref(),
-  passWord = ref('')
+  userName = ref(''),
+  passWord = ref(''),
+  noRegister = ref(false)
 const confirmLogin = async () => {
-  if (acount.value && passWord.value != '') {
-    const res = await login({ id: acount.value, passWord: passWord.value })
-    if (res.data == 1) {
-      uni.showToast({
-        title: '登录成功',
-        icon: 'success',
-        duration: 1000
-      })
-      let userID = acount.value
-      // 全局保存用户ID
-      loginStore.login(userID)
-      uni.switchTab({
-        url: '/pages/index/index'
-      })
-    } else if (res.data == 0) {
-      uni.showToast({
-        title: '密码错误，请重新输入',
-        icon: 'none',
-        duration: 1000
-      })
-    }
-    else {
-      uni.showToast({
-        title: '此账号未注册',
-        icon: 'none',
-        duration: 1000
-      })
-    }
+  if (userName.value == "") {
+    uni.showToast({
+      title: '请输入账号',
+      icon: 'none',
+      duration: 1000
+    })
+    return
+  }
+  if (passWord.value == "") {
+    uni.showToast({
+      title: '请输入密码',
+      icon: 'none',
+      duration: 1000
+    })
+    return
+  }
+  const res = await userServer.login({ userName: userName.value, passWord: passWord.value })
+  if (res.data > 0) {
+    uni.showToast({
+      title: '登录成功',
+      icon: 'success',
+      duration: 1000
+    })
+    let userID = res.data
+    // 全局保存用户ID
+    loginStore.login(userID)
+    uni.switchTab({
+      url: '/pages/index/index'
+    })
+  } else if (res.data == 0) {
+    uni.showToast({
+      title: '密码错误，请重新输入',
+      icon: 'none',
+      duration: 1000
+    })
   }
   else {
     uni.showToast({
-      title: '请输入账号/密码',
+      title: '此账号未注册',
       icon: 'none',
       duration: 1000
     })
@@ -63,14 +78,15 @@ const confirmLogin = async () => {
 }
 
 const registerUser = async () => {
-  const res = await register({ id: acount.value, passWord: passWord.value })
-  if (res.data == 1) {
+  if (!noRegister) return
+  const res = await userServer.register({ userName: userName.value, passWord: passWord.value })
+  if (res.statusCode == 200) {
     uni.showToast({
       title: '注册成功',
       icon: 'success',
       duration: 1000
     })
-    let userID = acount.value
+    let userID = res.data
     // 全局保存用户ID
     loginStore.login(userID)
     uni.switchTab({
@@ -84,15 +100,26 @@ const registerUser = async () => {
       duration: 1000
     })
   }
-}
+},
+  ifRegister = async (name: string) => {
+    if (name == '') {
+      return
+    }
+    const res = userServer.isRegister({ userName: name })
+    if ((await res).data == -1) {
+      noRegister.value = true
+    }
+    else {
+      noRegister.value = false
+    }
+  }
 
 onMounted(() => {
-
 })
 
 </script>
-  
-<style lang="less" scoped>
+
+<style lang="scss" scoped>
 .content {
   display: flex;
   flex-direction: column;
@@ -101,29 +128,42 @@ onMounted(() => {
   width: 100%;
 
   .top {
+    width: 100%;
     display: flex;
     justify-content: center;
-
-    .title {
-      font-size: 36rpx;
-      color: rgb(255, 91, 119);
-    }
+    padding-top: 300rpx;
+    background-color: #aed0ee;
+    color: red;
   }
 
   .table {
-    width: 80%;
+    width: 100%;
+    padding: 10rpx 40rpx;
 
-    input {
-      width: 60%;
-      border: 1px solid gray;
+    ::v-deep input {
+      width: 100%;
+      height: 100rpx;
+      border-bottom: 1px solid rgb(201, 201, 201);
     }
+  }
 
-    .table-input {
-      display: flex;
-      justify-content: center;
-      margin: 10rpx 0;
+  .login-btn {
+    width: 100%;
+    padding: 0 40rpx;
+
+    button {
+      width: 100%;
+      background: rgba(174, 208, 238, 0.5);
+      margin-top: 20rpx;
+
+      &::after {
+        border: none;
+      }
     }
+  }
+
+  ::v-deep button {
+    background-color: pink;
   }
 }
 </style>
-  

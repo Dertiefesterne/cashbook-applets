@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { login, getInformation, getSegement } from '@/api/TestApi'
+import userServer from '@/api/userApi'
 import { useloginStore } from '@/pinia-store/login'
 import histogram from './component/histogramChart.vue'
 import LineChart from './component/LineChart.vue';

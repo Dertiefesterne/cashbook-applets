@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch, computed } from 'vue'
-import { getSegement } from '@/api/TestApi'
+import userServer from '@/api/userApi'
 import billServer from '@/api/billApi'
 import { useloginStore } from '@/pinia-store/login'
 import formattereTools from '@/utils/dataUtils'

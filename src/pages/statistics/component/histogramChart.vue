@@ -58,7 +58,6 @@ const chartData = {
     }
 
     .scrollx_items {
-        text-align: center;
         display: inline-block;
         width: 100%;
         height: 500rpx;
