@@ -4,19 +4,17 @@
       <h3>登录页</h3>
     </view>
     <view class="table">
-      <!-- <view class="table-input">账号<input type="number" maxlength="15" v-model="acount" />
-      </view> -->
       <view><input maxlength="15" placeholder="用户名" v-model="userName" @input="ifRegister(userName)" />
       </view>
-      <view class="info-warn flex px py-2 w-full bg-#fef5ec lh-35rpx text-26rpx text-red"
-        v-if="noRegister && userName.length">
-        <u-icon name="info-circle" color="red" class="mr-10rpx"></u-icon>该账号尚未注册
+      <view class="info-warn" v-if="noRegister && userName.length">
+        <u-icon name="info-circle" color="red"></u-icon>该账号尚未注册
       </view>
       <view><input maxlength="15" placeholder="密码" v-model="passWord" /></view>
     </view>
     <view class="login-btn">
-      <button @click="confirmLogin" hover-class='none' :disabled="noRegister" class=" rd-6">登录</button>
-      <button @click="registerUser" hover-class='none' :disabled="!noRegister" class="rd-6">注册</button>
+      <button @click="confirmLogin" hover-class='none' :disabled="noRegister">登录</button>
+      <button @click="registerUser" hover-class='none' :disabled="!noRegister">注册</button>
+      <BillTypeIconVue />
     </view>
   </view>
 </template>
@@ -25,6 +23,7 @@
 import { ref, onMounted } from 'vue'
 import userServer from '@/api/userApi'
 import { useloginStore } from '@/pinia-store/login'
+import BillTypeIconVue from '../../components/billTypeIcon.vue'
 const loginStore = useloginStore()
 
 const acount = ref(),
@@ -133,7 +132,7 @@ onMounted(() => {
     justify-content: center;
     padding-top: 300rpx;
     background-color: #aed0ee;
-    color: red;
+    color: pink;
   }
 
   .table {
@@ -145,6 +144,20 @@ onMounted(() => {
       height: 100rpx;
       border-bottom: 1px solid rgb(201, 201, 201);
     }
+
+    .info-warn {
+      display: flex;
+      width: 1005;
+      padding: 10rpx 0;
+      background-color: #fef5ec;
+      line-height: 35rpx;
+      font-size: 26rpx;
+      color: red;
+
+      .u-icon {
+        margin-right: 10rpx;
+      }
+    }
   }
 
   .login-btn {
@@ -155,15 +168,12 @@ onMounted(() => {
       width: 100%;
       background: rgba(174, 208, 238, 0.5);
       margin-top: 20rpx;
+      border-radius: 6rem;
 
       &::after {
         border: none;
       }
     }
-  }
-
-  ::v-deep button {
-    background-color: pink;
   }
 }
 </style>

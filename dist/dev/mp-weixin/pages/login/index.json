@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "u-icon": "../../uni_modules/uview-plus_3.1.23/components/u-icon/u-icon",
+    "bill-type-icon-vue": "../../components/billTypeIcon"
+  }
+}

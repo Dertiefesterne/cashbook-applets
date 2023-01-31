@@ -1,5 +1,5 @@
 <template>
-	<view class="content w-full">
+	<view class="content">
 		统计页面页面
 		<histogram />
 		<LineChart></LineChart>
@@ -48,5 +48,7 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
-
+.content {
+	width: 100%;
+}
 </style>

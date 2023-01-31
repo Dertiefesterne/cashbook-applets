@@ -1,0 +1,11 @@
+.big-contaniner .charts-box.data-v-bb3fa553 {
+  height: 500rpx;
+}
+.big-contaniner .uni-swiper-tab.data-v-bb3fa553 {
+  white-space: nowrap;
+}
+.big-contaniner .scrollx_items.data-v-bb3fa553 {
+  display: inline-block;
+  width: 100%;
+  height: 500rpx;
+}

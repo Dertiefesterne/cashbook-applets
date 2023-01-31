@@ -1,0 +1,9 @@
+{
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 100,
+  "usingComponents": {
+    "bill-sum": "./component/billSum",
+    "bill-date": "./component/billDate",
+    "bill-analyse": "./component/billAnalyse"
+  }
+}

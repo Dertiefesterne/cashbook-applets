@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "u-icon": "../../uni_modules/uview-plus_3.1.23/components/u-icon/u-icon",
+    "u-calendar": "../../uni_modules/uview-plus_3.1.23/components/u-calendar/u-calendar",
+    "u-datetime-picker": "../../uni_modules/uview-plus_3.1.23/components/u-datetime-picker/u-datetime-picker",
+    "bill-type-icon-vue": "../../components/billTypeIcon"
+  }
+}

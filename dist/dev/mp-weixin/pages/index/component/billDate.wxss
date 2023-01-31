@@ -1,0 +1,31 @@
+.date-container.data-v-c5a12818 {
+  margin-bottom: 20rpx;
+}
+.date-container .content.data-v-c5a12818 {
+  margin: 0 40rpx;
+  padding: 30rpx;
+  background: #f6f7f8;
+  border-radius: 1.5rem;
+}
+.date-container .content .head.data-v-c5a12818 {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15rpx;
+}
+.date-container .content .bill-list.data-v-c5a12818 {
+  width: 100%;
+}
+.date-container .content .bill-list .items.data-v-c5a12818 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.date-container .content .bill-list .items .item.data-v-c5a12818 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 2rem;
+  margin: 0 15rpx;
+}

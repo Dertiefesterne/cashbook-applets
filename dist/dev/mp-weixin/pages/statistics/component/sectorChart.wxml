@@ -1,0 +1,1 @@
+<view class="big-contaniner data-v-594b6faa"> 扇形图 <view class="charts-box data-v-594b6faa"><qiun-data-charts wx:if="{{a}}" class="data-v-594b6faa" u-i="594b6faa-0" bind:__l="__l" u-p="{{a}}"/></view></view>

@@ -1,0 +1,1 @@
+<view class="big-contaniner data-v-b021aa9f"> 折线图 <view class="scrollx_items data-v-b021aa9f"><qiun-data-charts wx:if="{{a}}" class="data-v-b021aa9f" u-i="b021aa9f-0" bind:__l="__l" u-p="{{a}}"/></view></view>

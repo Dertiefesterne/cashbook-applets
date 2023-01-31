@@ -1,28 +1,24 @@
 <template>
-    <view class="mb-20rpx">
-        <view class="mx-40rpx p-30rpx bg-#f6f7f8 b-rd-4">
-            <view class="flex justify-between mb-15rpx">
+    <view class="date-container">
+        <view class="content">
+            <view class="head ">
                 <p>{{ formattereTools.dateFormatString(dayDate[0].time) }}</p>
                 <p>总支出：{{ dataListSum }}￥</p>
             </view>
             <!-- 每一项账单 -->
-            <view>
-                <view class="flex justify-between w-full mb-15rpx" v-for="item in dayDate"
-                    @click="toBillDetial(item.bill_id)">
-                    <view class="flex justify-center items-center">
-                        <view class="flex justify-center items-center w-60rpx h-60rpx b-rd-2 mx-15rpx"
-                            :style="filters.billTypeColor(item.classify)">
-                            <i class="iconfont" :class="filters.billTypeIcon(item.classify)"></i>
-                        </view>
-                        <!-- <billTypeIconVue :classify="item.classify" /> -->
-                        <view>
-                            <p class="mb-5rpx">{{ item.matter }} | {{ filters.billTypeFilter(item.classify) }}</p>
-                            <p>{{ formattereTools.dateFormatString(item.time, "time") }}</p>
-                        </view>
+            <view class="bill-list head" v-for="item in dayDate" @click="toBillDetial(item.bill_id)">
+                <view class="items">
+                    <view class="item" :style="filters.billTypeColor(item.classify)">
+                        <i class="iconfont" :class="filters.billTypeIcon(item.classify)"></i>
                     </view>
-                    <view class="flex justify-center items-center">
-                        -{{ item.money }}
+                    <view>
+                        <p style="margin-bottom: 5rpx;">{{ item.matter }} | {{ filters.billTypeFilter(item.classify) }}
+                        </p>
+                        <p>{{ formattereTools.dateFormatString(item.time, "time") }}</p>
                     </view>
+                </view>
+                <view class="items">
+                    -{{ item.money }}
                 </view>
             </view>
         </view>
@@ -78,20 +74,37 @@ const toBillDetial = (billID: number) => {
 </script>
 
 <style lang="less" scoped>
-.content {
-    display: flex;
-    flex-direction: column;
+.date-container {
+    margin-bottom: 20rpx;
 
-    .bill_checkbox {
-        :deep(.uni-checkbox-wrapper) {
+    .content {
+        margin: 0 40rpx;
+        padding: 30rpx;
+        background: #f6f7f8;
+        border-radius: 1.5rem;
+
+        .head {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15rpx;
+        }
+
+        .bill-list {
             width: 100%;
 
-            .uni-checkbox-input {
-                width: 30rpx;
-                height: 30rpx;
+            .items {
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
-                svg {
-                    font-size: 14rpx;
+                .item {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 60rpx;
+                    height: 60rpx;
+                    border-radius: 2rem;
+                    margin: 0 15rpx;
                 }
             }
         }

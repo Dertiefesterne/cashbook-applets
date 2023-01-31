@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "histogram": "./component/histogramChart",
+    "line-chart": "./component/LineChart",
+    "sector-chart": "./component/sectorChart"
+  }
+}

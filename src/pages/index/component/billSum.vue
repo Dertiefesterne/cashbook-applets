@@ -1,9 +1,9 @@
 <template>
     <view>
-        <view class="main px-40rpx pt-40rpx pb-20rpx">
-            <view class="p-40rpx bg-#d0e2fa b-rd-4 content">
+        <view class="main">
+            <view class="content">
                 <!-- 第一行 -->
-                <view class="flex justify-between mb-40rpx">
+                <view class="first">
                     <view>
                         <p>今天支出</p>
                         <p>{{ sumData.daySum }}￥</p>
@@ -13,7 +13,7 @@
                     </view>
                 </view>
                 <!-- 第二行 -->
-                <view class="flex justify-between">
+                <view class="second">
                     <view>
                         <p>本月支出</p>
                         <p>{{ sumData.monthSum.toFixed(2) }}￥</p>
@@ -29,12 +29,10 @@
         <view class="picker-content" :style="{ transform: show ? 'translateY(0)' : 'translateY(100%)' }">
             <!-- <view>顶部</view> -->
             <picker-view class="picker-view">
-                <view class="w-full p-40rpx ">
+                <view>
                     <!-- 标签展示栏 -->
                     哈哈哈哈哈哈
-                    <view class="flex items-center w-full mb-10rpx">
-                    </view>
-                    <view class="flex w-full justify-between ">
+                    <view>
                         <i class="iconfont icon-rili" style="font-size:40rpx"></i>
                     </view>
                 </view>
@@ -72,11 +70,25 @@ const props = defineProps({
 .main {
     width: 100%;
     position: relative;
+    padding: 40rpx 40rpx 20rpx;
     // background-color: rgba(0, 0, 0, 0.1);
 
-    // .content {
-    //     opacity: 0.1;
-    // }
+    .content {
+        padding: 40rpx;
+        background: #d0e2fa;
+        border-radius: 1.5rem;
+
+        .first {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40rpx;
+        }
+
+        .second {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
 
     .mask {
         width: 100%;

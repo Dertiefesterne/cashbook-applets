@@ -1,1 +1,0 @@
-<view class="content"> 统计页面页面 <view class="text-area"><view wx:if="{{a}}" bindtap="{{b}}">退出登录</view></view></view>

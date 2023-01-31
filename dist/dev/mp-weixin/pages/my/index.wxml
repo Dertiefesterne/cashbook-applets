@@ -1,0 +1,1 @@
+<view class="content data-v-276ac604"><view class="data-v-276ac604">我的界面</view><view class="text-area data-v-276ac604"><view wx:if="{{a}}" class="data-v-276ac604" bindtap="{{b}}">退出登录</view></view></view>

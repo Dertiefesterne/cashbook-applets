@@ -1,1 +1,0 @@
-"use strict";const e=require("../utils/request.js");exports.getSegement=function(t){return e.http.request({url:"/analyze/tokenizer/nlp",method:"GET",data:t})},exports.login=function(t){return e.http.request({url:"/user/checkUser",method:"GET",data:t})},exports.register=function(t){return e.http.request({url:"/user/registerUser",method:"POST",data:t})};

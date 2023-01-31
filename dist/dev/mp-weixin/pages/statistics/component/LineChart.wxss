@@ -1,0 +1,12 @@
+.big-contaniner .charts-box.data-v-b021aa9f {
+  height: 500rpx;
+}
+.big-contaniner .uni-swiper-tab.data-v-b021aa9f {
+  white-space: nowrap;
+}
+.big-contaniner .scrollx_items.data-v-b021aa9f {
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  height: 500rpx;
+}

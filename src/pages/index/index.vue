@@ -1,13 +1,13 @@
 <template>
   <view class="big-container">
-    <view class="flex justify-between items-center w-full h-100rpx px-40rpx fixed top-0 bg-#bccdd6 z-2">
+    <view class="head">
       <p>记账</p>
       <p @click="change">{{ isEdit? '取消': '批量管理' }}</p>
     </view>
-    <view class="content pt-100rpx w-full">
+    <view class="content">
       <billSum :isEdit="isEdit" :sumData="moneySum"></billSum>
-      <view class="w-full px-40rpx mb-40rpx">
-        <button class="addBtn bg-#bcd4e7" hover-class='none' @click="toAddBill">增加一条新记账</button>
+      <view class="btn-box">
+        <button class="addBtn" hover-class='none' @click="toAddBill">增加一条新记账</button>
       </view>
       <view v-for="item in list">
         <billDate :day-date="item" v-if="item.length"></billDate>
@@ -281,21 +281,44 @@ onMounted(() => {
 .big-container {
   position: relative;
 
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100rpx;
+    padding: 0 40rpx;
+    position: fixed;
+    top: 0;
+    background: #bccdd6;
+    z-index: 2;
+  }
+
   .content {
     display: flex;
     flex-direction: column;
+    padding-top: 100rpx;
+    width: 100%;
 
     button::after {
       border: none;
     }
 
-    .addBtn {}
+    .btn-box {
+      width: 100%;
+      padding: 0 40rpx;
+      margin-bottom: 40rpx;
+
+      .addBtn {
+        background: #bcd4e7;
+      }
+    }
   }
 
   .add-bill {
     position: fixed;
     right: 100rpx;
-    bottom: 300rpx;
+    bottom: 200rpx;
     width: 100rpx;
     height: 100rpx;
     background-color: #bcd4e7;

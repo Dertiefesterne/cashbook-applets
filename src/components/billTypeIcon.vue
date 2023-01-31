@@ -1,7 +1,6 @@
 <template>
     <view>
-        <view class="flex justify-center items-center w-100rpx h-100rpx b-rd-2 mx-15rpx" :class="{ mask: !choose }"
-            :style="filters.billTypeColor(classify)">
+        <view class="box" :class="{ mask: !choose }" :style="filters.billTypeColor(classify)">
             <i class="iconfont" :class="filters.billTypeIcon(classify)" style="font-size:40rpx"></i>
         </view>
     </view>
@@ -29,6 +28,16 @@ const color = () => {
 </script>
 
 <style lang="less" scoped>
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100rpx;
+    height: 100rpx;
+    border-radius: 0.5rem;
+    margin: 0 15rpx;
+}
+
 :deep(.mask) {
     opacity: 0.3;
 }

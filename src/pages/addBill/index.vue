@@ -1,41 +1,39 @@
 <template>
     <view>
-        <view class="head flex justify-center items-center w-full h-100rpx px-40rpx fixed top-0 bg-#dfdfe1 z-2">
-            <view class="mx-40rpx h-full lh-100rpx" :class="{ 'chooseBorder': chooseType == -1 }"
-                @click="changeChoose(-1)">
+        <view class="head ">
+            <view class="text" :class="{ 'chooseBorder': chooseType == -1 }" @click="changeChoose(-1)">
                 支出</view>
-            <view class="mx-40rpx h-full lh-100rpx" :class="{ 'chooseBorder': chooseType == 1 }"
-                @click="changeChoose(1)">
+            <view class="text" :class="{ 'chooseBorder': chooseType == 1 }" @click="changeChoose(1)">
                 收入</view>
             <view class="icon" @click="savaBill">
-                <u-icon name="checkmark" class="mr-20rpx" size="20"></u-icon>
+                <u-icon name="checkmark" size="20"></u-icon>
             </view>
         </view>
-        <view class="pt-100rpx w-full ">
-            <view class="flex flex-row-reverse py-20rpx px-40rpx w-full money-box">
-                <text class="text-60rpx font-600">{{ moneyDisplay }}<text class="text-32rpx text-#999">元</text>
+        <view class="content">
+            <view class="money flex flex-row-reverse py-20rpx px-40rpx w-full money-box">
+                <text class="num text-60rpx font-600">{{ moneyDisplay }}<text class="yuan text-32rpx text-#999">元</text>
                 </text>
             </view>
             <!-- 图标 -->
             <view class="gaid-box">
-                <view v-for="index of 8" class="flex flex-col items-center bg-" @click="changeClassify(index - 1)">
+                <view v-for="index of 8" class="classify" @click="changeClassify(index - 1)">
                     <BillTypeIconVue :classify="index - 1" :choose="(index - 1) == billForm.classify" />
                     <p>{{ filters.billTypeFilter(index - 1) }}</p>
                 </view>
             </view>
-            <view class="mt-50rpx px-40rpx">
+            <view class="date-box">
                 <!-- 时间 -->
-                <view class="flex items-center mb-25rpx text-32rpx">
-                    <u-icon name="edit-pen" class="mr-20rpx" size="20"></u-icon>
+                <view class="matter">
+                    <u-icon name="edit-pen" size="20"></u-icon>
                     <input placeholder="备注...（最多15个字）" v-model="billForm.matter" @input="changeText(billForm.matter)"
                         maxlength="15" class="matter-input" />
-                    <span v-if="billForm.matter.length" class="text-28rpx text-#999">{{
+                    <text v-if="billForm.matter.length" class="matter-num text-28rpx text-#999">{{
                         billForm.matter.length
-                    }}/15</span>
+                    }}/15</text>
                 </view>
-                <view class="flex text-32rpx">
-                    <u-icon name="clock" class="mr-20rpx" size="20"></u-icon>
-                    <text class="mr-10rpx" @click="showDate = true">
+                <view class="time">
+                    <u-icon name="clock" size="20"></u-icon>
+                    <text class="dd" @click="showDate = true">
                         {{ billForm.data_time.slice(0, 10) }}
                     </text>
                     <text @click="showTime = true">
@@ -47,32 +45,32 @@
                 monthNum="3" closeOnClickOverlay @close="showDate = false"></u-calendar>
             <u-datetime-picker :show="showTime" v-model="datetimeValue" mode="time" @confirm="confirmTime"
                 closeOnClickOverlay @cancel="showTime = false"></u-datetime-picker>
-            <view class="absolute bottom-0  w-full">
-                <view class="w-full">
-                    <view class="flex tagsBox bg-#d0e2fa p-20rpx w-full">
-                        <text v-for="item in tags" class="px-15rpx py-5rpx bg-#fff rd-3 mr-10rpx"
-                            @click="changeMatter(item)">{{
-                                item
-                            }}</text>
-                        <view class="bg-#d0e2fa  iconBox">
-                            <u-icon name="more-circle" size="20"></u-icon>
-                        </view>
+            <view class="keyboard">
+                <view class="tagsBox">
+                    <scroll-view class="uni-swiper-tab" scroll-x>
+                        <text v-for="item in tags" class="tab" @click="changeMatter(item)">{{
+                            item
+                        }}</text>
+                    </scroll-view>
+                    <view class=" iconBox">
+                        <u-icon name="more-circle" size="20"></u-icon>
                     </view>
-                    <view class="w-full bg-#f8f8fa but-box flex p-20rpx">
-                        <view class="number-box">
-                            <button hover-class='none' class="rd-7" v-for="item in buttons"
-                                @click="changeMoney(item)">{{ item }}</button>
-                            <button hover-class='none' class="rd-7 flex justify-center" @click="subMoney">
-                                <u-icon name="backspace" size="35"></u-icon>
-                            </button>
-                        </view>
-                        <view class="add-box">
-                            <button hover-class='none' class="rd-7" @click="changeMoney('+')">+</button>
-                            <button hover-class='none' class="rd-7" @click="changeMoney('-')">-</button>
-                            <button hover-class='none' class="publish rd-7" @click="changeMoney(inCalc())">{{
-                                inCalc()
-                            }}</button>
-                        </view>
+                </view>
+                <view class="but-box">
+                    <view class="number-box">
+                        <button hover-class='none' v-for="item in buttons" @click="changeMoney(item)">{{
+                            item
+                        }}</button>
+                        <button hover-class='none' class="sub" @click="subMoney">
+                            <u-icon name="backspace" size="35"></u-icon>
+                        </button>
+                    </view>
+                    <view class="add-box">
+                        <button hover-class='none' @click="changeMoney('+')">+</button>
+                        <button hover-class='none' @click="changeMoney('-')">-</button>
+                        <button hover-class='none' class="publish" @click="changeMoney(inCalc())">{{
+                            inCalc()
+                        }}</button>
                     </view>
                 </view>
             </view>
@@ -285,86 +283,198 @@ function inCalc() {
 
 <style lang="less" scoped>
 .head {
-    position: relative;
+    width: 100%;
+    height: 100rpx;
+    padding: 0 40rpx;
+    position: fixed;
+    top: 0;
+    background: #dfdfe1;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .text {
+        line-height: 100rpx;
+        height: 100%;
+        margin: 0 40rpx;
+    }
 
     .icon {
         position: absolute;
         right: 0;
+
+        .u-icon {
+            margin-right: 20rpx;
+        }
     }
 }
 
-.money-box {
-    text {
-        white-space: normal;
-    }
-}
+.content {
+    padding: 100rpx 0 600rpx;
+    width: 100%;
 
-.gaid-box {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap: 10rpx;
+    .money {
+        display: flex;
+        flex-direction: row-reverse;
+        padding: 20rpx 40rpx;
+        width: 100%;
+
+        text {
+            white-space: normal;
+        }
+
+        .num {
+            font-size: 60rpx;
+            font-weight: 600;
+        }
+
+        .yuan {
+            font-size: 32rpx;
+            color: #999;
+        }
+    }
+
+    .gaid-box {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-gap: 10rpx;
+
+        .classify {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+
+    .date-box {
+        padding: 0 40rpx;
+        margin-top: 50rpx;
+
+        .matter {
+            display: flex;
+            font-size: 32rpx;
+            margin-bottom: 25rpx;
+
+            .u-icon {
+                margin-right: 20rpx;
+            }
+
+            .matter-input {
+                width: 100%;
+            }
+        }
+
+        .time {
+            display: flex;
+            font-size: 32rpx;
+
+            .u-icon {
+                margin-right: 20rpx;
+            }
+
+            .dd {
+                margin-right: 10rpx;
+            }
+        }
+    }
+
+    .keyboard {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+
+        .tagsBox {
+            overflow: hidden;
+            width: 100%;
+            background: #d0e2fa;
+            padding: 20rpx;
+            position: relative;
+
+            text {
+                white-space: nowrap;
+            }
+
+            .iconBox {
+                position: absolute;
+                right: 0;
+                top: 0;
+                display: flex;
+                align-items: center;
+                height: 100%;
+                padding: 0 25rpx;
+            }
+
+            .uni-swiper-tab {
+                white-space: nowrap;
+                width: 90%;
+
+                .tab {
+                    padding: 5rpx 15rpx;
+                    background: #fff;
+                    border-radius: 0.5rem;
+                    margin-right: 10rpx;
+                    display: inline-block;
+                }
+            }
+
+            .iconBox {
+                background: #d0e2fa;
+            }
+        }
+
+        .but-box {
+            width: 100%;
+            background: #f8f8fa;
+            display: flex;
+            padding: 20rpx;
+
+            button {
+                width: 150rpx;
+                height: 100rpx;
+                background-color: #fff;
+                box-shadow: 0 5px 5px #dfdfe1;
+                border-radius: 2rem;
+            }
+
+            button::after {
+                border: none;
+            }
+
+            button:focus {
+                outline: none; //去除点击之后默认的边框
+                background: #fff;
+            }
+
+            .sub {
+                display: flex;
+                justify-content: center;
+            }
+
+            .number-box {
+                width: 75%;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 10px 0;
+            }
+
+            .add-box {
+                width: 25%;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 10px 0;
+                border-radius: 2rem;
+
+                .publish {
+                    height: 220rpx;
+                    line-height: 220rpx;
+                }
+            }
+        }
+    }
 }
 
 .chooseBorder {
     border-bottom: 2px solid #559eff;
-}
-
-
-.matter-input {
-    width: 100%;
-}
-
-.tagsBox {
-    overflow: hidden;
-    position: relative;
-
-    text {
-        white-space: nowrap;
-    }
-
-    .iconBox {
-        position: absolute;
-        right: 0;
-        top: 0;
-        padding: 25rpx 25rpx;
-    }
-}
-
-.but-box {
-
-    button {
-        width: 150rpx;
-        height: 100rpx;
-        background-color: #fff;
-        box-shadow: 0 5px 5px #dfdfe1;
-    }
-
-    button::after {
-        border: none;
-    }
-
-    button:focus {
-        outline: none; //去除点击之后默认的边框
-        background: #fff;
-    }
-
-    .number-box {
-        width: 75%;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 10px 0;
-    }
-
-    .add-box {
-        width: 25%;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 10px 0;
-
-        .publish {
-            height: 220rpx;
-            line-height: 220rpx;
-        }
-    }
 }
 </style>
