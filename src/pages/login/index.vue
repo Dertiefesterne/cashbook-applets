@@ -14,7 +14,6 @@
     <view class="login-btn">
       <button @click="confirmLogin" hover-class='none' :disabled="noRegister">登录</button>
       <button @click="registerUser" hover-class='none' :disabled="!noRegister">注册</button>
-      <BillTypeIconVue />
     </view>
   </view>
 </template>

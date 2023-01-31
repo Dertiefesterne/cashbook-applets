@@ -2,13 +2,18 @@
     <view class="big-contaniner">
         扇形图
         <view class="charts-box">
-            <qiun-data-charts type="pie" :chartData="chartData2" />
+            <qiun-data-charts type="pie" :chartData="myData" />
         </view>
     </view>
 </template>
 
 
 <script setup lang="ts">
+
+const emit = defineEmits(['update:modelValue', 'addBill']),
+    props = defineProps({
+        myData: {}
+    })
 const opts = {
     color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
     padding: [5, 5, 5, 5],

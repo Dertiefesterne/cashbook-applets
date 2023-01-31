@@ -98,7 +98,9 @@ onLoad((option) => {
   // }
 })
 
+onMounted(() => {
 
+})
 
 /** 页面触底 */
 onReachBottom(() => {
@@ -290,7 +292,7 @@ onMounted(() => {
     padding: 0 40rpx;
     position: fixed;
     top: 0;
-    background: #bccdd6;
+    background: #dfdfe1;
     z-index: 2;
   }
 

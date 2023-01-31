@@ -18,7 +18,7 @@
                     </view>
                 </view>
                 <view class="items">
-                    -{{ item.money }}
+                    {{ item.bill_type == 1 ? "+" : "-" }}{{ item.money }}
                 </view>
             </view>
         </view>
@@ -58,7 +58,7 @@ const props = defineProps({
 })
 
 const dataListSum = computed(() => {
-    return props.dayDate.reduce((sum, e) => sum + Number(e.money || 0), 0).toFixed(2)
+    return props.dayDate.reduce((sum, e) => sum + Number(e.money * e.bill_type || 0), 0).toFixed(2)
 })
 
 const allChoose = ref([]),

@@ -102,6 +102,16 @@ export default {
             return year + '-' + month + '-' + day + ' ' + hour + ":" + min + ":" + seconds
         }
     },
+    // 获得某个月的天数
+    getMonthDays(date: string) {
+        var d = new Date(date)
+        //将日期设为下一个月的一号
+        d.setMonth(d.getMonth() + 1)
+        d.setDate(1)
+        //现在d是下一个月的1号，1号的前一天就是我们所求月份的最后一天，这天的日期就是这个月的天数
+        d.setDate(d.getDate() - 1)
+        return d.getDate()
+    },
     // 测试
     testYy(val: number) {
         let yy = val + 1

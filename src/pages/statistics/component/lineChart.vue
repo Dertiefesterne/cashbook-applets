@@ -1,7 +1,6 @@
 <template>
     <view class="big-contaniner">
-
-        折线图
+        折线图--
         <!-- <scroll-view class="uni-swiper-tab" scroll-x style="height:500rpx">
             <view class="scrollx_items">
                 <qiun-data-charts type="line" width="5" :chartData="chartData1" />
@@ -11,39 +10,24 @@
             </view>
         </scroll-view> -->
         <view class="scrollx_items">
-            <qiun-data-charts type="line" width="5" :chartData="chartData2" :opts="opts2" />
+            <qiun-data-charts type="line" width="5" :chartData="myData" :opts="opts2" />
         </view>
     </view>
 </template>
 
 
 <script setup lang="ts">
-const chartData = {
-    categories: ['7月', '8月', '9月', '10月', '11月', '12月'],
-    series: [
-        {
-            name: '支出',
-            data: [5036, 4831, 3933, 4513, 4934, 6782]
-        }
-    ]
-}, chartData1 = {
-    categories: ['1月', '2月', '3月', '4月', '5月', '6月'],
-    series: [
-        {
-            name: '支出',
-            data: [13835, 5036, 4831, 3933, 4513, 4934]
-        }
-    ]
-}, chartData2 = {
-    categories: ['12/1', '12/2', '12/3', '12/4', '12/5', '12/6', '12/7', '12/8', '12/9', '12/10', '12/11', '12/12', '12/13', '12/14', '12/15', '12/16', '12/17', '12/18', '12/19', '12/20', '12/21', '12/22', '12/23', '12/24', '12/25', '12/26', '12/27', '12/28', '12/29', '12/30', '12/31'],
-    series: [
-        {
-            name: '支出',
-            data: [45, 67, 10, 89, 23, 76, 123, 56, 38, 95, 26, 72, 33, 75, 12, 44, 56, 86, 13, 465, 90, 53, 23, 65, 88, 346, 65, 134, 76, 12, 98]
-        }
-    ]
-}, opts2 = {
+import { chart, interSeries } from '@/entity/chart'
+
+const emit = defineEmits(['update:modelValue', 'addBill']),
+    props = defineProps({
+        myData: {}
+    })
+const opts2 = {
     dataLabel: false, // 是否显示图表区域内数据点上方的数据文案
+    "xAxis": {
+        "disabled": true,  //是否启用 不绘制X轴
+    },
 }, opts = {
     color: ["#1890FF"],
     padding: [15, 25, 10, 10],

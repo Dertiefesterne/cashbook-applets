@@ -84,6 +84,13 @@
         method: 'GET',
         data
       })
+  },
+  getBillChartData(data:any){
+    return http.request({
+      url:'/bill/billList/chartData',
+      method: 'GET',
+      data
+    })
   }
 }
  // 指定类型

@@ -121,7 +121,7 @@ onLoad((option) => {
  * 获取获取账单详情
  */
 const getBillDetail = async () => {
-    const res = await billServer.getBillDetial({ userID: loginStore.userID, billID: billID.value })
+    const res = await billServer.getBillDetial({ userID: Number(loginStore.userID), billID: billID.value })
     console.log("获取获取账单详情", res.data)
     billDetial.value = res.data
     moneyDisplay.value = billDetial.value.money + ''

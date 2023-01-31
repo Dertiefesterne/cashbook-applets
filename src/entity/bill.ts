@@ -34,6 +34,9 @@ export interface groupBill {
 	count: number
 }
 
+
+
+
 // 请求返回信息
 export interface responseType {
 	/**  日期，按天分组 */

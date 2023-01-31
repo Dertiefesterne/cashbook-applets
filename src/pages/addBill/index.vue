@@ -1,11 +1,14 @@
 <template>
     <view>
-        <view class="head ">
+        <view class="head">
+            <view class="icon-l" @click="back">
+                <u-icon name="arrow-left" size="20"></u-icon>
+            </view>
             <view class="text" :class="{ 'chooseBorder': chooseType == -1 }" @click="changeChoose(-1)">
                 支出</view>
             <view class="text" :class="{ 'chooseBorder': chooseType == 1 }" @click="changeChoose(1)">
                 收入</view>
-            <view class="icon" @click="savaBill">
+            <view class="icon-r" @click="savaBill">
                 <u-icon name="checkmark" size="20"></u-icon>
             </view>
         </view>
@@ -27,7 +30,7 @@
                     <u-icon name="edit-pen" size="20"></u-icon>
                     <input placeholder="备注...（最多15个字）" v-model="billForm.matter" @input="changeText(billForm.matter)"
                         maxlength="15" class="matter-input" />
-                    <text v-if="billForm.matter.length" class="matter-num text-28rpx text-#999">{{
+                    <text v-if="billForm.matter.length" class="matter-num">{{
                         billForm.matter.length
                     }}/15</text>
                 </view>
@@ -254,6 +257,7 @@ const changeChoose = (type: number) => {
     savaBill = async () => {
         let money = Number(moneyDisplay.value)
         billForm.money = money
+        billForm.bill_type = chooseType.value
         if (billForm.money == 0) {
             uni.showToast({ title: '请输入该账单金额', icon: 'none' })
             return
@@ -267,6 +271,10 @@ const changeChoose = (type: number) => {
                 url: '/pages/index/index'
             })
         }
+    }, back = () => {
+        uni.switchTab({
+            url: '/pages/index/index'
+        })
     }
 
 function inCalc() {
@@ -300,13 +308,14 @@ function inCalc() {
         margin: 0 40rpx;
     }
 
-    .icon {
+    .icon-l {
         position: absolute;
-        right: 0;
+        left: 20rpx;
+    }
 
-        .u-icon {
-            margin-right: 20rpx;
-        }
+    .icon-r {
+        position: absolute;
+        right: 20rpx;
     }
 }
 
@@ -362,6 +371,11 @@ function inCalc() {
 
             .matter-input {
                 width: 100%;
+            }
+
+            .matter-num {
+                font-size: 28rpx;
+                color: #999;
             }
         }
 

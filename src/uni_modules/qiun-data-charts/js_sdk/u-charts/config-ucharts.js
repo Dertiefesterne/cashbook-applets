@@ -241,7 +241,7 @@ const cfu = {
 		"color": color,
 		"padding": [15, 10, 0, 15],
 		"xAxis": {
-			"disabled": true,  //是否启用 不绘制X轴
+			// "disabled": true,  //是否启用 不绘制X轴
 			"disableGrid": true,
 		},
 		"yAxis": {
