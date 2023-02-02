@@ -116,5 +116,17 @@ export default {
     testYy(val: number) {
         let yy = val + 1
         return yy
+    },
+    debounce(fn: Function, wait: number = 200) {
+        console.log('看看2')
+        var timer = 0;
+        return function () {
+            if (timer !== null) {
+                clearTimeout(timer);
+            }
+            timer = setTimeout(() => {
+                fn
+            }, wait);
+        }
     }
 }

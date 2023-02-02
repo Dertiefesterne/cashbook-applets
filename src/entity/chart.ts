@@ -35,13 +35,3 @@ export interface sectorSeriesData {
     // 图表数据
     value: number
 }
-
-chartData3 = {
-    categories: ['1班', '2班', '3班', '4班', '5班'],
-    series: [
-        {
-            name: '支出',
-            data: [{ "name": "一班", "value": 50 }, { "name": "二班", "value": 30 }, { "name": "三班", "value": 20 }, { "name": "四班", "value": 18 }, { "name": "五班", "value": 8 }]
-        }
-    ]
-}

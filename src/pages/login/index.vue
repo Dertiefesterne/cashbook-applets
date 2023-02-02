@@ -4,7 +4,7 @@
       <h3>登录页</h3>
     </view>
     <view class="table">
-      <view><input maxlength="15" placeholder="用户名" v-model="userName" @input="ifRegister(userName)" />
+      <view><input maxlength="15" placeholder="用户名" v-model="userName" @input="ifRegister3" />
       </view>
       <view class="info-warn" v-if="noRegister && userName.length">
         <u-icon name="info-circle" color="red"></u-icon>该账号尚未注册
@@ -21,6 +21,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import userServer from '@/api/userApi'
+import dataUtils from '@/utils/dataUtils'
 import { useloginStore } from '@/pinia-store/login'
 import BillTypeIconVue from '../../components/billTypeIcon.vue'
 const loginStore = useloginStore()
@@ -28,7 +29,9 @@ const loginStore = useloginStore()
 const acount = ref(),
   userName = ref(''),
   passWord = ref(''),
-  noRegister = ref(false)
+  noRegister = ref(false),
+  timer = ref(0)
+
 const confirmLogin = async () => {
   if (userName.value == "") {
     uni.showToast({
@@ -99,7 +102,9 @@ const registerUser = async () => {
     })
   }
 },
-  ifRegister = async (name: string) => {
+  ifRegister = async () => {
+    console.log('开始执行--')
+    let name = userName.value.replace(/ /g, '')
     if (name == '') {
       return
     }
@@ -110,6 +115,22 @@ const registerUser = async () => {
     else {
       noRegister.value = false
     }
+  },
+  ifRegister2 = () => {
+    console.log('看看')
+    return new Promise(resolve => {
+      clearTimeout(timer.value)
+      timer.value = setTimeout(() => {
+        ifRegister()
+      }, 800)
+    })
+  },
+  ifRegister3 = () => {
+    console.log('看看')
+    clearTimeout(timer.value)
+    timer.value = setTimeout(() => {
+      ifRegister()
+    }, 800)
   }
 
 onMounted(() => {

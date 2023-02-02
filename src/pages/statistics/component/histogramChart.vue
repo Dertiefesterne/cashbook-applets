@@ -1,14 +1,19 @@
 <template>
     <view class="big-contaniner">
-        柱状图
-        <scroll-view class="uni-swiper-tab" scroll-x style="height:500rpx">
+        <view class="year-picker" @click="show = true">
+            {{ chooseValue }}年度
+            <u-icon :name="show ? 'arrow-down' : 'arrow-right'"></u-icon>
+        </view>
+        <u-picker :show="show" :columns="rangeData" closeOnClickOverlay @close="show = false"
+            @confirm="chooseYear"></u-picker>
+        <!-- <scroll-view class="uni-swiper-tab" scroll-x style="height:500rpx">
             <view class="scrollx_items">
                 <qiun-data-charts type="column" width="5" :chartData="chartData1" :opts="opts" />
             </view>
             <view class="scrollx_items">
                 <qiun-data-charts type="column" width="5" :chartData="chartData" :opts="opts" />
             </view>
-        </scroll-view>
+        </scroll-view> -->
         <view class="scrollx_items">
             <qiun-data-charts type="column" width="5" :chartData="data1" :opts="opts2" />
         </view>
@@ -17,13 +22,38 @@
 
 
 <script setup lang="ts">
+import { ref, onMounted, watch } from 'vue'
 
+interface chooseEven {
+    // x轴
+    indexs: Array<Number>,
+    // 图表数据
+    value: Array<Number>,
+    values: Array<Array<Number>>,
+}
 
-
-const emit = defineEmits(['update:modelValue', 'addBill']),
+const emit = defineEmits(['update:modelValue', 'changeYearGroup']),
     props = defineProps({
+        rangeData: {
+            type: Array<Array<String>>,
+            default: [[0]]
+        },
         data1: {}
     })
+
+watch(
+    props,
+    (newProps) => {
+        console.log('新增值', newProps.data1); //这里看到新值
+    }
+);
+
+onMounted(() => {
+    chooseValue.value = props.rangeData[0][0]
+})
+const show = ref(false),
+    chooseValue = ref<String>()
+
 const chartData = {
     categories: ['7月', '8月', '9月', '10月', '11月', '12月'],
     series: [
@@ -48,7 +78,19 @@ const chartData = {
             data: [3835, 2036, 6831, 5133, 7213, 8134, 13835, 5036, 4831, 3933, 4513, 4934]
         }
     ]
-}
+},
+    columns = [
+        [{
+            label: '雪月夜',
+            // 其他属性值
+            id: 2021
+            // ...
+        }, {
+            label: '冷夜雨',
+            id: 804
+        }]
+    ]
+
 
 const opts = {
     xAxis: {
@@ -63,10 +105,25 @@ const opts = {
     opts2 = {
         dataLabel: false, // 是否显示图表区域内数据点上方的数据文案
     }
+
+const chooseYear = (e: chooseEven) => {
+    console.log('confirm', e)
+    show.value = false
+    chooseValue.value = e.value[0] + ''
+    emit('changeYearGroup', e.value[0] + '')
+}
+
+
 </script>
 
 <style lang="less" scoped>
 .big-contaniner {
+
+    .year-picker {
+        padding: 10rpx 20rpx 0;
+        display: flex;
+        float: right;
+    }
 
     .charts-box {
         // width: 100%;

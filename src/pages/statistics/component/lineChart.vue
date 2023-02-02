@@ -1,6 +1,11 @@
 <template>
     <view class="big-contaniner">
-        折线图--
+        <view class="month-picker" @click="show = true">
+            {{ chooseValue }}月
+            <u-icon :name="show ? 'arrow-down' : 'arrow-right'"></u-icon>
+        </view>
+        <u-picker :show="show" :columns="rangeData" closeOnClickOverlay @close="show = false"
+            @confirm="chooseMonth"></u-picker>
         <!-- <scroll-view class="uni-swiper-tab" scroll-x style="height:500rpx">
             <view class="scrollx_items">
                 <qiun-data-charts type="line" width="5" :chartData="chartData1" />
@@ -17,12 +22,28 @@
 
 
 <script setup lang="ts">
+import { ref, onMounted, watch } from 'vue'
 import { chart, interSeries } from '@/entity/chart'
 
-const emit = defineEmits(['update:modelValue', 'addBill']),
+interface chooseEven {
+    // x轴
+    indexs: Array<Number>,
+    // 图表数据
+    value: Array<Number>,
+    values: Array<Array<Number>>,
+}
+const emit = defineEmits(['update:modelValue', 'changeMonthGroup']),
     props = defineProps({
+        rangeData: {
+            type: Array<Array<String>>,
+            default: [[0]]
+        },
         myData: {}
     })
+
+const show = ref(false),
+    chooseValue = ref<String>()
+
 const opts2 = {
     dataLabel: false, // 是否显示图表区域内数据点上方的数据文案
     "xAxis": {
@@ -87,10 +108,25 @@ const opts2 = {
     }
 }
 
+const chooseMonth = (e: chooseEven) => {
+    show.value = false
+    chooseValue.value = e.value[0] + ''
+    emit('changeMonthGroup', e.value[0] + '')
+}
+
+onMounted(() => {
+    console.log('yyyyyyy', props.rangeData)
+    chooseValue.value = props.rangeData[0][0]
+})
 </script>
 
 <style lang="less" scoped>
 .big-contaniner {
+    .month-picker {
+        padding: 10rpx 20rpx 0;
+        display: flex;
+        float: right;
+    }
 
     .charts-box {
         // width: 100%;
