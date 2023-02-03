@@ -107,7 +107,8 @@ watch(
     (newProps) => {
         if (newProps.length) {
             console.log('新增值年度范围数据', newProps)
-            chooseValue.value = newProps[0][0]
+            let index = newProps[0].length
+            chooseValue.value = newProps[0][index - 1]
         }
     },
     // 强制立即执行回调

@@ -101,7 +101,8 @@ const billID = ref(),
     moneyDisplay = ref(''),
     showDate = ref(false),
     showTime = ref(false),
-    value1 = ref()
+    value1 = ref(),
+    lastTime = ref('')
 
 const tags = ['外卖', '淘宝', '打车', '吃饭', '零食', '超市', '买菜', '旅游', '机票', '房租']
 const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0']
@@ -113,6 +114,13 @@ onLoad((option) => {
         billID.value = option.billID
     // 获取账单详情
     getBillDetail()
+    if (option && option.lastTime) {
+        lastTime.value = option.lastTime;
+        console.log('lastTime', lastTime.value, typeof lastTime.value)
+    }
+    else {
+        lastTime.value = new Date().getTime() + ''
+    }
 })
 
 
@@ -136,15 +144,17 @@ const getBillDetail = async () => {
         showDate.value = false
         const Data = JSON.parse(JSON.stringify(e));
         let time = Data[0] + billDetial.value.time.slice(10)
+        let timestamp = new Date(time).getTime() + '';
         setProp(billDetial.value, 'time', time)
-        console.log('11confirmDate ', time)
+        setProp(billDetial.value, 'timestamp', timestamp)
     },
     confirmTime = (e: Event) => {
         showTime.value = false
         const Time = JSON.parse(JSON.stringify(e));
         let time = billDetial.value.time.slice(0, 11) + Time.value + ":00"
+        let timestamp = new Date(time).getTime() + '';
         setProp(billDetial.value, 'time', time)
-        console.log('11confirmTime', time)
+        setProp(billDetial.value, 'timestamp', timestamp)
     },
     changeText = (e: string) => {
         let matter = e.replace(/ /g, '')
@@ -265,15 +275,7 @@ const getBillDetail = async () => {
                     const res = billServer.deleteBill(params)
                     if ((await res).data == '删除成功') {
                         uni.showToast({ title: '删除成功', duration: 800 })
-                        // uni.switchTab({
-                        //     url: '/pages/index/index'
-                        // })
-                        uni.reLaunch({
-                            url: '/pages/index/index'
-                        })
-                        // uni.reLaunch({
-                        //     // url: `/pages/index/index?billID=${billDetial.value.bill_id}&date=${formattereTools.dateFormatString(billDetial.value.time)}`
-                        // });
+                        jumpPage()
                     }
                 }
             },
@@ -282,15 +284,22 @@ const getBillDetail = async () => {
     modifyBill = async () => {
         // 保存修改后的账单
         console.log('修改后的账单', billDetial.value)
-        const params = { userID: Number(loginStore.userID), billID: billDetial.value.bill_id, datetime: billDetial.value.time, money: billDetial.value.money, matter: billDetial.value.matter }
+        const params = { userID: Number(loginStore.userID), billID: billDetial.value.bill_id, datetime: billDetial.value.time, timestamp: billDetial.value.timestamp, money: billDetial.value.money, matter: billDetial.value.matter, classify: billDetial.value.classify }
         const res = billServer.updateBill(params)
-        console.log('请求结果', res)
         if ((await res).statusCode == 200) {
             uni.showToast({ title: '修改成功', duration: 800 })
-            // uni.switchTab({
-            //     url: '/pages/index/index'
-            // })
+            jumpPage()
+        }
+    },
+    jumpPage = () => {
+        // 如果修改的账单时间距离(最新一条账单)超过7天，就刷新
+        if (formattereTools.dateFormatterDispose(billDetial.value.timestamp, Number(lastTime.value))) {
             uni.reLaunch({
+                url: '/pages/index/index'
+            })
+        }
+        else {
+            uni.switchTab({
                 url: '/pages/index/index'
             })
         }

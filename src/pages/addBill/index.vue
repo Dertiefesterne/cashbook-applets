@@ -102,7 +102,8 @@ const billID = ref(),
     showTime = ref(false),
     datetimeValue = ref(),
     time = ref(),
-    maxDate = ref()
+    maxDate = ref(),
+    lastTime = ref('')
 
 // 保存参数信息
 const billForm = reactive({
@@ -130,7 +131,6 @@ const billForm = reactive({
 const tags = ['外卖', '淘宝', '打车', '吃饭', '零食', '超市', '买菜', '旅游', '机票']
 const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0']
 
-
 /**
  * 获取获取账单详情
  */
@@ -145,12 +145,14 @@ const changeChoose = (type: number) => {
         const Data = JSON.parse(JSON.stringify(e));
         let data_time = Data[0] + billForm.data_time.slice(10)
         billForm.data_time = data_time
+        billForm.timestamp = new Date(data_time).getTime() + '';
     },
     confirmTime = (e: Event) => {
         showTime.value = false
         const Time = JSON.parse(JSON.stringify(e));
         let data_time = billForm.data_time.slice(0, 11) + Time.value + ":00"
         billForm.data_time = data_time
+        billForm.timestamp = new Date(data_time).getTime() + '';
     },
     changeText = (e: string) => {
         let matter = e.replace(/ /g, '')
@@ -267,9 +269,18 @@ const changeChoose = (type: number) => {
         const res = await billServer.addBill({ ...params })
         if (res.data == '添加成功') {
             uni.showToast({ title: '添加成功', duration: 800 })
-            uni.reLaunch({
-                url: '/pages/index/index'
-            })
+            // 如果添加的账单时间距离(最新一条账单)超过7天，就刷新
+            if (formattereTools.dateFormatterDispose(billForm.timestamp, Number(lastTime.value))) {
+                uni.reLaunch({
+                    url: '/pages/index/index'
+                })
+            }
+            // 
+            else {
+                uni.switchTab({
+                    url: '/pages/index/index'
+                })
+            }
         }
     }, back = () => {
         uni.switchTab({
@@ -286,6 +297,16 @@ function inCalc() {
         return '完成'
 }
 
+onLoad((option) => {
+    if (option && option.lastTime) {
+        lastTime.value = option.lastTime;
+        console.log('lastTime', lastTime.value, typeof lastTime.value)
+    }
+    else {
+        lastTime.value = new Date().getTime() + ''
+    }
+
+})
 
 </script>
 

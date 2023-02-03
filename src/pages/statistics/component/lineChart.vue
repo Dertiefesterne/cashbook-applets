@@ -113,8 +113,7 @@ watch(
     (newProps) => {
         if (newProps.length) {
             console.log('新增值月度范围数据', newProps)
-            let index = newProps[0].length
-            chooseValue.value = newProps[0][index - 1]
+            chooseValue.value = newProps[0][0]
         }
     },
     // 强制立即执行回调

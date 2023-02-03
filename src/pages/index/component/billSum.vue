@@ -6,7 +6,7 @@
                 <view class="first">
                     <view>
                         <p>今天支出</p>
-                        <p>{{ sumData.daySum }}￥</p>
+                        <p>{{ sumData.daySum ? sumData.daySum : 0 }}￥</p>
                     </view>
                     <view @click="show = true">点击设置预算
                         <i class="icon xianxing-15"></i>
@@ -16,7 +16,7 @@
                 <view class="second">
                     <view>
                         <p>本月支出</p>
-                        <p>{{ sumData.monthSum.toFixed(2) }}￥</p>
+                        <p>{{ sumData.monthSum ? sumData.monthSum.toFixed(2) : '0' }}￥</p>
                     </view>
                     <view>
                         <p>本月剩余预算</p>

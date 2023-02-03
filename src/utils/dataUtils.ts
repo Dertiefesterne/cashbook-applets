@@ -5,11 +5,14 @@ export default {
     charactersTonumber(chnStr: string) {
     },
     // 处理时间
-    dateFormatterDispose(str: string, val: number) {
-        var stime = val
+    dateFormatterDispose(endTime: string, startTime: number) {
+        // 开始时间
+        var stime = startTime
         // var etime = new Date().getTime()
-        var etime = Number(str)
-        var usedTime = etime - stime //两个时间戳相差的毫秒数
+        // 结束时间()
+        var etime = Number(endTime)
+        // 刚记录的账单时间距离最新一条记录的时间
+        var usedTime = Math.abs(etime - stime) //两个时间戳相差的毫秒数
         var days = Math.floor(usedTime / (24 * 3600 * 1000))
         // //计算出小时数
         // var leave1 = usedTime % (24 * 3600 * 1000) //计算天数后剩余的毫秒数

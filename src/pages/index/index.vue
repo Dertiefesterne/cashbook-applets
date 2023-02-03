@@ -65,9 +65,9 @@ interface PageParams {
 
 /** 分页传参对象 */
 interface sumParams {
-  daySum: number // 当前分页
-  monthSum: number // 分页大小
-  yearSum: number // 是否不再加载更多
+  daySum: number // 日支出
+  monthSum: number // 月支出
+  yearSum: number // 年支出
 }
 
 // 账单列表----嵌套数组
@@ -144,9 +144,17 @@ const segement = async () => {
     refreshData(new Date().getTime())
   },
   toAddBill = () => {
-    uni.navigateTo({
-      url: '/pages/addBill/index'
-    })
+    if (allData.value.length) {
+      console.log('跳转参数', allData.value[0])
+      uni.navigateTo({
+        url: `/pages/addBill/index?lastTime=${allData.value[0].timestamp}`
+      })
+    }
+    else {
+      uni.navigateTo({
+        url: '/pages/addBill/index'
+      })
+    }
   },
   ifRefresh = (e: any) => {
     console.log(e, typeof e)
@@ -154,7 +162,7 @@ const segement = async () => {
   },
   refreshData = (timestamp: number) => {
     // 检查是否需要重新刷新页面
-    if (formattereTools.dateFormatterDispose(allData.value[0].timestamp, timestamp)) {
+    if (allData.value.length == 0 || formattereTools.dateFormatterDispose(allData.value[0].timestamp, timestamp)) {
       console.log("重新刷新首页数据")
       // 当前添加的账单距离当前时间(更准确的是距离最新的一条账单的时间)没有超过7天，需要重新刷新首页数据（新增加的账单可能会出现在首页）
       // 重置数据列表
