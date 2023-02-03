@@ -98,9 +98,6 @@ onLoad((option) => {
   // }
 })
 
-onMounted(() => {
-
-})
 
 /** 页面触底 */
 onReachBottom(() => {
@@ -167,6 +164,8 @@ const segement = async () => {
       page.value.notMore = false
       // 重新获取新的分组信息
       GetBillByGroup()
+      // 重新获得新的账单总数信息
+      GetBillSum()
       // 
       // uni.pageScrollTo({
       //   scrollTop: 0,
@@ -270,7 +269,6 @@ async function getNextList() {
 }
 
 onMounted(() => {
-  console.log("初始化", list.value)
   // console.log("homestorage", uni.getStorageSync("USER_INFORMATION"))
   GetBillByGroup()
   GetBillSum()

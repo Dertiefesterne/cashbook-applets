@@ -35,3 +35,11 @@ export interface sectorSeriesData {
     // 图表数据
     value: number
 }
+
+export interface chooseEven {
+    // x轴
+    indexs: Array<Number>,
+    // 图表数据
+    value: Array<Number>,
+    values: Array<Array<Number>>,
+}

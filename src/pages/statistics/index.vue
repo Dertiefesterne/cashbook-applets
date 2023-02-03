@@ -9,10 +9,7 @@
 		<view class="content" v-if="ready">
 			<histogram :data1="myHistogramData" :rangeData="histogramRangeData" @changeYearGroup="changeYearGroup" />
 			<LineChart :myData="myLineData" :rangeData="LineRangeData" @changeMonthGroup="changeMonthGroup"></LineChart>
-			<sectorChart :myData="mySectorData" />
-			<!-- <view class="text-area">
-			<view @tap="loginOut" v-if="loginStore.userID != -1">退出登录</view>
-		</view> -->
+			<sectorChart :myData="mySectorData" :rangeData="LineRangeData" @changeMonthGroup="changeClassifyMonth" />
 		</view>
 	</view>
 </template>
@@ -70,16 +67,24 @@ const chartData = {
 			data: [{ "name": "一班", "value": 50 }, { "name": "二班", "value": 30 }, { "name": "三班", "value": 20 }, { "name": "四班", "value": 18 }, { "name": "五班", "value": 8 }]
 		}
 	]
-}
+},
+	columns = [
+		['2022', '2023'],
+		['01', '02']
+	]
+
 
 
 const getYearGroupData = async () => {
 	const params = { userID: Number(loginStore.userID), groupType: "year", billType: -1 }
 	const res = await billServer.getBillChartData(params)
 	let arr = res.data.map((item: yearGroupItem) => item.date)
-	console.log('年结果2', arr)
 	histogramRangeData.value?.push(arr)
-	console.log('年结果3', histogramRangeData.value)
+	const params2 = { userID: Number(loginStore.userID), groupType: "month", billType: -1 }
+	const res2 = await billServer.getBillChartData(params2)
+	let arr2 = res2.data.map((item: yearGroupItem) => item.date.slice(5))
+	LineRangeData.value.push(arr2)
+	console.log('有数据的年\月份信息', histogramRangeData.value, LineRangeData.value)
 },
 	getMonthGroupData = async (year: String) => {
 		// 每次切换年份，初始化图表数据
@@ -91,30 +96,23 @@ const getYearGroupData = async () => {
 		// 请求该年份的账单数据
 		let params = { userID: Number(loginStore.userID), groupType: "month", billType: -1, year: year }
 		const res = await billServer.getBillChartData(params)
-		// console.log('月分组结果', res.data)
-		// 将有支出的月份计入
-		let arr: Array<String> = []
 		for (let i = 0; i < res.data.length; i++) {
 			// 如果是今年的数据按月份分组的话，顺便记录下有数据的月份信息
-			arr.push(res.data[i].date.slice(5))
+			// arr.push(res.data[i].date.slice(5))
 			let index = Number(res.data[i].date.slice(5)) - 1
 			myHistogramData.value.series[0].data[index] = res.data[i].sums
 		}
-		if (year == new Date().getFullYear() + '') {
-			LineRangeData.value = []
-			LineRangeData.value.push(arr)
-		}
-		console.log('月分组结果', myHistogramData.value, LineRangeData.value)
 	},
-	initDayGroupData = () => {
+	initDayGroupData = (month: String) => {
+		// 每次切换月份，初始化图表数据
+		myLineData.value.categories = []
+		myLineData.value.series = []
 		let yy = new Date().getFullYear()
-		let month = new Date().getMonth() + 1
-		let mm = month < 10 ? '0' + month : month
 		// 获取这个月的天数
-		let days = formattereTools.getMonthDays(yy + '-' + mm + '-01')
+		let days = formattereTools.getMonthDays(yy + '-' + month + '-01')
 		let temp: interSeries = { name: '', data: [] }
 		// 图表名
-		temp.name = mm + '月支出'
+		temp.name = month + '月支出'
 		for (let i = 1; i < days + 1; i++) {
 			// 初始化x轴
 			let str = month + '/' + i
@@ -122,28 +120,28 @@ const getYearGroupData = async () => {
 			// 初始化Y轴
 			temp.data.push(0)
 		}
-		myLineData.value?.series.push(temp)
-		console.log('初始化数据表格', temp, myLineData.value)
+		myLineData.value.series.push(temp)
+		console.log('初始化月度数据表格', temp, myLineData.value)
 	},
-	getDayGroupData = async () => {
-		const params = { userID: Number(loginStore.userID), groupType: "day", billType: -1 }
+	getDayGroupData = async (month: String) => {
+		initDayGroupData(month)
+		const params = { userID: Number(loginStore.userID), groupType: "day", billType: -1, month: month }
 		const res = await billServer.getBillChartData(params)
 		console.log('结果month', res.data)
 		for (let i = 0; i < res.data.length; i++) {
-			// console.log(res.data[i].date)
-			// console.log(res.data[i].date.slice(5))
-			// console.log(Number(res.data[i].date.slice(8)))
 			let index = Number(res.data[i].date.slice(8)) - 1
 			myLineData.value.series[0].data[index] = res.data[i].sums
 		}
 		console.log('结果month2', myLineData.value)
 	},
-	getClassifyGroupData = async () => {
-		const params = { userID: Number(loginStore.userID), groupType: "classify", billType: -1 }
+	getClassifyGroupData = async (month: String) => {
+		// 每次切换月份，初始化图表数据
+		mySectorData.value.categories = []
+		mySectorData.value.series = []
+		const params = { userID: Number(loginStore.userID), groupType: "classify", billType: -1, month: month }
 		const res = await billServer.getBillChartData(params)
-		console.log('结果classify', res.data)
 		let temp2: sectorSeries = {
-			name: '本月分类',
+			name: month + '月分类',
 			data: []
 		}
 		for (let i = 0; i < res.data.length; i++) {
@@ -161,16 +159,22 @@ const getYearGroupData = async () => {
 	},
 	changeMonthGroup = (e: any) => {
 		console.log(e, typeof e)
+		getDayGroupData(e)
+	},
+	changeClassifyMonth = (e: any) => {
+		console.log(e, typeof e)
+		getClassifyGroupData(e)
 	}
 
 
 onMounted(() => {
-	initDayGroupData()
 	getYearGroupData()
-	let yy = new Date().getFullYear() + ''
-	getMonthGroupData(yy)
-	getDayGroupData()
-	getClassifyGroupData()
+	let year = new Date().getFullYear() + ''
+	getMonthGroupData(year)
+	let month = new Date().getMonth() + 1
+	let mm = month < 10 ? '0' + month : '' + month
+	getDayGroupData(mm)
+	getClassifyGroupData(mm)
 })
 
 </script>
@@ -205,6 +209,7 @@ onMounted(() => {
 
 	.content {
 		width: 100%;
+		padding: 0 0 40rpx 0;
 	}
 
 }

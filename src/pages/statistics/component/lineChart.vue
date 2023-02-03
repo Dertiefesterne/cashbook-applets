@@ -23,22 +23,16 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-import { chart, interSeries } from '@/entity/chart'
+import { chart, interSeries, chooseEven } from '@/entity/chart'
 
-interface chooseEven {
-    // x轴
-    indexs: Array<Number>,
-    // 图表数据
-    value: Array<Number>,
-    values: Array<Array<Number>>,
-}
 const emit = defineEmits(['update:modelValue', 'changeMonthGroup']),
     props = defineProps({
         rangeData: {
             type: Array<Array<String>>,
             default: [[0]]
         },
-        myData: {}
+        myData: {
+        }
     })
 
 const show = ref(false),
@@ -111,12 +105,22 @@ const opts2 = {
 const chooseMonth = (e: chooseEven) => {
     show.value = false
     chooseValue.value = e.value[0] + ''
+    console.log('改变月份', chooseValue.value)
     emit('changeMonthGroup', e.value[0] + '')
 }
-
+watch(
+    props.rangeData,
+    (newProps) => {
+        if (newProps.length) {
+            console.log('新增值月度范围数据', newProps)
+            let index = newProps[0].length
+            chooseValue.value = newProps[0][index - 1]
+        }
+    },
+    // 强制立即执行回调
+    { deep: true, immediate: true }
+);
 onMounted(() => {
-    console.log('yyyyyyy', props.rangeData)
-    chooseValue.value = props.rangeData[0][0]
 })
 </script>
 

@@ -1,6 +1,11 @@
 <template>
     <view class="big-contaniner">
-        扇形图
+        <view class="month-picker" @click="show = true">
+            {{ chooseValue }}月
+            <u-icon :name="show ? 'arrow-down' : 'arrow-right'"></u-icon>
+        </view>
+        <u-picker :show="show" :columns="rangeData" closeOnClickOverlay @close="show = false"
+            @confirm="chooseMonth"></u-picker>
         <view class="charts-box">
             <qiun-data-charts type="pie" :chartData="myData" />
         </view>
@@ -9,11 +14,19 @@
 
 
 <script setup lang="ts">
-
-const emit = defineEmits(['update:modelValue', 'addBill']),
+import { ref, onMounted, watch } from 'vue'
+import { chooseEven } from '@/entity/chart'
+const emit = defineEmits(['update:modelValue', 'changeMonthGroup']),
     props = defineProps({
+        rangeData: {
+            type: Array<Array<String>>,
+            default: [[0]]
+        },
         myData: {}
     })
+const show = ref(false),
+    chooseValue = ref<String>()
+
 const opts = {
     color: ["#1890FF", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4", "#ea7ccc"],
     padding: [5, 5, 5, 5],
@@ -39,10 +52,35 @@ const opts = {
     ]
 }, data2 = [{ "name": "一班", "value": 50 }, { "name": "二班", "value": 30 }, { "name": "三班", "value": 20 }, { "name": "四班", "value": 18 }, { "name": "五班", "value": 8 }]
 
+const chooseMonth = (e: chooseEven) => {
+    show.value = false
+    chooseValue.value = e.value[0] + ''
+    console.log('改变月份', chooseValue.value)
+    emit('changeMonthGroup', e.value[0] + '')
+}
+watch(
+    props.rangeData,
+    (newProps) => {
+        if (newProps.length) {
+            console.log('新增值月度范围数据', newProps)
+            let index = newProps[0].length
+            chooseValue.value = newProps[0][index - 1]
+        }
+    },
+    // 强制立即执行回调
+    { deep: true, immediate: true }
+);
+
+
 </script>
 
 <style lang="less" scoped>
 .big-contaniner {
+    .month-picker {
+        padding: 10rpx 20rpx 0;
+        display: flex;
+        float: right;
+    }
 
     /* 请根据需求修改图表容器尺寸，如果父容器没有高度图表则会显示异常 */
     .charts-box {

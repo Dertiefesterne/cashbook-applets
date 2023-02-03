@@ -23,14 +23,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
+import { chooseEven } from '@/entity/chart'
 
-interface chooseEven {
-    // x轴
-    indexs: Array<Number>,
-    // 图表数据
-    value: Array<Number>,
-    values: Array<Array<Number>>,
-}
 
 const emit = defineEmits(['update:modelValue', 'changeYearGroup']),
     props = defineProps({
@@ -38,19 +32,13 @@ const emit = defineEmits(['update:modelValue', 'changeYearGroup']),
             type: Array<Array<String>>,
             default: [[0]]
         },
+        defaultValue: {
+            type: String,
+            default: ''
+        },
         data1: {}
     })
 
-watch(
-    props,
-    (newProps) => {
-        console.log('新增值', newProps.data1); //这里看到新值
-    }
-);
-
-onMounted(() => {
-    chooseValue.value = props.rangeData[0][0]
-})
 const show = ref(false),
     chooseValue = ref<String>()
 
@@ -110,10 +98,25 @@ const chooseYear = (e: chooseEven) => {
     console.log('confirm', e)
     show.value = false
     chooseValue.value = e.value[0] + ''
+    console.log('点击确认', chooseValue.value)
     emit('changeYearGroup', e.value[0] + '')
 }
 
+watch(
+    props.rangeData,
+    (newProps) => {
+        if (newProps.length) {
+            console.log('新增值年度范围数据', newProps)
+            chooseValue.value = newProps[0][0]
+        }
+    },
+    // 强制立即执行回调
+    { immediate: true }
+);
 
+onMounted(() => {
+
+})
 </script>
 
 <style lang="less" scoped>
