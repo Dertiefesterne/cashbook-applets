@@ -152,7 +152,6 @@ onMounted(() => {
     justify-content: center;
     padding-top: 300rpx;
     background-color: #aed0ee;
-    color: pink;
   }
 
   .table {

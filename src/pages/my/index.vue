@@ -1,7 +1,17 @@
 <template>
-	<view class="content">
-		<h1>我的界面</h1>
-		<view class="text-area">
+	<view class="contaniner">
+		<view class="top">
+			<view class="image-box">
+				<image src="@/static/img/avatar2.jpg" mode="aspectFill" />
+			</view>
+			<p>-狮几猫</p>
+			<view class="info-box">
+				<view>记账天数</view>
+				|
+				<view>记账笔数</view>
+			</view>
+		</view>
+		<view class="content">
 			<view @tap="loginOut" v-if="loginStore.userID != -1">退出登录</view>
 		</view>
 	</view>
@@ -39,9 +49,38 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
-.content {
-	border: 1px solid red;
+.contaniner {
 	width: 100%;
 	height: 100%;
+
+	.top {
+		width: 100%;
+		padding: 150rpx 0 20rpx;
+		background-color: #aed0ee;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		.image-box {
+			width: 200rpx;
+			height: 200rpx;
+			border-radius: 50%;
+
+			image {
+				width: 100%;
+				height: 100%;
+				border-radius: 50%;
+			}
+		}
+
+		.info-box {
+			display: flex;
+			margin-top: 20rpx;
+		}
+	}
+
+	.content {
+		padding: 0 40rpx;
+	}
 }
 </style>
