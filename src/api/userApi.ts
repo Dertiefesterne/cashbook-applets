@@ -10,7 +10,7 @@
  // GET
   getInformation(data:any) {
       return http.request({
-          url: '/user/deleteUser',
+          url: '/userInfo/info',
           method: 'GET',
       data
       })

@@ -6,9 +6,9 @@
 			</view>
 			<p>-狮几猫</p>
 			<view class="info-box">
-				<view>记账天数</view>
+				<view>记账天数{{}}</view>
 				|
-				<view>记账笔数</view>
+				<view>记账笔数{{ loginStore.info.bill_count }}</view>
 			</view>
 		</view>
 		<view class="content">

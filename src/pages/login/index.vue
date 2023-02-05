@@ -56,9 +56,11 @@ const confirmLogin = async () => {
       icon: 'success',
       duration: 1000
     })
-    let userID = res.data
+    let userID: Number = res.data
+    console.log('userID----', userID)
     // 全局保存用户ID
     loginStore.login(userID)
+    getUserInfo(userID)
     uni.switchTab({
       url: '/pages/index/index'
     })
@@ -87,12 +89,9 @@ const registerUser = async () => {
       icon: 'success',
       duration: 1000
     })
-    let userID = res.data
+    let userID: Number = res.data
     // 全局保存用户ID
     loginStore.login(userID)
-    uni.switchTab({
-      url: '/pages/index/index'
-    })
   }
   else {
     uni.showToast({
@@ -131,6 +130,14 @@ const registerUser = async () => {
     timer.value = setTimeout(() => {
       ifRegister()
     }, 800)
+  },
+  getUserInfo = async (id: Number) => {
+    const res = userServer.getInformation({ userID: id })
+    console.log('userInfo----', (await res).data)
+    loginStore.setInfo((await res).data)
+    // uni.switchTab({
+    //   url: '/pages/index/index'
+    // })
   }
 
 onMounted(() => {

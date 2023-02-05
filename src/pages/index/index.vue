@@ -5,6 +5,7 @@
       <p @click="change">{{ isEdit? '取消': '批量管理' }}</p>
     </view>
     <view class="content">
+      {{ loginStore.info.user_name }}
       <billSum :isEdit="isEdit" :sumData="moneySum"></billSum>
       <view class="btn-box">
         <button class="addBtn" hover-class='none' @click="toAddBill">增加一条新记账</button>
@@ -16,22 +17,6 @@
     <view class="add-bill">
       <billAnalyse @add-bill="ifRefresh" />
     </view>
-    <!-- <view class="text-area">
-      <text class="title mt-10">用户IDhhhh{{ loginStore.userID }}</text>
-      <view @tap="goLogin" v-if="loginStore.userID == -1">去登录</view>
-      <view class="input-box">
-        <input v-model="segementText" /><button @click="segement">添加账单</button>
-        <button @click="testAddBill">增加账单</button>
-        <button @click="testDeleteBill">删除账单</button>
-        <button @click="testUpdateBill">修改账单</button>
-        <button @click="testGetBill">查找账单</button>
-        <button @click="testGetBillCondition">条件查找</button>
-        <button @click="testGetBillPage">分页查找</button>
-        <u-button @click="testGetBillTime">时间查找</u-button>
-        <button @click="testGetBillCondition" class="w-50px">条件查找</button>
-        <u-icon name="photo"></u-icon>
-      </view>
-    </view> -->
   </view>
 
 </template>
@@ -277,6 +262,7 @@ async function getNextList() {
 }
 
 onMounted(() => {
+  console.log('用户信息', loginStore.info)
   // console.log("homestorage", uni.getStorageSync("USER_INFORMATION"))
   GetBillByGroup()
   GetBillSum()

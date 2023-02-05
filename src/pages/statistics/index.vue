@@ -168,6 +168,7 @@ const getYearGroupData = async () => {
 
 
 onMounted(() => {
+	// 如果用户账单总数为0就return
 	getYearGroupData()
 	let year = new Date().getFullYear() + ''
 	getMonthGroupData(year)
