@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia'
 
 interface userInfo {
-  user_id: Number,
-  user_name: String,
-  nickname: String,
-  budget: Number,
-  bill_count: Number,
-  time: String,
-  register_timestamp: String,
-  avatar: String
+  user_id: number,
+  user_name: string,
+  nickname: string,
+  budget: number,
+  bill_count: number,
+  time: string,
+  register_timestamp: string,
+  avatar: string
 }
 
 
@@ -23,7 +23,7 @@ export const useloginStore = defineStore({
   },
   // actions 用来修改 state
   actions: {
-    login(userID: Number) {
+    login(userID: number) {
       uni.setStorageSync('userID', userID)
       this.userID = userID
     },

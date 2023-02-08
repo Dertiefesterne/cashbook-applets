@@ -4,15 +4,20 @@
 			<view class="image-box">
 				<image src="@/static/img/avatar2.jpg" mode="aspectFill" />
 			</view>
-			<p>-狮几猫</p>
+			<view class="name-box" @click="editName">-狮几猫<u-icon name="edit-pen-fill" size="20"></u-icon></view>
 			<view class="info-box">
-				<view>记账天数{{}}</view>
-				|
-				<view>记账笔数{{ loginStore.info.bill_count }}</view>
+				<view class="text">记账天数 {{ timestamp?formattereTools.dataDays(timestamp.toString()) : 0}}</view>
+				<view class="gap">|</view>
+				<view>记账笔数 {{ bill_count }}</view>
 			</view>
 		</view>
 		<view class="content">
-			<view @tap="loginOut" v-if="loginStore.userID != -1">退出登录</view>
+			<view @tap="loginOut" v-if="loginStore.userID != -1" class="menu-item">退出登录<u-icon
+					name="arrow-right"></u-icon></view>
+			<view class="menu-item">个人信息 <u-icon name="arrow-right"></u-icon></view>
+			<view class="menu-item">推出登录<u-icon name="arrow-right"></u-icon></view>
+			<view class="menu-item">注销账号<u-icon name="arrow-right"></u-icon></view>
+			<view class="menu-item">关于我们<u-icon name="arrow-right"></u-icon></view>
 		</view>
 	</view>
 </template>
@@ -20,8 +25,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import userServer from '@/api/userApi'
+import formattereTools from '@/utils/dataUtils'
 import { useloginStore } from '@/pinia-store/login'
 const loginStore = useloginStore()
+
+// 用户注册时间
+const timestamp = loginStore.info.register_timestamp
+const bill_count = loginStore.info.bill_count || 0
 
 const loginOut = () => {
 	uni.showModal({
@@ -38,7 +48,10 @@ const loginOut = () => {
 			}
 		}
 	});
-
+}, editName = () => {
+	uni.navigateTo({
+		url: `/pages/editInfo/editName?name=${loginStore.info.nickname}`
+	})
 }
 
 
@@ -49,6 +62,10 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
+page {
+	height: 100%
+}
+
 .contaniner {
 	width: 100%;
 	height: 100%;
@@ -73,14 +90,38 @@ onMounted(() => {
 			}
 		}
 
+		.name-box {
+			display: flex;
+		}
+
 		.info-box {
 			display: flex;
 			margin-top: 20rpx;
+
+			.gap {
+				margin: 0 30rpx;
+			}
+
+			text {
+				text-align: center;
+			}
 		}
 	}
 
 	.content {
-		padding: 0 40rpx;
+		background-color: #f8f8fa;
+		padding: 20rpx 0;
+		height: 100%;
+
+		.menu-item {
+			padding: 0 40rpx;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			height: 100rpx;
+			background-color: #fff;
+			margin-bottom: 20rpx;
+		}
 	}
 }
 </style>

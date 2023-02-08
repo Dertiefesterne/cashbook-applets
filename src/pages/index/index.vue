@@ -5,7 +5,6 @@
       <p @click="change">{{ isEdit? '取消': '批量管理' }}</p>
     </view>
     <view class="content">
-      {{ loginStore.info.user_name }}
       <billSum :isEdit="isEdit" :sumData="moneySum"></billSum>
       <view class="btn-box">
         <button class="addBtn" hover-class='none' @click="toAddBill">增加一条新记账</button>
@@ -203,14 +202,6 @@ const segement = async () => {
   }
 
 
-
-
-
-
-
-
-
-
 /**根据新的分组，将账单列表分组插入大数组中 */
 function grouping(group: Array<groupBill>, data: Array<Bill>) {
   let index = 0
@@ -264,8 +255,10 @@ async function getNextList() {
 onMounted(() => {
   console.log('用户信息', loginStore.info)
   // console.log("homestorage", uni.getStorageSync("USER_INFORMATION"))
-  GetBillByGroup()
-  GetBillSum()
+  if (loginStore.info.bill_count) {
+    GetBillByGroup()
+    GetBillSum()
+  }
 })
 
 

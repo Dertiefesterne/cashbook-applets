@@ -56,8 +56,7 @@ const confirmLogin = async () => {
       icon: 'success',
       duration: 1000
     })
-    let userID: Number = res.data
-    console.log('userID----', userID)
+    let userID: number = res.data
     // 全局保存用户ID
     loginStore.login(userID)
     getUserInfo(userID)
@@ -89,9 +88,12 @@ const registerUser = async () => {
       icon: 'success',
       duration: 1000
     })
-    let userID: Number = res.data
+    let userID: number = res.data
     // 全局保存用户ID
     loginStore.login(userID)
+    uni.switchTab({
+      url: '/pages/index/index'
+    })
   }
   else {
     uni.showToast({
@@ -102,7 +104,6 @@ const registerUser = async () => {
   }
 },
   ifRegister = async () => {
-    console.log('开始执行--')
     let name = userName.value.replace(/ /g, '')
     if (name == '') {
       return
@@ -116,7 +117,6 @@ const registerUser = async () => {
     }
   },
   ifRegister2 = () => {
-    console.log('看看')
     return new Promise(resolve => {
       clearTimeout(timer.value)
       timer.value = setTimeout(() => {
@@ -125,19 +125,15 @@ const registerUser = async () => {
     })
   },
   ifRegister3 = () => {
-    console.log('看看')
     clearTimeout(timer.value)
     timer.value = setTimeout(() => {
       ifRegister()
     }, 800)
   },
-  getUserInfo = async (id: Number) => {
+  getUserInfo = async (id: number) => {
     const res = userServer.getInformation({ userID: id })
     console.log('userInfo----', (await res).data)
     loginStore.setInfo((await res).data)
-    // uni.switchTab({
-    //   url: '/pages/index/index'
-    // })
   }
 
 onMounted(() => {

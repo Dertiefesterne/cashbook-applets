@@ -1,0 +1,36 @@
+<template>
+    <view class="head">
+        <view class="icon-l" @click="back">
+            <u-icon name="arrow-left" size="20"></u-icon>
+        </view>
+    </view>
+</template>
+
+<script setup lang="ts">
+
+
+const back = () => {
+    uni.switchTab({
+        url: '/pages/my/index'
+    })
+}
+</script>
+
+<style lang="less" scoped>
+.head {
+    width: 100%;
+    height: 100rpx;
+    padding: 0 40rpx;
+    position: fixed;
+    top: 0;
+    background: #dfdfe1;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+
+    .icon-l {
+        position: absolute;
+        left: 20rpx;
+    }
+}
+</style>

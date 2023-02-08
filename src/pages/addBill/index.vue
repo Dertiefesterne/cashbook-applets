@@ -305,7 +305,6 @@ onLoad((option) => {
     else {
         lastTime.value = new Date().getTime() + ''
     }
-
 })
 
 </script>

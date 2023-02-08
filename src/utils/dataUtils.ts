@@ -4,7 +4,7 @@ export default {
     // 处理中文数字转数字
     charactersTonumber(chnStr: string) {
     },
-    // 处理时间
+    // 处理时间（计算是否超过七天）
     dateFormatterDispose(endTime: string, startTime: number) {
         // 开始时间
         var stime = startTime
@@ -41,6 +41,16 @@ export default {
             return false
         else
             return true
+    },
+    // 处理时间（计算距离今天是几天）
+    dataDays(time: string) {
+        // 今天时间戳
+        var etime = new Date().getTime()
+        // 注册时间
+        var stime = Number(time)
+        var usedTime = Math.abs(etime - stime) //两个时间戳相差的毫秒数
+        var days = Math.floor(usedTime / (24 * 3600 * 1000))
+        return days
     },
     // 处理时间（Date)
     dateFormattere(date: Date, type: string = "date") {

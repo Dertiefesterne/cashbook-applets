@@ -11,6 +11,10 @@
 			<LineChart :myData="myLineData" :rangeData="LineRangeData" @changeMonthGroup="changeMonthGroup"></LineChart>
 			<sectorChart :myData="mySectorData" :rangeData="LineRangeData" @changeMonthGroup="changeClassifyMonth" />
 		</view>
+		<view v-if="noBill">
+			啊哦~一条账单都没有
+			<button @click="goAddBill">去记账</button>
+		</view>
 	</view>
 </template>
 
@@ -28,14 +32,15 @@ const loginStore = useloginStore()
 
 interface yearGroupItem {
 	// x轴
-	date: String,
+	date: string,
 	// 图表数据
-	sums: Number,
-	count: Number,
+	sums: number,
+	count: number,
 }
 
 
 const ready = ref(false),
+	noBill = ref(false),
 	myHistogramData = ref<chart>({
 		categories: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
 		series: []
@@ -86,7 +91,7 @@ const getYearGroupData = async () => {
 	LineRangeData.value.push(arr2)
 	console.log('有数据的年\月份信息', histogramRangeData.value, LineRangeData.value)
 },
-	getMonthGroupData = async (year: String) => {
+	getMonthGroupData = async (year: string) => {
 		// 每次切换年份，初始化图表数据
 		myHistogramData.value.series = []
 		let temp: interSeries = { name: '', data: [] }
@@ -103,7 +108,7 @@ const getYearGroupData = async () => {
 			myHistogramData.value.series[0].data[index] = res.data[i].sums
 		}
 	},
-	initDayGroupData = (month: String) => {
+	initDayGroupData = (month: string) => {
 		// 每次切换月份，初始化图表数据
 		myLineData.value.categories = []
 		myLineData.value.series = []
@@ -123,7 +128,7 @@ const getYearGroupData = async () => {
 		myLineData.value.series.push(temp)
 		console.log('初始化月度数据表格', temp, myLineData.value)
 	},
-	getDayGroupData = async (month: String) => {
+	getDayGroupData = async (month: string) => {
 		initDayGroupData(month)
 		const params = { userID: Number(loginStore.userID), groupType: "day", billType: -1, month: month }
 		const res = await billServer.getBillChartData(params)
@@ -134,7 +139,7 @@ const getYearGroupData = async () => {
 		}
 		console.log('结果month2', myLineData.value)
 	},
-	getClassifyGroupData = async (month: String) => {
+	getClassifyGroupData = async (month: string) => {
 		// 每次切换月份，初始化图表数据
 		mySectorData.value.categories = []
 		mySectorData.value.series = []
@@ -164,18 +169,27 @@ const getYearGroupData = async () => {
 	changeClassifyMonth = (e: any) => {
 		console.log(e, typeof e)
 		getClassifyGroupData(e)
+	},
+	goAddBill = () => {
+		uni.navigateTo({
+			url: '/pages/addBill/index'
+		})
 	}
 
 
 onMounted(() => {
 	// 如果用户账单总数为0就return
-	getYearGroupData()
-	let year = new Date().getFullYear() + ''
-	getMonthGroupData(year)
-	let month = new Date().getMonth() + 1
-	let mm = month < 10 ? '0' + month : '' + month
-	getDayGroupData(mm)
-	getClassifyGroupData(mm)
+	if (loginStore.info.bill_count) {
+		getYearGroupData()
+		let year = new Date().getFullYear() + ''
+		getMonthGroupData(year)
+		let month = new Date().getMonth() + 1
+		let mm = month < 10 ? '0' + month : '' + month
+		getDayGroupData(mm)
+		getClassifyGroupData(mm)
+	} else {
+		noBill.value = true
+	}
 })
 
 </script>

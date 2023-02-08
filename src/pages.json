@@ -22,6 +22,9 @@
 		},
 		{
 			"path": "pages/addBill/index"
+		},
+		{
+			"path": "pages/editInfo/editName"
 		}
 	],
 	"tabBar": {
