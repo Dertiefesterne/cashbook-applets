@@ -8,7 +8,7 @@
                         <p>今天支出</p>
                         <p>{{ sumData.daySum ? sumData.daySum : 0 }}￥</p>
                     </view>
-                    <view @click="show = true">点击设置预算
+                    <view @click="editBudget">点击设置预算
                         <i class="icon xianxing-15"></i>
                     </view>
                 </view>
@@ -20,29 +20,16 @@
                     </view>
                     <view>
                         <p>本月剩余预算</p>
-                        <p>0.00</p>
+                        <p>{{ surplus }}</p>
                     </view>
                 </view>
             </view>
-        </view>
-        <view class="picker-modal" v-if="show" @click="show = false"></view>
-        <view class="picker-content" :style="{ transform: show ? 'translateY(0)' : 'translateY(100%)' }">
-            <!-- <view>顶部</view> -->
-            <picker-view class="picker-view">
-                <view>
-                    <!-- 标签展示栏 -->
-                    哈哈哈哈哈哈
-                    <view>
-                        <i class="iconfont icon-rili" style="font-size:40rpx"></i>
-                    </view>
-                </view>
-            </picker-view>
         </view>
     </view>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import userServe from '@/api/userApi'
 import billServer from '@/api/billApi'
 import { useloginStore } from '@/pinia-store/login'
@@ -62,8 +49,15 @@ const props = defineProps({
         default: () => { }
     }
 })
+const surplus = computed(() => {
+    return (loginStore.info.budget - Math.abs(props.sumData.monthSum)).toFixed(2)
+})
 
-
+const editBudget = () => {
+    uni.navigateTo({
+        url: '/pages/editInfo/editBudget'
+    })
+}
 </script>
 
 <style lang="less" scoped>

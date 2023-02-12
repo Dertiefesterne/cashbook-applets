@@ -11,14 +11,12 @@ interface userInfo {
   avatar: string
 }
 
-
-
 export const useloginStore = defineStore({
   id: 'login', // id必填，且需要唯一
   state: () => {
     return {
       info: {} as userInfo, // 用户信息 , 包含 token
-      userID: uni.getStorageSync('userID') ? uni.getStorageSync('userID') : -1
+      userID: -1
     }
   },
   // actions 用来修改 state
@@ -31,6 +29,12 @@ export const useloginStore = defineStore({
       uni.setStorageSync('info', info)
       this.info = info
       // this.userID = userID
+    },
+    setInfoName(name: string) {
+      this.info.nickname = name
+    },
+    setInfoBudget(budget: number) {
+      this.info.budget = budget
     },
     logout() {
       uni.clearStorage()

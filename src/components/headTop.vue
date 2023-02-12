@@ -3,6 +3,7 @@
         <view class="icon-l" @click="back">
             <u-icon name="arrow-left" size="20"></u-icon>
         </view>
+        <slot></slot>
     </view>
 </template>
 
@@ -27,6 +28,7 @@ const back = () => {
     z-index: 2;
     display: flex;
     align-items: center;
+    justify-content: center;
 
     .icon-l {
         position: absolute;

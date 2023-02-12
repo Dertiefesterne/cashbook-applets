@@ -1,9 +1,9 @@
 <template>
     <view class="container">
-        <headTop>我的昵称</headTop>
+        <headTop>本月预算</headTop>
         <view class="content">
-            <input v-model="name" maxlength="15" />
-            <button hover-class='none' @click="modifyNickName">确认修改</button>
+            <input v-model="budget" maxlength="15" type="number" />
+            <button hover-class='none' @click="modifyBudget">确认修改</button>
         </view>
     </view>
 </template>
@@ -16,16 +16,11 @@ import headTop from '@/components/headTop.vue';
 import userInfoServer from '@/api/userInfoApi';
 import { useloginStore } from '@/pinia-store/login'
 const loginStore = useloginStore()
-const name = ref(loginStore.info.nickname)
+const budget = ref(loginStore.info.budget)
 
-onMounted(() => {
-    // name.value = loginStore.info.nickname
-    // console.log('用户昵称', loginStore.info.nickname)
-})
-
-const modifyNickName = async () => {
-    console.log('modifyNickName', name.value)
-    const params = { userID: loginStore.userID, nickname: name.value }
+const modifyBudget = async () => {
+    console.log('modifyNickName', budget.value)
+    const params = { userID: loginStore.userID, budget: budget.value }
     const res = await userInfoServer.updateInfo(params)
     if (res.statusCode == 200) {
         uni.showToast({
@@ -33,12 +28,13 @@ const modifyNickName = async () => {
             icon: 'success',
             duration: 1000
         })
-        loginStore.setInfoName(name.value)
+        loginStore.setInfoBudget(budget.value)
         uni.switchTab({
-            url: '/pages/my/index'
+            url: '/pages/index/index'
         })
     }
 }
+
 </script>
 
 
@@ -65,6 +61,5 @@ const modifyNickName = async () => {
             }
         }
     }
-
 }
 </style>

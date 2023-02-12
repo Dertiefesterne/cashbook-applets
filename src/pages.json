@@ -25,6 +25,9 @@
 		},
 		{
 			"path": "pages/editInfo/editName"
+		},
+		{
+			"path": "pages/editInfo/editBudget"
 		}
 	],
 	"tabBar": {

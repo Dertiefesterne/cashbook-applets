@@ -4,7 +4,8 @@
 			<view class="image-box">
 				<image src="@/static/img/avatar2.jpg" mode="aspectFill" />
 			</view>
-			<view class="name-box" @click="editName">-狮几猫<u-icon name="edit-pen-fill" size="20"></u-icon></view>
+			<view class="name-box" @click="editName">{{ loginStore.info.nickname }}<u-icon name="edit-pen-fill"
+					size="20"></u-icon></view>
 			<view class="info-box">
 				<view class="text">记账天数 {{ timestamp?formattereTools.dataDays(timestamp.toString()) : 0}}</view>
 				<view class="gap">|</view>
@@ -50,7 +51,8 @@ const loginOut = () => {
 	});
 }, editName = () => {
 	uni.navigateTo({
-		url: `/pages/editInfo/editName?name=${loginStore.info.nickname}`
+		// url: `/pages/editInfo/editName?name=${loginStore.info.nickname}`
+		url: '/pages/editInfo/editName'
 	})
 }
 
