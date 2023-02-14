@@ -43,7 +43,7 @@
                     </text>
                 </view>
             </view>
-            <u-calendar :show="showDate" mode="single" @confirm="confirmDate" minDate="2022-12-17" maxDate="2023-02-13"
+            <u-calendar :show="showDate" mode="single" @confirm="confirmDate" minDate="2022-12-17" maxDate="2023-03-13"
                 monthNum="3" closeOnClickOverlay @close="showDate = false"></u-calendar>
             <u-datetime-picker :show="showTime" v-model="value1" mode="time" @confirm="confirmTime" closeOnClickOverlay
                 @cancel="showTime = false"></u-datetime-picker>

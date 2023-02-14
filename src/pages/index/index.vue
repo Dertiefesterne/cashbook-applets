@@ -10,7 +10,7 @@
         <button class="addBtn" hover-class='none' @click="toAddBill">增加一条新记账</button>
       </view>
       <view v-for="item in list">
-        <billDate :day-date="item" v-if="item.length"></billDate>
+        <billDate :day-date="item" v-if="item.length" :is-edit="isEdit" @delete-bill="delBill"></billDate>
       </view>
     </view>
     <view class="add-bill">
@@ -100,7 +100,6 @@ const segementText = ref(''),
 
 const change = () => {
   isEdit.value = !isEdit.value;
-  console.log('hhh', isEdit.value)
 }, allChoose = (e: Array<number>) => {
   choseeBill.value.push(...e)
   console.log('all', choseeBill.value)
@@ -199,6 +198,10 @@ const segement = async () => {
     const res = billServer.getBillSum({ userID: loginStore.userID })
     moneySum.value = (await res).data
     console.log('账单总数', moneySum.value)
+  },
+  delBill = () => {
+    console.log('删除了账单---')
+    GetBillSum()
   }
 
 

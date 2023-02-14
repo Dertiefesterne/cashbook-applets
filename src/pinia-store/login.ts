@@ -16,7 +16,7 @@ export const useloginStore = defineStore({
   state: () => {
     return {
       info: {} as userInfo, // 用户信息 , 包含 token
-      userID: -1
+      userID: uni.getStorageSync('userID') ? Number(uni.getStorageSync('userID')) : -1
     }
   },
   // actions 用来修改 state
