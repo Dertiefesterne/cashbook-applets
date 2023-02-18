@@ -256,8 +256,6 @@ async function getNextList() {
 }
 
 onMounted(() => {
-  console.log('用户信息', loginStore.info)
-  // console.log("homestorage", uni.getStorageSync("USER_INFORMATION"))
   if (loginStore.info.bill_count) {
     GetBillByGroup()
     GetBillSum()

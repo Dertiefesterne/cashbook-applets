@@ -13,7 +13,7 @@ import filters from '@/utils/filters'
 const props = defineProps({
     classify: {
         type: Number,
-        default: 0
+        default: -1
     },
     choose: {
         type: Boolean,

@@ -84,6 +84,9 @@ export default {
         if (type == "date") {
             return year + '年' + month + '月' + day + '日'
         }
+        else if (type == 'sDate') {
+            return year + '-' + month + '-' + day
+        }
         else if (type == 'time') {
             return hour + ':' + min;
         }
@@ -125,13 +128,8 @@ export default {
         d.setDate(d.getDate() - 1)
         return d.getDate()
     },
-    // 测试
-    testYy(val: number) {
-        let yy = val + 1
-        return yy
-    },
+    // 防抖
     debounce(fn: Function, wait: number = 200) {
-        console.log('看看2')
         var timer = 0;
         return function () {
             if (timer !== null) {
@@ -141,5 +139,13 @@ export default {
                 fn
             }, wait);
         }
+    },
+    // 计算前一个月的时间戳
+    getMonTimes(month: number, direction: number) {
+        // 今天时间戳
+        var time = new Date().getTime()
+        // 31天时间
+        var monTime = 31 * 24 * 3600 * 1000
+        return time + (direction * monTime) + ''
     }
 }

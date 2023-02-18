@@ -60,9 +60,6 @@ const confirmLogin = async () => {
     // 全局保存用户ID
     loginStore.login(userID)
     getUserInfo(userID)
-    uni.switchTab({
-      url: '/pages/index/index'
-    })
   } else if (res.data == 0) {
     uni.showToast({
       title: '密码错误，请重新输入',
@@ -131,11 +128,13 @@ const registerUser = async () => {
     }, 800)
   },
   getUserInfo = async (id: number) => {
-    const res = userServer.getInformation({ userID: id })
-    console.log('userInfo----', (await res).data)
-    loginStore.setInfo((await res).data)
+    const res = await userServer.getInformation({ userID: id })
+    console.log('userInfo----', res.data)
+    loginStore.setInfo(res.data)
+    uni.switchTab({
+      url: '/pages/index/index'
+    })
   }
-
 onMounted(() => {
 })
 

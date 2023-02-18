@@ -19,11 +19,18 @@
                 <text class="num">{{ moneyDisplay }}<text class="yuan">元</text>
                 </text>
             </view>
-            <!-- 图标 -->
-            <view class="gaid-box">
+            <!-- 支出图标 -->
+            <view class="gaid-box" v-if="billDetial.bill_type == -1">
                 <view v-for="index of 8" class="classify" @click="changeClassify(index - 1)">
                     <BillTypeIconVue :classify="index - 1" :choose="(index - 1) == billDetial.classify" />
                     <p>{{ filters.billTypeFilter(index - 1) }}</p>
+                </view>
+            </view>
+            <!-- 收入图标 -->
+            <view class="gaid-box" v-else>
+                <view v-for="index of 5" class="classify" @click="changeClassify(index + 7)">
+                    <BillTypeIconVue :classify="index + 7" :choose="(index + 7) == billDetial.classify" />
+                    <p>{{ filters.billTypeFilter(index + 7) }}</p>
                 </view>
             </view>
             <view class="date-box">

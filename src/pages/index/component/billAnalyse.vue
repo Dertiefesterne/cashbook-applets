@@ -22,6 +22,9 @@
                 </view>
             </picker-view>
         </view>
+        <!-- 日历弹窗选择器 -->
+        <u-calendar :show="showDate" mode="single" @confirm="confirmDate" :minDate="minDate" :maxDate="maxDate"
+            monthNum="3" closeOnClickOverlay @close="showDate = false"></u-calendar>
     </view>
 </template>
 
@@ -31,14 +34,15 @@ import { ref, reactive, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app';
 import formattereTools from '@/utils/dataUtils'
 import billServer from '@/api/billApi'
-import { Bill } from '@/entity/bill'
-import filters from '@/utils/filters'
+import dataUtils from '@/utils/dataUtils';
 import { useloginStore } from '@/pinia-store/login'
-import BillTypeIconVue from '../../components/billTypeIcon.vue'
 const loginStore = useloginStore()
+const minDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, -1), 'sDate')
+const maxDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, 1), 'sDate')
 
 
 const billID = ref(),
+    showDate = ref(false),
     inputText = ref(''),
     show = ref(false),
     placeholder = ref("试试输入“打车22块”、“逛超市买菜58.3元”、“买资料39.9”、“工资收入1万”")
@@ -93,6 +97,11 @@ const _close = () => {
         inputText.value = ''
         emit('addBill', Number(res.data.time))
     }
+}, confirmDate = (e: Event) => {
+    showDate.value = false
+    const Data = JSON.parse(JSON.stringify(e));
+    let data_time = Data[0]
+    console.log('Date', Data, data_time)
 }
 
 </script>

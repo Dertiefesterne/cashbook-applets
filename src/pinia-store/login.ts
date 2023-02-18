@@ -26,9 +26,8 @@ export const useloginStore = defineStore({
       this.userID = userID
     },
     setInfo(info: userInfo) {
-      uni.setStorageSync('info', info)
-      this.info = info
-      // this.userID = userID
+      this.info = { ...info }
+      uni.setStorageSync('info', this.info)
     },
     setInfoName(name: string) {
       this.info.nickname = name

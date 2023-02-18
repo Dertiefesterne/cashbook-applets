@@ -1,9 +1,8 @@
 @font-face {
-  font-family: "iconfont";
-  /* Project id 3860764 */
-  src: url('iconfont.woff2?t=1674456726814') format('woff2'),
-    url('iconfont.woff?t=1674456726814') format('woff'),
-    url('iconfont.ttf?t=1674456726814') format('truetype');
+  font-family: "iconfont"; /* Project id 3860764 */
+  src: url('iconfont.woff2?t=1676711994552') format('woff2'),
+       url('iconfont.woff?t=1676711994552') format('woff'),
+       url('iconfont.ttf?t=1676711994552') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +11,38 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-qutouzi:before {
+  content: "\e74f";
+}
+
+.icon-qita:before {
+  content: "\e66a";
+}
+
+.icon-licai:before {
+  content: "\e67a";
+}
+
+.icon-qita1:before {
+  content: "\e6fe";
+}
+
+.icon-gongzi:before {
+  content: "\e60c";
+}
+
+.icon-hongbao:before {
+  content: "\e89a";
+}
+
+.icon-rili1:before {
+  content: "\e8b4";
+}
+
+.icon-gengduo:before {
+  content: "\e7ce";
 }
 
 .icon-rili:before {
@@ -26,7 +57,7 @@
   content: "\e6c8";
 }
 
-.icon-gouwu:before {
+.icon-shaogouwu:before {
   content: "\e6d5";
 }
 
@@ -85,3 +116,4 @@
 .icon-xianxing-09:before {
   content: "\e654";
 }
+

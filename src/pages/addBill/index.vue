@@ -17,15 +17,26 @@
                 <text class="num text-60rpx font-600">{{ moneyDisplay }}<text class="yuan text-32rpx text-#999">元</text>
                 </text>
             </view>
-            <!-- 图标 -->
-            <view class="gaid-box">
+            <!-- 支出图标 -->
+            <view class="gaid-box" v-if="chooseType == -1">
                 <view v-for="index of 8" class="classify" @click="changeClassify(index - 1)">
                     <BillTypeIconVue :classify="index - 1" :choose="(index - 1) == billForm.classify" />
                     <p>{{ filters.billTypeFilter(index - 1) }}</p>
                 </view>
             </view>
+            <!-- 收入图标 -->
+            <view class="gaid-box" v-if="chooseType == 1">
+                <view v-for="index of 5" class="classify" @click="changeClassify(index + 7)">
+                    <BillTypeIconVue :classify="index + 7" :choose="(index + 7) == billForm.classify" />
+                    <p>{{ filters.billTypeFilter(index + 7) }}</p>
+                </view>
+                <view class="classify">
+                    <BillTypeIconVue :classify="addClassify" :choose="billForm.classify == -1" />
+                    <p>添加</p>
+                </view>
+            </view>
             <view class="date-box">
-                <!-- 时间 -->
+                <!-- 事项 -->
                 <view class="matter">
                     <u-icon name="edit-pen" size="20"></u-icon>
                     <input placeholder="备注...（最多15个字）" v-model="billForm.matter" @input="changeText(billForm.matter)"
@@ -34,6 +45,7 @@
                         billForm.matter.length
                     }}/15</text>
                 </view>
+                <!-- 日期、时间 -->
                 <view class="time">
                     <u-icon name="clock" size="20"></u-icon>
                     <text class="dd" @click="showDate = true">
@@ -44,10 +56,14 @@
                     </text>
                 </view>
             </view>
-            <u-calendar :show="showDate" mode="single" @confirm="confirmDate" minDate="2022-12-17" maxDate="2023-03-13"
-                monthNum="3" closeOnClickOverlay @close="showDate = false"></u-calendar>
+            <!-- 日历弹窗选择器 -->
+            <u-calendar :show="showDate" mode="single" @confirm="confirmDate" @click="confirmDateClick"
+                :minDate="minDate" :maxDate="maxDate" monthNum="3" closeOnClickOverlay
+                @close="showDate = false"></u-calendar>
+            <!-- 时间弹窗选择器 -->
             <u-datetime-picker :show="showTime" v-model="datetimeValue" mode="time" @confirm="confirmTime"
                 closeOnClickOverlay @cancel="showTime = false"></u-datetime-picker>
+            <!-- 数字键盘 -->
             <view class="keyboard">
                 <view class="tagsBox">
                     <scroll-view class="uni-swiper-tab" scroll-x>
@@ -87,13 +103,15 @@ import { ref, reactive, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app';
 import formattereTools from '@/utils/dataUtils'
 import billServer from '@/api/billApi'
-import { Bill } from '@/entity/bill'
 import filters from '@/utils/filters'
+import dataUtils from '@/utils/dataUtils';
 import { useloginStore } from '@/pinia-store/login'
 import BillTypeIconVue from '../../components/billTypeIcon.vue'
 const loginStore = useloginStore()
+const minDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, -1), 'sDate')
+const maxDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, 1), 'sDate')
 
-
+const addClassify = -1
 const billID = ref(),
     billDetial = ref(),
     chooseType = ref<number>(-1),
@@ -102,7 +120,6 @@ const billID = ref(),
     showTime = ref(false),
     datetimeValue = ref(),
     time = ref(),
-    maxDate = ref(),
     lastTime = ref('')
 
 // 保存参数信息
@@ -146,6 +163,10 @@ const changeChoose = (type: number) => {
         let data_time = Data[0] + billForm.data_time.slice(10)
         billForm.data_time = data_time
         billForm.timestamp = new Date(data_time).getTime() + '';
+    },
+    confirmDateClick = (e: Event) => {
+        const Data = JSON.parse(JSON.stringify(e));
+        console.log('点击', Data[0], Data)
     },
     confirmTime = (e: Event) => {
         showTime.value = false
