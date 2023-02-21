@@ -2,7 +2,7 @@
   <view class="big-container">
     <view class="head">
       <p>记账</p>
-      <p @click="change">{{ isEdit? '取消': '批量管理' }}</p>
+      <p @click="change">{{ isEdit ? '取消' : '批量管理' }}</p>
     </view>
     <view class="content">
       <billSum :isEdit="isEdit" :sumData="moneySum"></billSum>
@@ -17,7 +17,6 @@
       <billAnalyse @add-bill="ifRefresh" />
     </view>
   </view>
-
 </template>
 
 <script setup lang="ts">
@@ -197,7 +196,7 @@ const segement = async () => {
   GetBillSum = async () => {
     const res = billServer.getBillSum({ userID: loginStore.userID })
     moneySum.value = (await res).data
-    console.log('账单总数', moneySum.value)
+    console.log('获取账单总数', moneySum.value)
   },
   delBill = () => {
     console.log('删除了账单---')

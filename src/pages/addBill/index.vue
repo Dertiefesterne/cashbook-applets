@@ -30,7 +30,7 @@
                     <BillTypeIconVue :classify="index + 7" :choose="(index + 7) == billForm.classify" />
                     <p>{{ filters.billTypeFilter(index + 7) }}</p>
                 </view>
-                <view class="classify">
+                <view class="classify" @click="addNewClassify">
                     <BillTypeIconVue :classify="addClassify" :choose="billForm.classify == -1" />
                     <p>添加</p>
                 </view>
@@ -57,9 +57,8 @@
                 </view>
             </view>
             <!-- 日历弹窗选择器 -->
-            <u-calendar :show="showDate" mode="single" @confirm="confirmDate" @click="confirmDateClick"
-                :minDate="minDate" :maxDate="maxDate" monthNum="3" closeOnClickOverlay
-                @close="showDate = false"></u-calendar>
+            <u-calendar :show="showDate" mode="single" @confirm="confirmDate" @click="confirmDateClick" :minDate="minDate"
+                :maxDate="maxDate" monthNum="3" closeOnClickOverlay @close="showDate = false"></u-calendar>
             <!-- 时间弹窗选择器 -->
             <u-datetime-picker :show="showTime" v-model="datetimeValue" mode="time" @confirm="confirmTime"
                 closeOnClickOverlay @cancel="showTime = false"></u-datetime-picker>
@@ -94,6 +93,15 @@
                 </view>
             </view>
         </view>
+        <u-popup :show="show" mode="center" @close="show = false">
+            添加分类
+            <view>
+                分类名称
+                <input />
+                <button>完成</button>
+                <button @click="show = false">取消</button>
+            </view>
+        </u-popup>
     </view>
 </template>
 
@@ -118,6 +126,7 @@ const billID = ref(),
     moneyDisplay = ref('0'),
     showDate = ref(false),
     showTime = ref(false),
+    show = ref(false),
     datetimeValue = ref(),
     time = ref(),
     lastTime = ref('')
@@ -152,6 +161,7 @@ const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0']
  * 获取获取账单详情
  */
 const changeChoose = (type: number) => {
+    billForm.classify = 8
     chooseType.value = type
 },
     changeClassify = (type: number) => {
@@ -307,6 +317,10 @@ const changeChoose = (type: number) => {
         uni.switchTab({
             url: '/pages/index/index'
         })
+    },
+    addNewClassify = () => {
+        console.log('add-------------------')
+        show.value = true
     }
 
 function inCalc() {

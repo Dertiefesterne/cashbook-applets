@@ -24,7 +24,7 @@
                         </view>
                     </view>
                     <view class="items">
-                        {{ item.bill_type == 1 ? "+" : "-" }}{{ item.money }}
+                        {{ item.bill_type == 1 ? "+" : "-" }}{{ item.money.toFixed(2) }}
                     </view>
                 </view>
             </view>

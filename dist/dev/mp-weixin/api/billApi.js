@@ -77,6 +77,13 @@ const billServer = {
       method: "GET",
       data
     });
+  },
+  getBillChartData(data) {
+    return utils_request.http.request({
+      url: "/bill/billList/chartData",
+      method: "GET",
+      data
+    });
   }
 };
 exports.billServer = billServer;

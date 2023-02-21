@@ -101,7 +101,7 @@ const getYearGroupData = async () => {
 		// 请求该年份的账单数据
 		let params = { userID: Number(loginStore.userID), groupType: "month", billType: -1, year: year }
 		const res = await billServer.getBillChartData(params)
-		for (let i = 0; i < res.data.length; i++) {
+		for (let i = 0, len = res.data.length; i < len; i++) {
 			// 如果是今年的数据按月份分组的话，顺便记录下有数据的月份信息
 			// arr.push(res.data[i].date.slice(5))
 			let index = Number(res.data[i].date.slice(5)) - 1
