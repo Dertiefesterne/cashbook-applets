@@ -1,16 +1,14 @@
 <template>
     <view v-if="billDetial">
-        <!-- <view class="flex justify-center items-center w-full h-100rpx px-40rpx fixed top-0 bg-#dfdfe1 z-2">
-            <view class="mx-20rpx h-full lh-100rpx" :class="{ 'chooseBorder': chooseType == -1 }"
-                @click="changeChoose(-1)">
-                支出</view>
-            <view class="mx-20rpx h-full lh-100rpx" :class="{ 'chooseBorder': chooseType == 1 }"
-                @click="changeChoose(1)">
-                收入</view>
-        </view> -->
         <view class="head">
-            <text class="text">账单详情</text>
-            <view class="icon" @click="deleteBill">
+            <view class="icon-l">
+                <text class="text">账单详情</text>
+            </view>
+            <view class="text" :class="{ 'chooseBorder': chooseType == -1 }" @click="changeChoose(-1)">
+                支出</view>
+            <view class="text" :class="{ 'chooseBorder': chooseType == 1 }" @click="changeChoose(1)">
+                收入</view>
+            <view class="icon-r" @click="deleteBill">
                 <u-icon name="trash" size="20"></u-icon>
             </view>
         </view>
@@ -37,8 +35,8 @@
                 <!-- 时间 -->
                 <view class="matter">
                     <u-icon name="edit-pen" size="20"></u-icon>
-                    <input placeholder="备注...（最多15个字）" v-model="billDetial.matter"
-                        @input="changeText(billDetial.matter)" maxlength="15" class="matter-input" />
+                    <input placeholder="备注...（最多15个字）" v-model="billDetial.matter" @input="changeText(billDetial.matter)"
+                        maxlength="15" class="matter-input" />
                 </view>
                 <view class="time">
                     <u-icon name="clock" size="20"></u-icon>
@@ -137,8 +135,9 @@ onLoad((option) => {
  */
 const getBillDetail = async () => {
     const res = await billServer.getBillDetial({ userID: Number(loginStore.userID), billID: billID.value })
-    console.log("获取获取账单详情", res.data)
+    console.log("获取获取账单详情", res.data, res.data.bill_type)
     billDetial.value = res.data
+    chooseType.value = res.data.bill_type
     moneyDisplay.value = billDetial.value.money + ''
 },
     changeChoose = (type: number) => {
@@ -290,8 +289,8 @@ const getBillDetail = async () => {
     },
     modifyBill = async () => {
         // 保存修改后的账单
-        console.log('修改后的账单', billDetial.value)
-        const params = { userID: Number(loginStore.userID), billID: billDetial.value.bill_id, datetime: billDetial.value.time, timestamp: billDetial.value.timestamp, money: billDetial.value.money, matter: billDetial.value.matter, classify: billDetial.value.classify }
+        const params = { userID: Number(loginStore.userID), billID: billDetial.value.bill_id, datetime: billDetial.value.time, timestamp: billDetial.value.timestamp, money: billDetial.value.money, matter: billDetial.value.matter, classify: billDetial.value.classify, bill_type: chooseType.value }
+        console.log('修改后的账单', params)
         const res = billServer.updateBill(params)
         if ((await res).statusCode == 200) {
             uni.showToast({ title: '修改成功', duration: 800 })
@@ -336,19 +335,31 @@ function setProp<T, K extends keyof T>(foo: T, key: K, val: T[K]) {
     top: 0;
     background: #dfdfe1;
     z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
+    // .text {
+    //     line-height: 100rpx;
+    // }
     .text {
         line-height: 100rpx;
+        height: 100%;
+        margin: 0 40rpx;
     }
 
-    .icon {
-        float: right;
-        height: 100%;
-        display: flex;
+    .chooseBorder {
+        border-bottom: 2px solid #559eff;
+    }
 
-        .u-icon {
-            margin-right: 20rpx;
-        }
+    .icon-l {
+        position: absolute;
+        left: 20rpx;
+    }
+
+    .icon-r {
+        position: absolute;
+        right: 20rpx;
     }
 }
 

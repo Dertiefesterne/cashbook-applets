@@ -13,13 +13,13 @@
 			</view>
 		</view>
 		<view class="content">
-			<view @tap="loginOut" v-if="loginStore.userID != -1" class="menu-item">退出登录<u-icon name="arrow-right"></u-icon>
-			</view>
 			<view class="menu-item">个人信息 <u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item">类别管理<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item">惯用词管理<u-icon name="arrow-right"></u-icon></view>
-			<view class="menu-item">注销账号<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item">关于我们<u-icon name="arrow-right"></u-icon></view>
+			<view class="menu-item">注销账号<u-icon name="arrow-right"></u-icon></view>
+			<view @tap="loginOut" v-if="loginStore.userID != -1" class="menu-item">退出登录<u-icon name="arrow-right"></u-icon>
+			</view>
 		</view>
 	</view>
 </template>

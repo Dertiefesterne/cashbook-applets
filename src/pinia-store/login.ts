@@ -35,6 +35,9 @@ export const useloginStore = defineStore({
     setInfoBudget(budget: number) {
       this.info.budget = budget
     },
+    setInfoBillCount(count: number) {
+      this.info.bill_count = count
+    },
     logout() {
       uni.clearStorage()
       this.userID = -1

@@ -7,5 +7,12 @@ export default {
             method: 'POST',
             data
         })
+    },
+    updateUserClassify(data: any) {
+        return http.request({
+            url: '/userInfo/update/classify',
+            method: 'POST',
+            data
+        })
     }
 }

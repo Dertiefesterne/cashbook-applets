@@ -93,6 +93,7 @@
                 </view>
             </view>
         </view>
+        <!-- 增加自定义类别弹窗 -->
         <u-popup :show="show" mode="center" @close="show = false">
             添加分类
             <view>
@@ -300,6 +301,7 @@ const changeChoose = (type: number) => {
         const res = await billServer.addBill({ ...params })
         if (res.data == '添加成功') {
             uni.showToast({ title: '添加成功', duration: 800 })
+
             // 如果添加的账单时间距离(最新一条账单)超过7天，就刷新
             if (formattereTools.dateFormatterDispose(billForm.timestamp, Number(lastTime.value))) {
                 uni.reLaunch({
@@ -312,6 +314,8 @@ const changeChoose = (type: number) => {
                     url: '/pages/index/index'
                 })
             }
+            // 更新用户的账单数
+            loginStore.setInfoBillCount(loginStore.info.bill_count + 1)
         }
     }, back = () => {
         uni.switchTab({
