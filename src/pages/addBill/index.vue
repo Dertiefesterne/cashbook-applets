@@ -30,8 +30,8 @@
                     <BillTypeIconVue :classify="index + 7" :choose="(index + 7) == billForm.classify" />
                     <p>{{ filters.billTypeFilter(index + 7) }}</p>
                 </view>
-                <view class="classify" @click="addNewClassify">
-                    <BillTypeIconVue :classify="addClassify" :choose="billForm.classify == -1" />
+                <view class="classify" @click="isAddClassify = true">
+                    <BillTypeIconVue classify="add" :choose="billForm.classify == -1" />
                     <p>添加</p>
                 </view>
             </view>
@@ -94,14 +94,17 @@
             </view>
         </view>
         <!-- 增加自定义类别弹窗 -->
-        <u-popup :show="show" mode="center" @close="show = false">
-            添加分类
-            <view>
-                分类名称
-                <input />
-                <button>完成</button>
-                <button @click="show = false">取消</button>
+        <u-popup :show="isAddClassify" mode="center" @close="isAddClassify = false">
+            <view class="head-title">添加分类</view>
+            <p>分类名称:</p>
+            <view class="input-box"> <input v-model.trim="classify" maxlength="4"
+                    @input="classify = classify.replace(/ /g, '')" />
+                <text v-if="classify.length" class="matter-num">{{
+                    classify.length
+                }}/4</text>
             </view>
+            <button hover-class='none' class="save" @click="addNewClassify" :disabled="classify.length == 0">完成</button>
+            <button hover-class='none' class="cancel" @click="isAddClassify = false">取消</button>
         </u-popup>
     </view>
 </template>
@@ -112,6 +115,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app';
 import formattereTools from '@/utils/dataUtils'
 import billServer from '@/api/billApi'
+import userInfoApi from '@/api/userInfoApi';
 import filters from '@/utils/filters'
 import dataUtils from '@/utils/dataUtils';
 import { useloginStore } from '@/pinia-store/login'
@@ -120,17 +124,18 @@ const loginStore = useloginStore()
 const minDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, -1), 'sDate')
 const maxDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, 1), 'sDate')
 
-const addClassify = -1
+const add = -1
 const billID = ref(),
     billDetial = ref(),
     chooseType = ref<number>(-1),
     moneyDisplay = ref('0'),
     showDate = ref(false),
     showTime = ref(false),
-    show = ref(false),
+    isAddClassify = ref(false),
     datetimeValue = ref(),
     time = ref(),
-    lastTime = ref('')
+    lastTime = ref(''),
+    classify = ref('')
 
 // 保存参数信息
 const billForm = reactive({
@@ -322,9 +327,14 @@ const changeChoose = (type: number) => {
             url: '/pages/index/index'
         })
     },
-    addNewClassify = () => {
-        console.log('add-------------------')
-        show.value = true
+    addNewClassify = async () => {
+        if (classify.value == '') return
+        isAddClassify.value = false
+        const res = userInfoApi.updateUserClassify({ userID: loginStore.userID, customClassify: classify.value })
+        if ((await res).statusCode == 200) {
+            uni.showToast({ title: '添加成功', duration: 800 })
+            classify.value = ''
+        }
     }
 
 function inCalc() {
@@ -549,5 +559,65 @@ onLoad((option) => {
 
 .chooseBorder {
     border-bottom: 2px solid #559eff;
+}
+
+:deep(.u-popup__content) {
+    width: 70%;
+    height: 36%;
+    background-color: #fff;
+    position: relative;
+    border-radius: 10rpx;
+    padding: 40rpx;
+
+    .head-title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 32rpx;
+        margin-bottom: 20rpx;
+    }
+
+    p {
+        margin-bottom: 10rpx;
+    }
+
+    .input-box {
+        width: 80%;
+        display: flex;
+        font-size: 32rpx;
+        border-bottom: 2px solid rgb(165, 165, 165);
+        align-items: center;
+        padding: 5rpx 15rpx;
+        margin: 0 auto;
+
+        input {
+            width: 100%;
+            padding: 1prpx;
+        }
+
+        .matter-num {
+            font-size: 28rpx;
+            color: #999;
+        }
+    }
+
+    button {
+        width: 80%;
+        border-radius: 6rem;
+
+        &::after {
+            border: none;
+        }
+    }
+
+    .save {
+        margin-top: 30rpx;
+        background: rgba(174, 208, 238, 0.5);
+        text-align: center;
+    }
+
+    .cancel {
+        background-color: rgba(221, 222, 224, 0.5);
+        margin-top: 10rpx;
+    }
 }
 </style>

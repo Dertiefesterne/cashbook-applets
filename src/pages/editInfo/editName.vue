@@ -1,6 +1,8 @@
 <template>
     <view class="container">
-        <headTop>我的昵称</headTop>
+        <headTop> <template v-slot:title>
+                我的昵称
+            </template></headTop>
         <view class="content">
             <input v-model="name" maxlength="15" />
             <button hover-class='none' @click="modifyNickName">确认修改</button>

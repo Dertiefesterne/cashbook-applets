@@ -14,5 +14,13 @@ export default {
             method: 'POST',
             data
         })
+    },
+    updateUserMatter(data: any) {
+        return http.request({
+            url: '/userInfo/update/matterlabel',
+            method: 'POST',
+            data
+        })
     }
+
 }

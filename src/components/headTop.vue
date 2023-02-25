@@ -3,7 +3,10 @@
         <view class="icon-l" @click="back">
             <u-icon name="arrow-left" size="20"></u-icon>
         </view>
-        <slot></slot>
+        <slot name="title"></slot>
+        <view class="icon-r">
+            <slot name="icon"></slot>
+        </view>
     </view>
 </template>
 
@@ -33,6 +36,11 @@ const back = () => {
     .icon-l {
         position: absolute;
         left: 20rpx;
+    }
+
+    .icon-r {
+        position: absolute;
+        right: 20rpx;
     }
 }
 </style>

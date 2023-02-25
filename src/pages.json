@@ -28,6 +28,9 @@
 		},
 		{
 			"path": "pages/editInfo/editBudget"
+		},
+		{
+			"path": "pages/editInfo/editLabel"
 		}
 	],
 	"tabBar": {
