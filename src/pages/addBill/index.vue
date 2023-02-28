@@ -31,7 +31,7 @@
                     <p>{{ filters.billTypeFilter(index + 7) }}</p>
                 </view>
                 <view class="classify" @click="isAddClassify = true">
-                    <BillTypeIconVue classify="add" :choose="billForm.classify == -1" />
+                    <BillTypeIconVue :classify="add" :choose="billForm.classify == -1" />
                     <p>添加</p>
                 </view>
             </view>
@@ -124,7 +124,7 @@ const loginStore = useloginStore()
 const minDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, -1), 'sDate')
 const maxDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, 1), 'sDate')
 
-const add = -1
+const add: number = -1
 const billID = ref(),
     billDetial = ref(),
     chooseType = ref<number>(-1),

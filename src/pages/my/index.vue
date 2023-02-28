@@ -14,7 +14,7 @@
 		</view>
 		<view class="content">
 			<view class="menu-item" @click="toEditInfo">个人信息 <u-icon name="arrow-right"></u-icon></view>
-			<view class="menu-item">类别管理<u-icon name="arrow-right"></u-icon></view>
+			<view class="menu-item" @click="toEditClassify">类别管理<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item" @click="toEditLabel">惯用词管理<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item">关于我们<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item">注销账号<u-icon name="arrow-right"></u-icon></view>
@@ -62,6 +62,10 @@ const loginOut = () => {
 }, toEditInfo = () => {
 	uni.navigateTo({
 		url: '/pages/editInfo/editMyInfo'
+	})
+}, toEditClassify = () => {
+	uni.navigateTo({
+		url: '/pages/editInfo/editClassify'
 	})
 }
 

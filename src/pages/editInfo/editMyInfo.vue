@@ -4,11 +4,16 @@
                 个人信息
             </template></headTop>
         <view class="content">
-            <view>我的头像</view>
-            <view>我的账号</view>
+            <view class="menu-item">我的头像<image style="width: 80rpx; height: 80rpx; border-radius: 50%;"
+                    src="@/style/iconPng/img1.jpg" mode="aspectFill"></image>
+            </view>
+            <view class="menu-item">我的账号 <view class="icon">{{ loginStore.userID }}<u-icon name="arrow-right"></u-icon>
+                </view>
+            </view>
+            <view class="menu-item" @click="toEditName">我的昵称 <u-icon name="arrow-right"></u-icon></view>
+            <view class="menu-item">修改密码 <u-icon name="arrow-right"></u-icon></view>
+            <view class="menu-item">退出登录</view>
         </view>
-        <view>修改密码</view>
-        <view>退出登录</view>
         <view>注销账号</view>
     </view>
 </template>
@@ -43,6 +48,10 @@ const modifyNickName = async () => {
             url: '/pages/my/index'
         })
     }
+}, toEditName = () => {
+    uni.navigateTo({
+        url: '/pages/editInfo/editName'
+    })
 }
 </script>
 
@@ -51,22 +60,25 @@ const modifyNickName = async () => {
 .container {
 
     .content {
-        padding: 100rpx 140rpx 0;
+        padding: 120rpx 20rpx 0;
+        background-color: #f8f8fa;
+        height: 100%;
 
-        input {
-            width: 100%;
-            border-bottom: 2px solid rgb(58, 58, 58);
-            margin: 100rpx 0 120rpx;
-            font-size: 34rpx;
-            font-weight: 600;
-        }
+        .menu-item {
+            padding: 0 40rpx;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100rpx;
+            background-color: #fff;
+            margin-bottom: 20rpx;
 
-        button {
-            background: rgba(174, 208, 238, 0.5);
-            border-radius: 6rem;
+            .icon {
+                display: flex;
 
-            &::after {
-                border: none;
+                .u-icon {
+                    margin-left: 10rpx;
+                }
             }
         }
     }

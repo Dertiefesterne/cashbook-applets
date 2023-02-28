@@ -42,7 +42,7 @@ export default {
 		// 业务类型（0：未知，1：求职用户，2：企业HR，9：消息通知，10：其他）
 		switch (index) {
 			case -1:
-				return 'icon-xianxing-09';
+				return 'icon-tianjia';
 			case 0:
 				return 'icon-xianxing-15';
 			case 1:

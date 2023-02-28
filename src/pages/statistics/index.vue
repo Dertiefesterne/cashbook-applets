@@ -11,9 +11,10 @@
 			<LineChart :myData="myLineData" :rangeData="LineRangeData" @changeMonthGroup="changeMonthGroup"></LineChart>
 			<sectorChart :myData="mySectorData" :rangeData="LineRangeData" @changeMonthGroup="changeClassifyMonth" />
 		</view>
-		<view v-if="noBill">
-			啊哦~一条账单都没有
-			<button @click="goAddBill">去记账</button>
+		<view v-if="noBill" class="noBill">
+			<i class="iconfont icon-zanwushuju1" style="font-size:100rpx"></i>
+			<p>暂无账单</p>
+			<view @click="goAddBill" class="addBill"><u-icon name="edit-pen-fill" size="20"></u-icon>记一笔</view>
 		</view>
 	</view>
 </template>
@@ -227,5 +228,16 @@ onMounted(() => {
 		padding: 0 0 40rpx 0;
 	}
 
+	.noBill {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		.addBill {
+			display: flex;
+		}
+	}
 }
 </style>
