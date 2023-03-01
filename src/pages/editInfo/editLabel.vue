@@ -4,7 +4,7 @@
             <template v-slot:title>
                 我的惯用词
             </template>
-            <template v-slot:icon>
+            <template v-slot:icon-r>
                 <u-icon name="checkmark" size="20" @click="saveLabel"></u-icon>
             </template>
         </headTop>
@@ -19,8 +19,8 @@
                 </p>
                 <p class="advice">增加账单页面个性推荐</p>
                 <view class="label-box">
-                    <u-tag v-for="(item, index) in selectedLabel" :text="item" closable :show="selectedLabel.includes(item)"
-                        @close="selectedLabel.splice(index, 1)"></u-tag>
+                    <u-tag v-for="(item, index) in selectedLabel" plain plainFill :text="item" closable
+                        :show="selectedLabel.includes(item)" @close="selectedLabel.splice(index, 1)"></u-tag>
                 </view>
             </view>
         </view>
@@ -50,7 +50,8 @@ onMounted(() => {
 async function getUserInfoLabel() {
     const res = await userApi.getInformation({ userID: userID })
     console.log('userInfo----', res.data.customMatter)
-    selectedLabel.value = res.data.customMatter.split(',')
+    if (res.data.customMatter)
+        selectedLabel.value = res.data.customMatter.split(',')
     console.log('userInfo----', selectedLabel.value)
 }
 

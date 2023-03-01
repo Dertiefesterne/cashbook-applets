@@ -5,7 +5,7 @@
             </template></headTop>
         <view class="content">
             <view class="menu-item">我的头像<image style="width: 80rpx; height: 80rpx; border-radius: 50%;"
-                    src="@/style/iconPng/img1.jpg" mode="aspectFill"></image>
+                    src="@/style/iconPng/img1.jpg" mode="aspectFill" @click="previewImg(src)"></image>
             </view>
             <view class="menu-item">我的账号 <view class="icon">{{ loginStore.userID }}<u-icon name="arrow-right"></u-icon>
                 </view>
@@ -27,7 +27,7 @@ import userInfoServer from '@/api/userInfoApi';
 import { useloginStore } from '@/pinia-store/login'
 const loginStore = useloginStore()
 const name = ref(loginStore.info.nickname)
-
+const src = "http://cdn.uviewui.com/uview/empty/car.png"
 onMounted(() => {
     // name.value = loginStore.info.nickname
     // console.log('用户昵称', loginStore.info.nickname)
@@ -52,7 +52,23 @@ const modifyNickName = async () => {
     uni.navigateTo({
         url: '/pages/editInfo/editName'
     })
+}, previewImg = (photoImg: any) => {
+    let imgsArray = [];
+    imgsArray[0] = photoImg;
+    uni.previewImage({
+        current: 0,
+        urls: imgsArray
+    });
 }
+// , multPreviewImage = (index) => {
+//     let photoList = photos.value.map(item => {
+//         return item.src;
+//     });
+//     uni.previewImage({
+//         current: index,
+//         urls: photoList
+//     });
+// }
 </script>
 
 

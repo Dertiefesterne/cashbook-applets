@@ -12,9 +12,13 @@
 			<sectorChart :myData="mySectorData" :rangeData="LineRangeData" @changeMonthGroup="changeClassifyMonth" />
 		</view>
 		<view v-if="noBill" class="noBill">
-			<i class="iconfont icon-zanwushuju1" style="font-size:100rpx"></i>
+			<i class="iconfont icon-zanwushuju1" style="font-size:300rpx"></i>
 			<p>暂无账单</p>
-			<view @click="goAddBill" class="addBill"><u-icon name="edit-pen-fill" size="20"></u-icon>记一笔</view>
+			<view @click="goAddBill" class="addBill"><u-icon name="edit-pen-fill" size="25" color="#2979FF"></u-icon>
+				<p>记一笔</p>
+			</view>
+			<!-- <u-empty text="暂无账单-">
+			</u-empty> -->
 		</view>
 	</view>
 </template>
@@ -235,8 +239,26 @@ onMounted(() => {
 		justify-content: center;
 		align-items: center;
 
+		padding-top: 100rpx;
+
 		.addBill {
 			display: flex;
+			margin-top: 20rpx;
+
+			p {
+				height: 20px;
+				font-size: 30rpx;
+				line-height: 25px;
+				// border-bottom: 1px solid #2979FF;
+				color: #2979FF;
+				text-decoration: underline;
+			}
+
+		}
+
+		p,
+		i {
+			color: #c0c4cc;
 		}
 	}
 }

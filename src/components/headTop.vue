@@ -1,11 +1,11 @@
 <template>
     <view class="head">
         <view class="icon-l" @click="back">
-            <u-icon name="arrow-left" size="20"></u-icon>
+            <slot name="icon-l"> <u-icon name="arrow-left" size="20"></u-icon></slot>
         </view>
         <slot name="title"></slot>
         <view class="icon-r">
-            <slot name="icon"></slot>
+            <slot name="icon-r"></slot>
         </view>
     </view>
 </template>

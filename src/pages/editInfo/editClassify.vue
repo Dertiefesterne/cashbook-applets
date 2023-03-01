@@ -4,29 +4,50 @@
             <template v-slot:title>
                 账单类别
             </template>
-            <template v-slot:icon>
+            <template v-slot:icon-r>
                 <u-icon name="checkmark" size="20" @click="saveLabel"></u-icon>
             </template>
         </headTop>
         <view class="content">
-            支出类别
+            <u-subsection :list="list" :current="curNow" @change="sectionChange"></u-subsection>
             <view class="input-box">
-                <input v-model="newLabel" maxlength="2" @input="newLabel = newLabel.replace(/ /g, '')" /><text
+                <input v-model="NewClassify" maxlength="2" @input="NewClassify = NewClassify.replace(/ /g, '')" /><text
                     @click="addNewLabel">添加</text>
             </view>
-            <p class="advice"> 建议字数2字</p>
+            <p class="advice"> 建议字数：2</p>
             <view class="alreadyAdd">
-                <p> 已添加<sapn>({{ selectedClassify.length }}/8)</sapn>
+                <p> 已添加<sapn>({{ curNow ? inputClassify?.length : outputClassify?.length }}/8)</sapn>
+                </p>
+                <p class="advice">增加账单页面个性推荐</p>
+                <view class="label-box" v-if="curNow == 0">
+                    <u-tag v-for="item in defaultOutputClassify" :text="item.classifyDesc">
+                    </u-tag>
+                    <u-tag v-for="(item, index) in outputClassify" plain plainFill :text="item"
+                        :show="outputClassify.includes(item)" @close="outputClassify.splice(index, 1)"></u-tag>
+                </view>
+                <view class="label-box" v-else>
+                    <u-tag v-for="item in defaultInputClassify" :text="item.classifyDesc">
+                    </u-tag>
+                    <u-tag v-for="(item, index) in inputClassify" plain plainFill :text="item"
+                        :show="inputClassify.includes(item)" @close="inputClassify.splice(index, 1)"></u-tag>
+                </view>
+            </view>
+            <!-- <view class="input-box">
+                <input v-model="inputNewClassify" maxlength="2"
+                    @input="inputNewClassify = inputNewClassify.replace(/ /g, '')" /><text
+                    @click="addinputClassify">添加</text>
+            </view>
+            <p class="advice"> 建议字数：2</p>
+            <view class="alreadyAdd">
+                <p> 已添加<sapn>({{ inputClassify.length }}/8)</sapn>
                 </p>
                 <p class="advice">增加账单页面个性推荐</p>
                 <view class="label-box">
-                    <u-tag v-for="(item, index) in selectedClassify" :text="item" closable
-                        :show="selectedClassify.includes(item)" @close="selectedClassify.splice(index, 1)"></u-tag>
+                    <u-tag v-for="(item, index) in inputClassify" plain plainFill :text="item" closable
+                        :show="inputClassify.includes(item)" @close="inputClassify.splice(index, 1)"></u-tag>
                 </view>
-            </view>
-            收入类别
+            </view> -->
         </view>
-
     </view>
 </template>
 
@@ -37,13 +58,16 @@ import { onLoad } from '@dcloudio/uni-app';
 import headTop from '@/components/headTop.vue';
 import userInfoApi from '@/api/userInfoApi';
 import userApi from '@/api/userApi';
+import { defaultOutputClassify, defaultInputClassify } from '@/utils/staticData'
 import { useloginStore } from '@/pinia-store/login'
 const loginStore = useloginStore()
 const name = ref(loginStore.info.nickname)
-const newLabel = ref('')
+const NewClassify = ref('')
 const userID = loginStore.userID
-const selectedClassify = ref<string[]>([])
-const close2 = ref(true)
+const outputClassify = ref<string[]>([])
+const inputClassify = ref<string[]>([])
+const curNow = ref(0)
+const list = ['支出类别', '收入类别']
 onMounted(() => {
     //获取用户惯用词
     getUserInfoLabel()
@@ -52,32 +76,57 @@ onMounted(() => {
 async function getUserInfoLabel() {
     const res = await userApi.getInformation({ userID: userID })
     console.log('userInfo----', res.data)
-    selectedClassify.value = res.data.customClassify.split(',')
-    console.log('userInfo----', selectedClassify.value)
+    if (res.data.outputClassify)
+        outputClassify.value = res.data.outputClassify.split(',')
+    if (res.data.inputClassify)
+        inputClassify.value = res.data.inputClassify.split(',')
+    console.log('2', inputClassify.value)
 }
 
 const addNewLabel = async () => {
-    if (selectedClassify.value.length == 8) {
-        newLabel.value = ''
-        return
+    if (curNow.value == 0)
+        addOutputClassify()
+    else if (curNow.value == 1) {
+        addinputClassify()
     }
-    else if (selectedClassify.value.includes(newLabel.value)) {
-        uni.showToast({ title: '请勿添加重复类别', icon: 'none', duration: 1000 })
-        return
-    }
-    else
-        selectedClassify.value.push(newLabel.value)
-    newLabel.value = ''
-
 
 }, saveLabel = async () => {
-    const res = userInfoApi.updateUserClassify({ userID: userID, customClassify: selectedClassify.value.join(',') })
+    const res = userInfoApi.updateUserClassify({ userID: userID, outputClassify: outputClassify.value.join(','), inputClassify: inputClassify.value.join(',') })
     if ((await res).statusCode == 200) {
         uni.showToast({ title: '保存成功', duration: 500 })
         uni.switchTab({
             url: '/pages/my/index'
         })
     }
+}, addOutputClassify = async () => {
+
+    if (outputClassify.value?.length == 3) {
+        NewClassify.value = ''
+        return
+    }
+    else if (outputClassify.value?.includes(NewClassify.value)) {
+        uni.showToast({ title: '请勿添加重复类别', icon: 'none', duration: 1000 })
+        return
+    }
+    else {
+        outputClassify.value.push(NewClassify.value)
+        NewClassify.value = ''
+    }
+}, addinputClassify = async () => {
+    if (inputClassify.value.length == 3) {
+        NewClassify.value = ''
+        return
+    }
+    else if (inputClassify.value.includes(NewClassify.value)) {
+        uni.showToast({ title: '请勿添加重复类别', icon: 'none', duration: 1000 })
+        return
+    }
+    else {
+        inputClassify.value.push(NewClassify.value)
+        NewClassify.value = ''
+    }
+}, sectionChange = (index: number) => {
+    curNow.value = index;
 }
 </script>
 
@@ -85,7 +134,7 @@ const addNewLabel = async () => {
 .container {
 
     .content {
-        padding: 100rpx 40rpx 0;
+        padding: 120rpx 40rpx 0;
 
         .input-box {
             display: flex;
@@ -120,9 +169,13 @@ const addNewLabel = async () => {
             margin-top: 40rpx;
 
             .label-box {
-                display: flex;
-                flex-wrap: wrap;
-
+                margin-top: 20rpx;
+                display: grid;
+                grid-gap: 8px 5px;
+                //内容整体平均分布
+                justify-content: space-between;
+                //单元格的大小是固定的，但是容器的大小不确定。如果希望每一行（或每一列）容纳尽可能多的单元格，这时可以使用auto-fill关键字表示自动填充
+                grid-template-columns: repeat(auto-fill, 50px); //单元格的大小是65px
             }
         }
     }
