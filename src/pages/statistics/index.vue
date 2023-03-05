@@ -7,9 +7,22 @@
 			收支报表
 		</view>
 		<view class="content" v-if="ready">
-			<histogram :data1="myHistogramData" :rangeData="histogramRangeData" @changeYearGroup="changeYearGroup" />
+			<histogram :myData="myHistogramData" :rangeData="histogramRangeData" @changeYearGroup="changeYearGroup" />
 			<LineChart :myData="myLineData" :rangeData="LineRangeData" @changeMonthGroup="changeMonthGroup"></LineChart>
 			<sectorChart :myData="mySectorData" :rangeData="LineRangeData" @changeMonthGroup="changeClassifyMonth" />
+			<view class="classifyList">
+				<view v-for="item in classifyList" class="classifyItem" @click="toClassifyListDetial(item.classify)">
+					<view class="flex">
+						<BillTypeIconVue :classify="item.classify" />
+						{{ filters.billTypeFilter(item.classify) }}
+						<span>{{ item.count }}笔</span>
+					</view>
+					<view class="flex">
+						-{{ item.sums }}￥
+						<u-icon name="arrow-right"></u-icon>
+					</view>
+				</view>
+			</view>
 		</view>
 		<view v-if="noBill" class="noBill">
 			<i class="iconfont icon-zanwushuju1" style="font-size:300rpx"></i>
@@ -33,7 +46,9 @@ import formattereTools from '@/utils/dataUtils'
 import histogram from './component/histogramChart.vue'
 import LineChart from './component/LineChart.vue';
 import sectorChart from './component/sectorChart.vue';
+import BillTypeIconVue from '../../components/billTypeIcon.vue'
 const loginStore = useloginStore()
+const storeUserID = loginStore.userID
 
 interface yearGroupItem {
 	// x轴
@@ -43,6 +58,13 @@ interface yearGroupItem {
 	count: number,
 }
 
+interface classifyItem {
+	// x轴
+	classify: number,
+	// 图表数据
+	sums: number,
+	count: number,
+}
 
 const ready = ref(false),
 	noBill = ref(false),
@@ -59,7 +81,10 @@ const ready = ref(false),
 	mySectorData = ref<sector>({
 		categories: [],
 		series: []
-	})
+	}),
+	//分类列表
+	classifyList = ref<classifyItem[]>([]),
+	currentClassifyMonth = ref(0)
 
 const chartData = {
 	categories: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
@@ -84,13 +109,12 @@ const chartData = {
 	]
 
 
-
 const getYearGroupData = async () => {
-	const params = { userID: Number(loginStore.userID), groupType: "year", billType: -1 }
+	const params = { userID: storeUserID, groupType: "year", billType: -1 }
 	const res = await billServer.getBillChartData(params)
 	let arr = res.data.map((item: yearGroupItem) => item.date)
 	histogramRangeData.value?.push(arr)
-	const params2 = { userID: Number(loginStore.userID), groupType: "month", billType: -1 }
+	const params2 = { userID: storeUserID, groupType: "month", billType: -1 }
 	const res2 = await billServer.getBillChartData(params2)
 	let arr2 = res2.data.map((item: yearGroupItem) => item.date.slice(5))
 	LineRangeData.value.push(arr2)
@@ -104,7 +128,7 @@ const getYearGroupData = async () => {
 		temp.data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		myHistogramData.value.series.push(temp)
 		// 请求该年份的账单数据
-		let params = { userID: Number(loginStore.userID), groupType: "month", billType: -1, year: year }
+		let params = { userID: storeUserID, groupType: "month", billType: -1, year: year }
 		const res = await billServer.getBillChartData(params)
 		for (let i = 0, len = res.data.length; i < len; i++) {
 			// 如果是今年的数据按月份分组的话，顺便记录下有数据的月份信息
@@ -117,9 +141,8 @@ const getYearGroupData = async () => {
 		// 每次切换月份，初始化图表数据
 		myLineData.value.categories = []
 		myLineData.value.series = []
-		let yy = new Date().getFullYear()
 		// 获取这个月的天数
-		let days = formattereTools.getMonthDays(yy + '-' + month + '-01')
+		let days = formattereTools.getMonthDays(new Date().getFullYear() + '-' + month + '-01')
 		let temp: interSeries = { name: '', data: [] }
 		// 图表名
 		temp.name = month + '月支出'
@@ -131,11 +154,12 @@ const getYearGroupData = async () => {
 			temp.data.push(0)
 		}
 		myLineData.value.series.push(temp)
-		console.log('初始化月度数据表格', temp, myLineData.value)
+		console.log('初始化月度数据表格', myLineData.value)
 	},
 	getDayGroupData = async (month: string) => {
 		initDayGroupData(month)
-		const params = { userID: Number(loginStore.userID), groupType: "day", billType: -1, month: month }
+		console.log('yyyyyyyyyyyyyy', LineRangeData.value[0], month, LineRangeData.value[0].includes(month))
+		const params = { userID: Number(storeUserID), groupType: "day", billType: -1, month: month }
 		const res = await billServer.getBillChartData(params)
 		console.log('结果month', res.data)
 		for (let i = 0; i < res.data.length; i++) {
@@ -148,19 +172,22 @@ const getYearGroupData = async () => {
 		// 每次切换月份，初始化图表数据
 		mySectorData.value.categories = []
 		mySectorData.value.series = []
-		const params = { userID: Number(loginStore.userID), groupType: "classify", billType: -1, month: month }
+		const params = { userID: Number(storeUserID), groupType: "classify", billType: -1, month: month }
 		const res = await billServer.getBillChartData(params)
 		let temp2: sectorSeries = {
 			name: month + '月分类',
 			data: []
 		}
+		console.log('分类图表', res.data)
+		classifyList.value = res.data
 		for (let i = 0; i < res.data.length; i++) {
 			mySectorData.value.categories.push(filters.billTypeFilter(res.data[i].classify))
 			// series部分
 			temp2.data.push({ name: filters.billTypeFilter(res.data[i].classify), value: res.data[i].sums })
 		}
 		mySectorData.value.series.push(temp2)
-		console.log('结果classify2', mySectorData.value)
+
+		console.log('classify2', mySectorData.value)
 		ready.value = true
 	},
 	changeYearGroup = (e: any) => {
@@ -173,11 +200,18 @@ const getYearGroupData = async () => {
 	},
 	changeClassifyMonth = (e: any) => {
 		console.log(e, typeof e)
+		currentClassifyMonth.value = Number(e)
 		getClassifyGroupData(e)
 	},
 	goAddBill = () => {
 		uni.navigateTo({
 			url: '/pages/addBill/index'
+		})
+	},
+	toClassifyListDetial = (classify: number) => {
+		uni.navigateTo({
+			// url: '/pages/billDetial/index'
+			url: `/pages/billDetial/classifyList?classify=${classify}&month=${currentClassifyMonth.value}`
 		})
 	}
 
@@ -190,6 +224,7 @@ onMounted(() => {
 		getMonthGroupData(year)
 		let month = new Date().getMonth() + 1
 		let mm = month < 10 ? '0' + month : '' + month
+		currentClassifyMonth.value = Number(mm)
 		getDayGroupData(mm)
 		getClassifyGroupData(mm)
 	} else {
@@ -230,6 +265,22 @@ onMounted(() => {
 	.content {
 		width: 100%;
 		padding: 0 0 40rpx 0;
+
+		.classifyList {
+			padding: 0 70rpx;
+			margin-top: 40rpx;
+
+			.classifyItem {
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 10rpx;
+
+				.flex {
+					display: flex;
+					align-items: center;
+				}
+			}
+		}
 	}
 
 	.noBill {

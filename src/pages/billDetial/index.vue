@@ -96,9 +96,10 @@ import billServer from '@/api/billApi'
 import { Bill } from '@/entity/bill'
 import filters from '@/utils/filters'
 import { useloginStore } from '@/pinia-store/login'
+import { useStore } from '@/pinia-store/my'
 import BillTypeIconVue from '../../components/billTypeIcon.vue'
 const loginStore = useloginStore()
-
+const userStore = useStore()
 
 const billID = ref(),
     billDetial = ref(),
@@ -128,8 +129,6 @@ onLoad((option) => {
     }
 })
 
-
-
 /**
  * 获取获取账单详情
  */
@@ -142,6 +141,7 @@ const getBillDetail = async () => {
 },
     changeChoose = (type: number) => {
         chooseType.value = type
+        setProp(billDetial.value, 'bill_type', type)
     },
     changeClassify = (type: number) => {
         setProp(billDetial.value, 'classify', type)
@@ -289,11 +289,13 @@ const getBillDetail = async () => {
     },
     modifyBill = async () => {
         // 保存修改后的账单
-        const params = { userID: Number(loginStore.userID), billID: billDetial.value.bill_id, datetime: billDetial.value.time, timestamp: billDetial.value.timestamp, money: billDetial.value.money, matter: billDetial.value.matter, classify: billDetial.value.classify, bill_type: chooseType.value }
+        const params = { userID: Number(loginStore.userID), billID: billDetial.value.bill_id, datetime: billDetial.value.time, timestamp: billDetial.value.timestamp, money: billDetial.value.money, matter: billDetial.value.matter, classify: billDetial.value.classify, bill_type: billDetial.value.bill_type }
         console.log('修改后的账单', params)
         const res = billServer.updateBill(params)
         if ((await res).statusCode == 200) {
             uni.showToast({ title: '修改成功', duration: 800 })
+            // userStore.setModifyBill(JSON.parse(JSON.stringify(billDetial.value)))
+            // console.log("个人修改账单", userStore.modifyBill)
             jumpPage()
         }
     },

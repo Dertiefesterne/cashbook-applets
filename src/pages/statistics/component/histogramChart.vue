@@ -15,7 +15,7 @@
             </view>
         </scroll-view> -->
         <view class="scrollx_items">
-            <qiun-data-charts type="column" width="5" :chartData="data1" :opts="opts2" />
+            <qiun-data-charts type="column" width="5" :chartData="myData" :opts="opts2" />
         </view>
     </view>
 </template>
@@ -36,7 +36,7 @@ const emit = defineEmits(['update:modelValue', 'changeYearGroup']),
             type: String,
             default: ''
         },
-        data1: {}
+        myData: {}
     })
 
 const show = ref(false),
@@ -98,7 +98,7 @@ const chooseYear = (e: chooseEven) => {
     console.log('confirm', e)
     show.value = false
     chooseValue.value = e.value[0] + ''
-    console.log('点击确认', chooseValue.value)
+    // console.log('点击确认', chooseValue.value)
     emit('changeYearGroup', e.value[0] + '')
 }
 
@@ -106,7 +106,7 @@ watch(
     props.rangeData,
     (newProps) => {
         if (newProps.length) {
-            console.log('新增值年度范围数据', newProps)
+            // console.log('新增值年度范围数据', newProps)
             let index = newProps[0].length
             chooseValue.value = newProps[0][index - 1]
         }

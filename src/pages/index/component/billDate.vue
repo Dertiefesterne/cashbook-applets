@@ -6,7 +6,7 @@
                 <p>总支出：{{ dataListSum }}￥</p>
             </view>
             <!-- 每一项账单 -->
-            <view class="bill-list" v-for="(item, index) in dayDate" @click="toBillDetial(item.bill_id)">
+            <view class="bill-list" v-for="(item, index) in dayDate" @click="toBillDetial(item.bill_id, index)">
                 <view v-if="isEdit" @click="deleteBill(index, item.bill_id)">
                     <u-icon name="minus-circle-fill" color="red" size="22"></u-icon>
                 </view>
@@ -37,12 +37,14 @@ import { ref, onMounted, watch, computed } from 'vue'
 import userServer from '@/api/userApi'
 import billServer from '@/api/billApi'
 import { useloginStore } from '@/pinia-store/login'
+import { useStore } from '@/pinia-store/my'
 import formattereTools from '@/utils/dataUtils'
 import { Bill, groupBill } from '@/entity/bill'
 import filters from '@/utils/filters'
 import billTypeIconVue from '../../../components/billTypeIcon.vue'
+import { numberLiteralTypeAnnotation } from '@babel/types'
 const loginStore = useloginStore()
-
+const userStore = useStore()
 
 const emits = defineEmits(['chooseValue', 'deleteBill'])
 
@@ -61,6 +63,10 @@ const props = defineProps({
     dayDate: {
         type: Array<Bill>,
         default: () => []
+    },
+    groupIndex: {
+        type: Number,
+        default: 0
     }
 })
 
@@ -71,9 +77,11 @@ const dataListSum = computed(() => {
 const allChoose = ref([]),
     nowDate = ref('')
 
-const toBillDetial = (billID: number) => {
+const toBillDetial = (billID: number, billIndex: number) => {
     if (props.isEdit)
         return
+    // userStore.setIndex(props.groupIndex, billIndex)
+    // console.log('个人修改账单---', userStore.gruopIndex, userStore.billIndex)
     uni.navigateTo({
         // url: '/pages/billDetial/index'
         url: `/pages/billDetial/index?billID=${billID}`

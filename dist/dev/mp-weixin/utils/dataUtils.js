@@ -2,15 +2,22 @@
 const formattereTools = {
   charactersTonumber(chnStr) {
   },
-  dateFormatterDispose(str, val) {
-    var stime = val;
-    var etime = Number(str);
-    var usedTime = etime - stime;
+  dateFormatterDispose(endTime, startTime) {
+    var stime = startTime;
+    var etime = Number(endTime);
+    var usedTime = Math.abs(etime - stime);
     var days = Math.floor(usedTime / (24 * 3600 * 1e3));
     if (days > 7)
       return false;
     else
       return true;
+  },
+  dataDays(time) {
+    var etime = new Date().getTime();
+    var stime = Number(time);
+    var usedTime = Math.abs(etime - stime);
+    var days = Math.floor(usedTime / (24 * 3600 * 1e3));
+    return days;
   },
   dateFormattere(date, type = "date") {
     var date = new Date(date);
@@ -65,9 +72,27 @@ const formattereTools = {
       return year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + seconds;
     }
   },
+  getMonthDays(date) {
+    var d = new Date(date);
+    d.setMonth(d.getMonth() + 1);
+    d.setDate(1);
+    d.setDate(d.getDate() - 1);
+    return d.getDate();
+  },
   testYy(val) {
     let yy = val + 1;
     return yy;
+  },
+  debounce(fn, wait = 200) {
+    console.log("\u770B\u770B2");
+    var timer = 0;
+    return function() {
+      if (timer !== null) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(() => {
+      }, wait);
+    };
   }
 };
 exports.formattereTools = formattereTools;

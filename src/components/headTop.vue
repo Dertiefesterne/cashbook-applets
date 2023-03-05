@@ -14,9 +14,10 @@
 
 
 const back = () => {
-    uni.switchTab({
-        url: '/pages/my/index'
-    })
+    // uni.switchTab({
+    //     url: '/pages/my/index'
+    // })
+    uni.navigateBack({ delta: 1 })
 }
 </script>
 

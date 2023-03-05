@@ -8,7 +8,10 @@ interface userInfo {
   bill_count: number,
   time: string,
   register_timestamp: string,
-  avatar: string
+  avatar: string,
+  customMatter: string,
+  inputClassify: string,
+  outputClassify: string
 }
 
 export const useloginStore = defineStore({
@@ -38,9 +41,14 @@ export const useloginStore = defineStore({
     setInfoBillCount(count: number) {
       this.info.bill_count = count
     },
+    setInfoCustomMatter(matter: string) {
+      this.info.customMatter = matter
+    },
     logout() {
       uni.clearStorage()
       this.userID = -1
     }
   }
 })
+
+

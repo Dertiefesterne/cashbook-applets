@@ -10,10 +10,10 @@
         </headTop>
         <view class="content">
             <view class="input-box">
-                <input v-model="newLabel" maxlength="4" @input="newLabel = newLabel.replace(/ /g, '')" /><text
+                <input v-model="newLabel" maxlength="6" @input="newLabel = newLabel.replace(/ /g, '')" /><text
                     @click="addNewLabel">添加</text>
             </view>
-            <p class="advice"> 建议字数2~4字</p>
+            <p class="advice"> 建议字数2~6字</p>
             <view class="alreadyAdd">
                 <p> 已添加<sapn>({{ selectedLabel.length }}/8)</sapn>
                 </p>
@@ -48,10 +48,10 @@ onMounted(() => {
 })
 
 async function getUserInfoLabel() {
-    const res = await userApi.getInformation({ userID: userID })
-    console.log('userInfo----', res.data.customMatter)
-    if (res.data.customMatter)
-        selectedLabel.value = res.data.customMatter.split(',')
+    // const res = await userApi.getInformation({ userID: userID })
+    console.log('userInfo----', loginStore.info)
+    if (loginStore.info.customMatter)
+        selectedLabel.value = loginStore.info.customMatter.split(',')
     console.log('userInfo----', selectedLabel.value)
 }
 
@@ -74,6 +74,7 @@ const addNewLabel = async () => {
     const res = userInfoApi.updateUserMatter({ userID: userID, customMatter: selectedLabel.value.join(',') })
     if ((await res).statusCode == 200) {
         uni.showToast({ title: '保存成功', duration: 500 })
+        loginStore.setInfoCustomMatter(selectedLabel.value.join(","))
         uni.switchTab({
             url: '/pages/my/index'
         })
@@ -94,7 +95,7 @@ const addNewLabel = async () => {
             // align-items: center;
             // padding: 0 140rpx;
             input {
-                width: 200rpx;
+                width: 250rpx;
                 border-bottom: 2px solid rgb(58, 58, 58);
                 font-size: 34rpx;
                 font-weight: 600;

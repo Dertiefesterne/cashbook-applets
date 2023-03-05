@@ -112,7 +112,7 @@ watch(
     props.rangeData,
     (newProps) => {
         if (newProps.length) {
-            console.log('新增值月度范围数据', newProps)
+            // console.log('新增值月度范围数据', newProps)
             chooseValue.value = newProps[0][0]
         }
     },

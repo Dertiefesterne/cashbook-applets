@@ -9,8 +9,9 @@
       <view class="btn-box">
         <button class="addBtn" hover-class='none' @click="toAddBill">增加一条新记账</button>
       </view>
-      <view v-for="item in list">
-        <billDate :day-date="item" v-if="item.length" :is-edit="isEdit" @delete-bill="delBill"></billDate>
+      <view v-for="(item, index) in list">
+        <billDate :day-date="item" :groupIndex="index" v-if="item.length" :is-edit="isEdit" @delete-bill="delBill">
+        </billDate>
       </view>
     </view>
     <view class="add-bill">

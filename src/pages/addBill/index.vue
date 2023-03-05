@@ -66,7 +66,7 @@
             <view class="keyboard">
                 <view class="tagsBox">
                     <scroll-view class="uni-swiper-tab" scroll-x>
-                        <text v-for="item in tags" class="tab" @click="changeMatter(item)">{{
+                        <text v-for="item in recommendTags" class="tab" @click="changeMatter(item)">{{
                             item
                         }}</text>
                     </scroll-view>
@@ -135,7 +135,8 @@ const billID = ref(),
     datetimeValue = ref(),
     time = ref(),
     lastTime = ref(''),
-    classify = ref('')
+    classify = ref(''),
+    recommendTags = ref<string[]>([])
 
 // 保存参数信息
 const billForm = reactive({
@@ -356,6 +357,16 @@ onLoad((option) => {
     }
 })
 
+onMounted(() => {
+    console.log('用户信息---', loginStore.info)
+    let arr = []
+    if (loginStore.info.customMatter)
+        recommendTags.value = loginStore.info.customMatter.split(',')
+    if (recommendTags.value.length < 9) {
+        recommendTags.value = recommendTags.value.concat(tags.slice(0, 9 - recommendTags.value.length))
+    }
+    console.log('推荐标签', recommendTags.value)
+})
 </script>
 
 <style lang="less" scoped>

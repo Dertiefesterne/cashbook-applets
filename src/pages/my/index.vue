@@ -16,9 +16,12 @@
 			<view class="menu-item" @click="toEditInfo">个人信息 <u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item" @click="toEditClassify">类别管理<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item" @click="toEditLabel">惯用词管理<u-icon name="arrow-right"></u-icon></view>
+			<view class="menu-item">购物清单<u-icon name="arrow-right"></u-icon></view>
+			<view class="menu-item">切换主题<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item">关于我们<u-icon name="arrow-right"></u-icon></view>
-			<view @tap="loginOut" v-if="loginStore.userID != -1" class="menu-item">退出登录<u-icon name="arrow-right"></u-icon>
-			</view>
+			<!-- <view @click="loginOut" v-if="loginStore.userID != -1" class="menu-item">退出登录<u-icon
+					name="arrow-right"></u-icon>
+			</view> -->
 		</view>
 	</view>
 </template>
@@ -70,7 +73,7 @@ const loginOut = () => {
 
 
 onMounted(() => {
-	console.log("homestorage", uni.getStorageSync("USER_INFORMATION"))
+	// console.log("homestorage", uni.getStorageSync("USER_INFORMATION"))
 })
 
 </script>

@@ -91,6 +91,13 @@
       method: 'GET',
       data
     })
+  },
+  getBillClassifyList(data:any){
+    return http.request({
+      url:'/bill/billList/classifyData',
+      method: 'GET',
+      data
+    })
   }
 }
  // 指定类型
