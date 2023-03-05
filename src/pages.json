@@ -37,6 +37,9 @@
 		},
 		{
 			"path": "pages/editInfo/editClassify"
+		},
+		{
+			"path": "pages/editInfo/editCode"
 		}
 	],
 	"tabBar": {

@@ -20,7 +20,7 @@
                     </view>
                     <view>
                         <p>本月剩余预算</p>
-                        <p>{{ surplus }}</p>
+                        <p>{{ surplus ? surplus : 0 }}</p>
                     </view>
                 </view>
             </view>

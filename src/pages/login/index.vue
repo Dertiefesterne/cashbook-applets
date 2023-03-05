@@ -4,12 +4,12 @@
       <h3>登录页</h3>
     </view>
     <view class="table">
-      <view><input maxlength="15" placeholder="用户名" v-model="userName" @input="ifRegister3" />
+      <view><input maxlength="15" placeholder="用户名/账号ID" v-model="userName" @input="ifRegister3" />
       </view>
       <view class="info-warn" v-if="noRegister && userName.length">
         <u-icon name="info-circle" color="red"></u-icon>该账号尚未注册
       </view>
-      <view><input maxlength="15" placeholder="密码" v-model="passWord" /></view>
+      <view><input maxlength="15" type="password" placeholder="密码" v-model="passWord" /></view>
     </view>
     <view class="login-btn">
       <button @click="confirmLogin" hover-class='none' :disabled="noRegister">登录</button>
@@ -88,6 +88,7 @@ const registerUser = async () => {
     let userID: number = res.data
     // 全局保存用户ID
     loginStore.login(userID)
+    getUserInfo(userID)
     uni.switchTab({
       url: '/pages/index/index'
     })
@@ -113,14 +114,6 @@ const registerUser = async () => {
       noRegister.value = false
     }
   },
-  ifRegister2 = () => {
-    return new Promise(resolve => {
-      clearTimeout(timer.value)
-      timer.value = setTimeout(() => {
-        ifRegister()
-      }, 800)
-    })
-  },
   ifRegister3 = () => {
     clearTimeout(timer.value)
     timer.value = setTimeout(() => {
@@ -129,7 +122,7 @@ const registerUser = async () => {
   },
   getUserInfo = async (id: number) => {
     const res = await userServer.getInformation({ userID: id })
-    console.log('userInfo----', res.data)
+    console.log('userInfo----1', res.data)
     loginStore.setInfo(res.data)
     uni.switchTab({
       url: '/pages/index/index'

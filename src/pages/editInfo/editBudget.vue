@@ -1,6 +1,13 @@
 <template>
     <view class="container">
-        <headTop>本月预算</headTop>
+        <headTop>
+            <template v-slot:icon-l>
+                <u-icon name="arrow-left" size="20" @click="toIndex"></u-icon>
+            </template>
+            <template v-slot:title>
+                本月预算
+            </template>
+        </headTop>
         <view class="content">
             <input v-model="budget" maxlength="15" type="number" />
             <button hover-class='none' @click="modifyBudget">确认修改</button>
@@ -33,6 +40,10 @@ const modifyBudget = async () => {
             url: '/pages/index/index'
         })
     }
+}, toIndex = () => {
+    uni.switchTab({
+        url: '/pages/index/index'
+    })
 }
 
 </script>

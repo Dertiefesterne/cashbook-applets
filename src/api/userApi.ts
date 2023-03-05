@@ -45,9 +45,27 @@ login(data:any) {
       method: 'POST',
       data
     })
-  }
+  },
+  cancellation(data:any){
+    return http.request({
+      url:'/user/cancellationUser',
+      method: 'POST',
+      data
+    })
+  },
+  //修改密码
+modifyPassWord(data:any){
+  return http.request({
+    url:'/user/updatePassWord',
+    method: 'POST',
+    data
+  })
+}
 
 }
+
+
+
  // 指定类型
  /*export function switchLanguage(data: types.languageTypes) {
      return http.request({
