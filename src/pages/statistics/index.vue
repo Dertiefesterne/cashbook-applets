@@ -109,15 +109,19 @@ const chartData = {
 	]
 
 
-const getYearGroupData = async () => {
+const getYearGroupData = async (year: string, mon: string) => {
 	const params = { userID: storeUserID, groupType: "year", billType: -1 }
 	const res = await billServer.getBillChartData(params)
 	let arr = res.data.map((item: yearGroupItem) => item.date)
-	histogramRangeData.value?.push(arr)
+	histogramRangeData.value.push(arr)
 	const params2 = { userID: storeUserID, groupType: "month", billType: -1 }
 	const res2 = await billServer.getBillChartData(params2)
 	let arr2 = res2.data.map((item: yearGroupItem) => item.date.slice(5))
 	LineRangeData.value.push(arr2)
+	if (!histogramRangeData.value[0].includes(year))
+		histogramRangeData.value[0].push(year)
+	if (!LineRangeData.value[0].includes(mon))
+		LineRangeData.value[0].unshift(mon)
 	console.log('有数据的年\月份信息', histogramRangeData.value, LineRangeData.value)
 },
 	getMonthGroupData = async (year: string) => {
@@ -158,7 +162,7 @@ const getYearGroupData = async () => {
 	},
 	getDayGroupData = async (month: string) => {
 		initDayGroupData(month)
-		console.log('yyyyyyyyyyyyyy', LineRangeData.value[0], month, LineRangeData.value[0].includes(month))
+		console.log('yyyyyyyyyyyyyy', LineRangeData.value[0], month)
 		const params = { userID: Number(storeUserID), groupType: "day", billType: -1, month: month }
 		const res = await billServer.getBillChartData(params)
 		console.log('结果month', res.data)
@@ -219,11 +223,11 @@ const getYearGroupData = async () => {
 onMounted(() => {
 	// 如果用户账单总数为0就return
 	if (loginStore.info.bill_count) {
-		getYearGroupData()
-		let year = new Date().getFullYear() + ''
-		getMonthGroupData(year)
 		let month = new Date().getMonth() + 1
 		let mm = month < 10 ? '0' + month : '' + month
+		let year = new Date().getFullYear() + ''
+		getYearGroupData(year, mm)
+		getMonthGroupData(year)
 		currentClassifyMonth.value = Number(mm)
 		getDayGroupData(mm)
 		getClassifyGroupData(mm)

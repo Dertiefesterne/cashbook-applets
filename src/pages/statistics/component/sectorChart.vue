@@ -6,8 +6,12 @@
         </view>
         <u-picker :show="show" :columns="rangeData" closeOnClickOverlay @close="show = false"
             @confirm="chooseMonth"></u-picker>
-        <view class="charts-box">
+        <view class="charts-box" v-if="myData?.categories.length">
             <qiun-data-charts type="pie" :chartData="myData" />
+        </view>
+        <view class="no-charts" v-else>
+            <i class="iconfont icon-zanwushuju" style="font-size:200rpx"></i>
+            <p>本月暂无账单</p>
         </view>
     </view>
 </template>
@@ -15,14 +19,18 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
+import type { PropType } from 'vue'
 import { chooseEven } from '@/entity/chart'
+import { sector } from '@/entity/chart'
 const emit = defineEmits(['update:modelValue', 'changeMonthGroup']),
     props = defineProps({
         rangeData: {
             type: Array<Array<String>>,
             default: [[0]]
         },
-        myData: {}
+        myData: {
+            type: Object as PropType<sector>
+        }
     })
 const show = ref(false),
     chooseValue = ref<String>()
@@ -85,6 +93,19 @@ watch(
     .charts-box {
         width: 100%;
         height: 300px;
+    }
+
+    .no-charts {
+        width: 100%;
+        margin-top: 100rpx;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        p,
+        i {
+            color: #c0c4cc;
+        }
     }
 }
 </style>

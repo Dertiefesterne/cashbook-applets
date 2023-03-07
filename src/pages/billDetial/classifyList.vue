@@ -1,10 +1,13 @@
 <template>
-    <view class="container">
+    <view class="my-container">
         <headTop> <template v-slot:title>
                 {{ filters.billTypeFilter(classify) }}
             </template></headTop>
-        <view class="content">
-
+        <view class="my-content">
+            <view v-for="(item, index) in list">
+                <billDate :day-date="item.items" v-if="item.items.length">
+                </billDate>
+            </view>
         </view>
     </view>
 </template>
@@ -18,6 +21,7 @@ import billServer from '@/api/billApi'
 import filters from '@/utils/filters'
 import { Bill, groupBill } from '@/entity/bill'
 import { useloginStore } from '@/pinia-store/login'
+import billDate from '@/pages/index/component/billDate.vue'
 const loginStore = useloginStore()
 const name = ref(loginStore.info.nickname)
 const classify = ref(0)
@@ -30,27 +34,43 @@ onLoad((option) => {
 })
 
 interface listObject {
+    date: string,
     timestamp: string,
     items: Bill[]
 }
+
+
 
 const list = ref<listObject[]>([])
 
 
 const getClassifyList = async (classify: number, mon: number) => {
     const res = await billServer.getBillClassifyList({ userID: loginStore.userID, classify: classify, month: mon })
-    console.log('分类结果', res.data, res.data[0].data_time.slice(5, 10))
-
-
+    console.log('分类结果', res.data)
+    res.data.forEach((e: Bill) => {
+        if (list.value.length == 0 || list.value[list.value.length - 1].date != e.time.slice(5, 10)) {
+            let temp: listObject = {
+                date: e.time.slice(5, 10),
+                timestamp: e.timestamp,
+                items: []
+            }
+            temp.items.push(e)
+            list.value.push(temp)
+        }
+        else {
+            list.value[list.value.length - 1].items.push(e)
+        }
+    })
+    console.log('分类结果2', list.value)
 }
 </script>
 
 
 <style lang="less" scoped>
-.container {
+.my-container {
 
-    .content {
-        padding: 100rpx 140rpx 0;
+    .my-content {
+        padding: 130rpx 20rpx 0;
 
     }
 

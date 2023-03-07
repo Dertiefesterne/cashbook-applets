@@ -34,15 +34,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch, computed } from 'vue'
-import userServer from '@/api/userApi'
 import billServer from '@/api/billApi'
 import { useloginStore } from '@/pinia-store/login'
 import { useStore } from '@/pinia-store/my'
 import formattereTools from '@/utils/dataUtils'
-import { Bill, groupBill } from '@/entity/bill'
+import { Bill } from '@/entity/bill'
 import filters from '@/utils/filters'
-import billTypeIconVue from '../../../components/billTypeIcon.vue'
-import { numberLiteralTypeAnnotation } from '@babel/types'
 const loginStore = useloginStore()
 const userStore = useStore()
 
