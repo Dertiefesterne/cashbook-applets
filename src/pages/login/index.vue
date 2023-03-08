@@ -4,7 +4,7 @@
       <h3>登录页</h3>
     </view>
     <view class="table">
-      <view><input maxlength="15" placeholder="用户名/账号ID" v-model="userName" @input="ifRegister3" />
+      <view><input maxlength="15" placeholder="用户名/账号ID" v-model="userName" @input="ifRegister" />
       </view>
       <view class="info-warn" v-if="noRegister && userName.length">
         <u-icon name="info-circle" color="red"></u-icon>该账号尚未注册
@@ -21,16 +21,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import userServer from '@/api/userApi'
-import dataUtils from '@/utils/dataUtils'
+import { debounce } from '@/utils/funTools'
 import { useloginStore } from '@/pinia-store/login'
-import BillTypeIconVue from '../../components/billTypeIcon.vue'
 const loginStore = useloginStore()
 
-const acount = ref(),
-  userName = ref(''),
+const userName = ref(''),
   passWord = ref(''),
-  noRegister = ref(false),
-  timer = ref(0)
+  noRegister = ref(false)
 
 const confirmLogin = async () => {
   if (userName.value == "") {
@@ -101,7 +98,7 @@ const registerUser = async () => {
     })
   }
 },
-  ifRegister = async () => {
+  ifRegister = debounce(async () => {
     let name = userName.value.replace(/ /g, '')
     if (name == '') {
       return
@@ -113,18 +110,13 @@ const registerUser = async () => {
     else {
       noRegister.value = false
     }
-  },
-  ifRegister3 = () => {
-    clearTimeout(timer.value)
-    timer.value = setTimeout(() => {
-      ifRegister()
-    }, 800)
-  },
+  }, 800),
+
   getUserInfo = async (id: number) => {
     const res = await userServer.getInformation({ userID: id })
-    console.log('userInfo----1', res.data)
+    console.log('登录获取用户信息--', res.data)
     loginStore.setInfo(res.data)
-    uni.switchTab({
+    uni.reLaunch({
       url: '/pages/index/index'
     })
   }

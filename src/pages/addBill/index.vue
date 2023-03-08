@@ -94,7 +94,7 @@
             </view>
         </view>
         <!-- 增加自定义类别弹窗 -->
-        <u-popup :show="isAddClassify" mode="center" @close="isAddClassify = false">
+        <u-popup :show="isAddClassify" class="addClassify" mode="center" @close="isAddClassify = false">
             <view class="head-title">添加分类</view>
             <p>分类名称:</p>
             <view class="input-box"> <input v-model.trim="classify" maxlength="4"
@@ -572,63 +572,65 @@ onMounted(() => {
     border-bottom: 2px solid #559eff;
 }
 
-:deep(.u-popup__content) {
-    width: 70%;
-    height: 36%;
-    background-color: #fff;
-    position: relative;
-    border-radius: 10rpx;
-    padding: 40rpx;
+.addClassify {
+    :deep(.u-popup__content) {
+        width: 70%;
+        height: 36%;
+        background-color: #fff;
+        position: relative;
+        border-radius: 10rpx;
+        padding: 40rpx;
 
-    .head-title {
-        text-align: center;
-        font-weight: bold;
-        font-size: 32rpx;
-        margin-bottom: 20rpx;
-    }
-
-    p {
-        margin-bottom: 10rpx;
-    }
-
-    .input-box {
-        width: 80%;
-        display: flex;
-        font-size: 32rpx;
-        border-bottom: 2px solid rgb(165, 165, 165);
-        align-items: center;
-        padding: 5rpx 15rpx;
-        margin: 0 auto;
-
-        input {
-            width: 100%;
-            padding: 1prpx;
+        .head-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 32rpx;
+            margin-bottom: 20rpx;
         }
 
-        .matter-num {
-            font-size: 28rpx;
-            color: #999;
+        p {
+            margin-bottom: 10rpx;
         }
-    }
 
-    button {
-        width: 80%;
-        border-radius: 6rem;
+        .input-box {
+            width: 80%;
+            display: flex;
+            font-size: 32rpx;
+            border-bottom: 2px solid rgb(165, 165, 165);
+            align-items: center;
+            padding: 5rpx 15rpx;
+            margin: 0 auto;
 
-        &::after {
-            border: none;
+            input {
+                width: 100%;
+                padding: 1prpx;
+            }
+
+            .matter-num {
+                font-size: 28rpx;
+                color: #999;
+            }
         }
-    }
 
-    .save {
-        margin-top: 30rpx;
-        background: rgba(174, 208, 238, 0.5);
-        text-align: center;
-    }
+        button {
+            width: 80%;
+            border-radius: 6rem;
 
-    .cancel {
-        background-color: rgba(221, 222, 224, 0.5);
-        margin-top: 10rpx;
+            &::after {
+                border: none;
+            }
+        }
+
+        .save {
+            margin-top: 30rpx;
+            background: rgba(174, 208, 238, 0.5);
+            text-align: center;
+        }
+
+        .cancel {
+            background-color: rgba(221, 222, 224, 0.5);
+            margin-top: 10rpx;
+        }
     }
 }
 </style>

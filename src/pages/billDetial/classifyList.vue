@@ -19,7 +19,7 @@ import { onLoad } from '@dcloudio/uni-app';
 import headTop from '@/components/headTop.vue';
 import billServer from '@/api/billApi'
 import filters from '@/utils/filters'
-import { Bill, groupBill } from '@/entity/bill'
+import { Bill, listObject } from '@/entity/bill'
 import { useloginStore } from '@/pinia-store/login'
 import billDate from '@/pages/index/component/billDate.vue'
 const loginStore = useloginStore()
@@ -32,12 +32,6 @@ onLoad((option) => {
         getClassifyList(option.classify, option.month)
     }
 })
-
-interface listObject {
-    date: string,
-    timestamp: string,
-    items: Bill[]
-}
 
 
 

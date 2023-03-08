@@ -37,7 +37,7 @@ export interface groupBill {
 
 
 
-// 请求返回信息
+// 
 export interface responseType {
 	/**  日期，按天分组 */
 	code: number,
@@ -45,4 +45,13 @@ export interface responseType {
 	data: any
 }
 
+//账单树型结构
+export interface listObject {
+	/**  日期，按天分组*/
+	date: string,//'02-01'
+	/**  时间戳 */
+	timestamp: string,
+	/**  账单列表 */
+	items: Bill[]
+}
 

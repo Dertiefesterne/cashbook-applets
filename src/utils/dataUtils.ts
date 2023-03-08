@@ -128,18 +128,6 @@ export default {
         d.setDate(d.getDate() - 1)
         return d.getDate()
     },
-    // 防抖
-    debounce(fn: Function, wait: number = 200) {
-        var timer = 0;
-        return function () {
-            if (timer !== null) {
-                clearTimeout(timer);
-            }
-            timer = setTimeout(() => {
-                fn
-            }, wait);
-        }
-    },
     // 计算前一个月的时间戳
     getMonTimes(month: number, direction: number) {
         // 今天时间戳
