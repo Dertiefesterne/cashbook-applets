@@ -29,7 +29,7 @@ const classify = ref(0)
 onLoad((option) => {
     if (option) {
         classify.value = option.classify
-        getClassifyList(option.classify, option.month)
+        getClassifyList(option.classify, option.month, option.billType)
     }
 })
 
@@ -38,8 +38,8 @@ onLoad((option) => {
 const list = ref<listObject[]>([])
 
 
-const getClassifyList = async (classify: number, mon: number) => {
-    const res = await billServer.getBillClassifyList({ userID: loginStore.userID, classify: classify, month: mon })
+const getClassifyList = async (classify: number, mon: number, type: number) => {
+    const res = await billServer.getBillClassifyList({ userID: loginStore.userID, classify: classify, month: mon, billType: type })
     console.log('分类结果', res.data)
     res.data.forEach((e: Bill) => {
         if (list.value.length == 0 || list.value[list.value.length - 1].date != e.time.slice(5, 10)) {

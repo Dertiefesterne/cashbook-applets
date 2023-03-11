@@ -1,10 +1,13 @@
 <template>
 	<view class="container">
-		<view class="head ">
-			<view class="icon-l">
+		<view class="head">
+			<view class="icon-l" @click="back">
 				<u-icon name="arrow-left" size="20"></u-icon>
 			</view>
-			收支报表
+			<view class="text" :class="{ 'chooseBorder': chooseType == -1 }" @click="changeChoose(-1)">
+				支出</view>
+			<view class="text" :class="{ 'chooseBorder': chooseType == 1 }" @click="changeChoose(1)">
+				收入</view>
 		</view>
 		<view class="content" v-if="ready">
 			<histogram :myData="myHistogramData" :rangeData="histogramRangeData" @changeYearGroup="changeYearGroup" />
@@ -38,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import billServer from '@/api/billApi'
 import { useloginStore } from '@/pinia-store/login'
 import { chart, interSeries, sector, sectorSeries, sectorSeriesData } from '@/entity/chart'
@@ -85,7 +88,11 @@ const ready = ref(false),
 	}),
 	//分类列表
 	classifyList = ref<classifyItem[]>([]),
-	currentClassifyMonth = ref(0)
+	currentClassifyMonth = ref(0),
+	chooseType = ref<number>(-1)
+
+
+const year = new Date().getFullYear() + ''
 
 const chartData = {
 	categories: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
@@ -111,11 +118,11 @@ const chartData = {
 
 
 const getYearGroupData = async (year: string, mon: string) => {
-	const params = { userID: storeUserID, groupType: "year", billType: -1 }
+	const params = { userID: storeUserID, groupType: "year", billType: chooseType.value }
 	const res = await billServer.getBillChartData(params)
 	let arr = res.data.map((item: yearGroupItem) => item.date)
 	histogramRangeData.value.push(arr)
-	const params2 = { userID: storeUserID, groupType: "month", billType: -1 }
+	const params2 = { userID: storeUserID, groupType: "month", billType: chooseType.value }
 	const res2 = await billServer.getBillChartData(params2)
 	let arr2 = res2.data.map((item: yearGroupItem) => item.date)
 	LineRangeData.value.push(arr2)
@@ -129,11 +136,11 @@ const getYearGroupData = async (year: string, mon: string) => {
 		// 每次切换年份，初始化图表数据
 		myHistogramData.value.series = []
 		let temp: interSeries = { name: '', data: [] }
-		temp.name = year + '支出情况'
+		temp.name = chooseType.value == -1 ? `${year}支出情况` : `${year}收入情况`
 		temp.data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		myHistogramData.value.series.push(temp)
 		// 请求该年份的账单数据
-		let params = { userID: storeUserID, groupType: "month", billType: -1, year: year }
+		let params = { userID: storeUserID, groupType: "month", billType: chooseType.value, year: year }
 		const res = await billServer.getBillChartData(params)
 		for (let i = 0, len = res.data.length; i < len; i++) {
 			// 如果是今年的数据按月份分组的话，顺便记录下有数据的月份信息
@@ -150,7 +157,7 @@ const getYearGroupData = async (year: string, mon: string) => {
 		let days = formattereTools.getMonthDays(new Date().getFullYear() + '-' + month + '-01')
 		let temp: interSeries = { name: '', data: [] }
 		// 图表名
-		temp.name = month + '月支出'
+		temp.name = chooseType.value == -1 ? `${month}月支出` : `${month}月收入`
 		for (let i = 1; i < days + 1; i++) {
 			// 初始化x轴
 			let str = month + '/' + i
@@ -164,7 +171,7 @@ const getYearGroupData = async (year: string, mon: string) => {
 	getDayGroupData = async (month: string) => {
 		initDayGroupData(month)
 		console.log('yyyyyyyyyyyyyy', LineRangeData.value[0], month)
-		const params = { userID: Number(storeUserID), groupType: "day", billType: -1, month: month }
+		const params = { userID: Number(storeUserID), groupType: "day", billType: chooseType.value, month: month }
 		const res = await billServer.getBillChartData(params)
 		console.log('结果month', res.data)
 		for (let i = 0; i < res.data.length; i++) {
@@ -177,7 +184,7 @@ const getYearGroupData = async (year: string, mon: string) => {
 		// 每次切换月份，初始化图表数据
 		mySectorData.value.categories = []
 		mySectorData.value.series = []
-		const params = { userID: Number(storeUserID), groupType: "classify", billType: -1, month: month }
+		const params = { userID: Number(storeUserID), groupType: "classify", billType: chooseType.value, month: month }
 		const res = await billServer.getBillChartData(params)
 		let temp2: sectorSeries = {
 			name: month + '月分类',
@@ -216,22 +223,31 @@ const getYearGroupData = async (year: string, mon: string) => {
 	toClassifyListDetial = (classify: number) => {
 		uni.navigateTo({
 			// url: '/pages/billDetial/index'
-			url: `/pages/billDetial/classifyList?classify=${classify}&month=${currentClassifyMonth.value}`
+			url: `/pages/billDetial/classifyList?classify=${classify}&month=${currentClassifyMonth.value}&billType=${chooseType.value}`
 		})
+	}, back = () => {
+		uni.switchTab({
+			url: '/pages/index/index'
+		})
+	}, changeChoose = (type: number) => {
+		chooseType.value = type
+		reload()
+	},
+	reload = () => {
+		let month = new Date().getMonth() + 1
+		let mm = month < 10 ? '0' + month : '' + month
+		getYearGroupData(year, mm)
+		getMonthGroupData(year)
+		currentClassifyMonth.value = Number(mm)
+		getDayGroupData(mm)
+		getClassifyGroupData(mm)
 	}
 
 
 onMounted(() => {
 	// 如果用户账单总数为0就return
 	if (loginStore.info.bill_count) {
-		let month = new Date().getMonth() + 1
-		let mm = month < 10 ? '0' + month : '' + month
-		let year = new Date().getFullYear() + ''
-		getYearGroupData(year, mm)
-		getMonthGroupData(year)
-		currentClassifyMonth.value = Number(mm)
-		getDayGroupData(mm)
-		getClassifyGroupData(mm)
+		reload()
 	} else {
 		noBill.value = true
 	}
@@ -243,6 +259,29 @@ onMounted(() => {
 .container {
 	width: 100%;
 	padding-top: 110rpx;
+
+	// .head {
+	// 	width: 100%;
+	// 	height: 100rpx;
+	// 	padding: 0 40rpx;
+	// 	position: fixed;
+	// 	top: 0;
+	// 	background: #dfdfe1;
+	// 	z-index: 2;
+	// 	display: flex;
+	// 	justify-content: center;
+	// 	align-items: center;
+
+	// 	.icon-l {
+	// 		position: absolute;
+	// 		left: 20rpx;
+	// 	}
+
+	// 	.icon-r {
+	// 		position: absolute;
+	// 		right: 20rpx;
+	// 	}
+	// }
 
 	.head {
 		width: 100%;
@@ -256,6 +295,12 @@ onMounted(() => {
 		justify-content: center;
 		align-items: center;
 
+		.text {
+			line-height: 100rpx;
+			height: 100%;
+			margin: 0 40rpx;
+		}
+
 		.icon-l {
 			position: absolute;
 			left: 20rpx;
@@ -265,6 +310,10 @@ onMounted(() => {
 			position: absolute;
 			right: 20rpx;
 		}
+	}
+
+	.chooseBorder {
+		border-bottom: 2px solid #559eff;
 	}
 
 	.content {
