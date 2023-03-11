@@ -1,7 +1,17 @@
 <script setup lang="ts">
+import { useloginStore } from '@/pinia-store/login'
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
+const loginStore = useloginStore()
 onLaunch(() => {
-  console.log("App Launch");
+  console.log("App Launch", uni.getStorageSync('userID'), loginStore.userID, uni.getStorageSync('info'), loginStore.info,);
+  if (uni.getStorageSync('userID')) {
+    // 全局保存用户ID
+    loginStore.login(uni.getStorageSync('userID'))
+  }
+  if (uni.getStorageSync('info')) {
+    // 全局保存用户ID
+    loginStore.setInfo(uni.getStorageSync('info'))
+  }
 });
 onShow(() => {
   console.log("App Show");

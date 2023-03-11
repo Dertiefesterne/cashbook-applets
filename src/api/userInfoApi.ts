@@ -21,6 +21,13 @@ export default {
             method: 'POST',
             data
         })
+    },
+    uploadImg(data: any) {
+        return http.request({
+            url: '/userInfo/userAvatar/upload',
+            method: 'POST',
+            data
+        })
     }
 
 }

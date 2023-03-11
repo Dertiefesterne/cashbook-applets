@@ -5,7 +5,7 @@
             </template></headTop>
         <view class="content">
             <view class="menu-item">头像<image style="width: 80rpx; height: 80rpx; border-radius: 50%;"
-                    src="@/style/iconPng/img1.jpg" mode="aspectFill" @click="previewImg(src)"></image>
+                    :src="loginStore.avatar" mode="aspectFill" @click="choosePic"></image>
             </view>
             <view class="menu-item">ID <view class="icon">{{ loginStore.userID }}<u-icon name="arrow-right"
                         @click="copyBtn"></u-icon>
@@ -34,6 +34,7 @@ import userInfoServer from '@/api/userInfoApi';
 import userServer from '@/api/userApi';
 import datefilters from '@/utils/dataUtils';
 import { useloginStore } from '@/pinia-store/login'
+import { pathToBase64, base64ToPath } from '@/uni_modules/image-tools/index.js'
 const loginStore = useloginStore()
 const name = ref(loginStore.info.nickname)
 const timestamp = loginStore.info.register_timestamp
@@ -42,6 +43,9 @@ onMounted(() => {
     // name.value = loginStore.info.nickname
     // console.log('用户昵称', loginStore.info.nickname)
 })
+
+const imgSrc = ref('')
+//@/style/iconPng/img1.jpg
 
 const modifyNickName = async () => {
     console.log('modifyNickName', name.value)
@@ -124,6 +128,47 @@ const modifyNickName = async () => {
             uni.showToast({
                 title: '复制失败',
             });
+        }
+    });
+}
+//选择照片
+function choosePic() {
+    uni.chooseImage({
+        count: 1,
+        sizeType: ['original', 'compressed'],
+        success: function (res) {
+            const tempFilePaths = res.tempFilePaths[0];
+            console.log('tempFilePaths---', res.tempFilePaths, tempFilePaths)
+            // uni.uploadFile({
+            //     url: BASE_API + '/userInfo/userAvatar/upload',
+            //     filePath: tempFilePaths,
+            //     name: 'file',
+            //     header: { "Content-Type": "multipart/form-data" },
+            //     success: (myres) => {
+            //         var jsonObject = JSON.parse(myres.data);
+            //         console.log('成功！！！')
+            //     }
+            // });
+            //需要使用uni,getImageInfo获取图片的本地存储路径
+            uni.getImageInfo({
+                src: res.tempFilePaths[0],
+                success: (path) => {
+                    pathToBase64(path.path).then(async (base64: any) => {
+                        console.log('base64--', base64); // 这就是转为base64格式的图片
+                        imgSrc.value = base64
+                        loginStore.setAvatar(base64)
+                        // const params = {
+                        //     name: 'yy',
+                        //     base64: base64
+                        // }
+                        // const res = await userInfoServer.uploadImg(params)
+                        // console.log('res---', res.data)
+                    })
+                        .catch((error: any) => {
+                            console.error(error)
+                        })
+                }
+            })
         }
     });
 }

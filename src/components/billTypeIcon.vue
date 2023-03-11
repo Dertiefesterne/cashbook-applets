@@ -1,6 +1,11 @@
 <template>
-    <view>
-        <view class="box" :class="{ mask: !choose }" :style="filters.billTypeColor(classify)">
+    <view v-if="type == 'big'">
+        <view class="box box1" :class="{ mask: !choose }" :style="filters.billTypeColor(classify)">
+            <i class="iconfont" :class="filters.billTypeIcon(classify)" style="font-size:40rpx"></i>
+        </view>
+    </view>
+    <view v-else>
+        <view class="box box2" :class="{ mask: !choose }" :style="`background:${bgColor}`">
             <i class="iconfont" :class="filters.billTypeIcon(classify)" style="font-size:40rpx"></i>
         </view>
     </view>
@@ -18,6 +23,14 @@ const props = defineProps({
     choose: {
         type: Boolean,
         default: true
+    },
+    type: {
+        type: String,
+        default: 'big'
+    },
+    bgColor: {
+        type: String,
+        default: '#1890ff'
     }
 })
 const color = () => {
@@ -32,10 +45,18 @@ const color = () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100rpx;
-    height: 100rpx;
     border-radius: 0.5rem;
     margin: 0 15rpx;
+}
+
+.box1 {
+    width: 100rpx;
+    height: 100rpx;
+}
+
+.box2 {
+    width: 60rpx;
+    height: 60rpx;
 }
 
 :deep(.mask) {

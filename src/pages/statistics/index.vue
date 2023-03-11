@@ -11,9 +11,10 @@
 			<LineChart :myData="myLineData" :rangeData="LineRangeData" @changeMonthGroup="changeMonthGroup"></LineChart>
 			<sectorChart :myData="mySectorData" :rangeData="LineRangeData" @changeMonthGroup="changeClassifyMonth" />
 			<view class="classifyList">
-				<view v-for="item in classifyList" class="classifyItem" @click="toClassifyListDetial(item.classify)">
+				<view v-for="(item, index) in classifyList" class="classifyItem"
+					@click="toClassifyListDetial(item.classify)">
 					<view class="flex">
-						<BillTypeIconVue :classify="item.classify" />
+						<BillTypeIconVue :classify="item.classify" type="small" :bg-color="filters.billTypeColor2(index)" />
 						{{ filters.billTypeFilter(item.classify) }}
 						<span>{{ item.count }}笔</span>
 					</view>
@@ -116,7 +117,7 @@ const getYearGroupData = async (year: string, mon: string) => {
 	histogramRangeData.value.push(arr)
 	const params2 = { userID: storeUserID, groupType: "month", billType: -1 }
 	const res2 = await billServer.getBillChartData(params2)
-	let arr2 = res2.data.map((item: yearGroupItem) => item.date.slice(5))
+	let arr2 = res2.data.map((item: yearGroupItem) => item.date)
 	LineRangeData.value.push(arr2)
 	if (!histogramRangeData.value[0].includes(year))
 		histogramRangeData.value[0].push(year)
@@ -241,7 +242,7 @@ onMounted(() => {
 <style lang="less" scoped>
 .container {
 	width: 100%;
-	padding-top: 100rpx;
+	padding-top: 110rpx;
 
 	.head {
 		width: 100%;

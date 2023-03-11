@@ -2,7 +2,7 @@
 	<view class="contaniner">
 		<view class="top">
 			<view class="image-box">
-				<image src="@/static/img/avatar2.jpg" mode="aspectFill" />
+				<image :src="loginStore.avatar" mode="aspectFill" @click="previewImg" />
 			</view>
 			<view class="name-box" @click="toEditName">{{ loginStore.info.nickname }}<u-icon name="edit-pen-fill"
 					size="20"></u-icon></view>
@@ -69,8 +69,14 @@ const loginOut = () => {
 	uni.navigateTo({
 		url: '/pages/editInfo/editClassify'
 	})
+}, previewImg = () => {
+	let imgsArray = [];
+	imgsArray[0] = loginStore.avatar;
+	uni.previewImage({
+		current: 0,
+		urls: imgsArray
+	});
 }
-
 
 onMounted(() => {
 	// console.log("homestorage", uni.getStorageSync("USER_INFORMATION"))

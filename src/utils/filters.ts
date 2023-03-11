@@ -106,5 +106,39 @@ export default {
 			default:
 				return 'background:#abecfe';
 		}
+	},
+	billTypeColor2(index: number) {
+		switch (index) {
+			case -1:
+				return '#b9b9b9;';
+			case 0:
+				return '#1890ff';
+			case 1:
+				return '#91cb74;';
+			case 2:
+				return '#fac858';
+			case 3:
+				return '#ee6666';
+			case 4:
+				return '#73c0de';
+			case 5:
+				return '#3ca272';
+			case 6:
+				return '#fc8452';
+			case 7:
+				return '#9a60b4';
+			case 8:
+				return '#1890ff';
+			case 9:
+				return '#91cb74';
+			case 10:
+				return '#fac858';
+			case 11:
+				return '#ee6666';
+			case 12:
+				return '#73c0de';
+			default:
+				return '#abecfe';
+		}
 	}
 }
