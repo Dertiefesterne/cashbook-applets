@@ -12,7 +12,7 @@
                 </view>
                 <view class="bill">
                     <view class="items">
-                        <view class="item" :style="filters.billTypeColor(item.classify)">
+                        <view class="item" :style="`background:${filters.billTypeColor(item.classify)}`">
                             <i class="iconfont" :class="filters.billTypeIcon(item.classify)"></i>
                         </view>
                         <view>

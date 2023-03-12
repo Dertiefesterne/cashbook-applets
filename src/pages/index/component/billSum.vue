@@ -15,12 +15,12 @@
                 <!-- 第二行 -->
                 <view class="second">
                     <view>
-                        <p>本月支出</p>
+                        <p>本月结余</p>
                         <p>{{ sumData.monthSum ? sumData.monthSum.toFixed(2) : '0' }}￥</p>
                     </view>
                     <view>
                         <p>本月剩余预算</p>
-                        <p>{{ surplus ? surplus : 0 }}</p>
+                        <p>{{ surplus ? surplus : 0 }}￥</p>
                     </view>
                 </view>
             </view>
@@ -50,7 +50,10 @@ const props = defineProps({
     }
 })
 const surplus = computed(() => {
-    return (loginStore.info.budget - Math.abs(props.sumData.monthSum)).toFixed(2)
+    if (props.sumData.monthSum > 0)
+        return loginStore.info.budget
+    else
+        return (loginStore.info.budget - Math.abs(props.sumData.monthSum)).toFixed(2)
 })
 
 const editBudget = () => {

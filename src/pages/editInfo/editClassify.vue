@@ -16,37 +16,32 @@
             </view>
             <p class="advice"> 建议字数：2</p>
             <view class="alreadyAdd">
-                <p> 已添加<sapn>({{ curNow ? inputClassify?.length : outputClassify?.length }}/8)</sapn>
-                </p>
-                <p class="advice">增加账单页面个性推荐</p>
-                <view class="label-box" v-if="curNow == 0">
+                <p> 系统分类</p>
+                <p class="advice">不可删除</p>
+                <!-- 支出 -->
+                <view class="label-box2" v-if="curNow == 0">
                     <u-tag v-for="item in defaultOutputClassify" :text="item.classifyDesc">
                     </u-tag>
-                    <u-tag v-for="(item, index) in outputClassify" plain plainFill :text="item"
-                        :show="outputClassify.includes(item)" @close="outputClassify.splice(index, 1)"></u-tag>
                 </view>
-                <view class="label-box" v-else>
+                <!-- 收入 -->
+                <view class="label-box2" v-else>
                     <u-tag v-for="item in defaultInputClassify" :text="item.classifyDesc">
                     </u-tag>
-                    <u-tag v-for="(item, index) in inputClassify" plain plainFill :text="item"
-                        :show="inputClassify.includes(item)" @close="inputClassify.splice(index, 1)"></u-tag>
                 </view>
             </view>
-            <!-- <view class="input-box">
-                <input v-model="inputNewClassify" maxlength="2"
-                    @input="inputNewClassify = inputNewClassify.replace(/ /g, '')" /><text
-                    @click="addinputClassify">添加</text>
-            </view>
-            <p class="advice"> 建议字数：2</p>
             <view class="alreadyAdd">
-                <p> 已添加<sapn>({{ inputClassify.length }}/8)</sapn>
+                <p> 自定义类别<sapn>({{ curNow ? inputClassify?.length : outputClassify?.length }}/3)</sapn>
                 </p>
-                <p class="advice">增加账单页面个性推荐</p>
-                <view class="label-box">
-                    <u-tag v-for="(item, index) in inputClassify" plain plainFill :text="item" closable
+                <p class="advice">最多设置3个</p>
+                <view class="label-box2" v-if="curNow == 0">
+                    <u-tag v-for="(item, index) in outputClassify" plain plainFill closable :text="item"
+                        :show="outputClassify.includes(item)" @close="outputClassify.splice(index, 1)"></u-tag>
+                </view>
+                <view class="label-box2" v-else>
+                    <u-tag v-for="(item, index) in inputClassify" plain plainFill closable :text="item"
                         :show="inputClassify.includes(item)" @close="inputClassify.splice(index, 1)"></u-tag>
                 </view>
-            </view> -->
+            </view>
         </view>
     </view>
 </template>
@@ -94,6 +89,8 @@ const addNewLabel = async () => {
     const res = userInfoApi.updateUserClassify({ userID: userID, outputClassify: outputClassify.value.join(','), inputClassify: inputClassify.value.join(',') })
     if ((await res).statusCode == 200) {
         uni.showToast({ title: '保存成功', duration: 500 })
+        loginStore.setInputClassify(inputClassify.value.join(","))
+        loginStore.setOutputClassify(outputClassify.value.join(","))
         uni.switchTab({
             url: '/pages/my/index'
         })
@@ -102,10 +99,11 @@ const addNewLabel = async () => {
 
     if (outputClassify.value?.length == 3) {
         NewClassify.value = ''
+        uni.showToast({ title: '添加个数已达上限', icon: 'none', duration: 800 })
         return
     }
     else if (outputClassify.value?.includes(NewClassify.value)) {
-        uni.showToast({ title: '请勿添加重复类别', icon: 'none', duration: 1000 })
+        uni.showToast({ title: '请勿添加重复类别', icon: 'none', duration: 800 })
         return
     }
     else {
@@ -115,10 +113,11 @@ const addNewLabel = async () => {
 }, addinputClassify = async () => {
     if (inputClassify.value.length == 3) {
         NewClassify.value = ''
+        uni.showToast({ title: '添加个数已达上限', icon: 'none', duration: 800 })
         return
     }
     else if (inputClassify.value.includes(NewClassify.value)) {
-        uni.showToast({ title: '请勿添加重复类别', icon: 'none', duration: 1000 })
+        uni.showToast({ title: '请勿添加重复类别', icon: 'none', duration: 800 })
         return
     }
     else {
@@ -175,7 +174,18 @@ const addNewLabel = async () => {
                 //内容整体平均分布
                 justify-content: space-between;
                 //单元格的大小是固定的，但是容器的大小不确定。如果希望每一行（或每一列）容纳尽可能多的单元格，这时可以使用auto-fill关键字表示自动填充
-                grid-template-columns: repeat(auto-fill, 50px); //单元格的大小是65px
+                grid-template-columns: repeat(auto-fill, 58px); //单元格的大小是65px
+            }
+
+            .label-box2 {
+                margin-top: 20rpx;
+                display: flex;
+                flex-wrap: wrap;
+
+                :deep(.u-tag) {
+                    margin-right: 15rpx !important;
+                    margin-bottom: 15rpx;
+                }
             }
         }
     }

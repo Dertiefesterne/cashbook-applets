@@ -35,7 +35,7 @@ export default {
 			case 12:
 				return '红包';
 			default:
-				return '消费';
+				return '自定义';
 		}
 	},
 	billTypeIcon(index: number) {
@@ -70,47 +70,46 @@ export default {
 			case 12:
 				return 'icon-hongbao';
 			default:
-				return 'icon-xianxing-15';
+				return 'icon-jushoucang';
 		}
 	},
 	billTypeColor(index: number) {
 		switch (index) {
 			case -1:
-				return 'background:#b9b9b9;';
+				return '#b9b9b9;';
 			case 0:
-				return 'background:#abecfe';
+				return '#abecfe';
 			case 1:
-				return 'background:#fce681;';
+				return '#fce681;';
 			case 2:
-				return 'background:#f5cffe';
+				return '#f5cffe';
 			case 3:
-				return 'background:#d8d6fe';
+				return '#d8d6fe';
 			case 4:
-				return 'background:#8bfaca';
+				return '#8bfaca';
 			case 5:
-				return 'background:#fbd5b8';
+				return '#fbd5b8';
 			case 6:
-				return 'background:#99fbf2';
+				return '#99fbf2';
 			case 7:
-				return 'background:#e2f4a8';
+				return '#e2f4a8';
 			case 8:
-				return 'background:#d8d6fe';
+				return '#d8d6fe';
 			case 9:
-				return 'background:#92dfbf';
+				return '#92dfbf';
 			case 10:
-				return 'background:#e2f4a8';
+				return '#e2f4a8';
 			case 11:
-				return 'background:#fce681';
+				return '#fce681';
 			case 12:
-				return 'background:#fd9489';
+				return '#fd9489';
 			default:
-				return 'background:#abecfe';
+				return '#abecfe';
 		}
 	},
+	//图表颜色顺序
 	billTypeColor2(index: number) {
 		switch (index) {
-			case -1:
-				return '#b9b9b9;';
 			case 0:
 				return '#1890ff';
 			case 1:
@@ -139,6 +138,16 @@ export default {
 				return '#73c0de';
 			default:
 				return '#abecfe';
+		}
+	},
+	customBillTypeColor(index: number) {
+		switch (index) {
+			case 0:
+				return '#fce681;';
+			case 1:
+				return '#f5cffe';
+			case 2:
+				return '#d8d6fe';
 		}
 	}
 }

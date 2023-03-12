@@ -35,15 +35,27 @@ export const useloginStore = defineStore({
     },
     setInfoName(name: string) {
       this.info.nickname = name
+      uni.setStorageSync('info', this.info)
     },
     setInfoBudget(budget: number) {
       this.info.budget = budget
+      uni.setStorageSync('info', this.info)
     },
     setInfoBillCount(count: number) {
       this.info.bill_count = count
+      uni.setStorageSync('info', this.info)
     },
     setInfoCustomMatter(matter: string) {
       this.info.customMatter = matter
+      uni.setStorageSync('info', this.info)
+    },
+    setInputClassify(matter: string) {
+      this.info.inputClassify = matter
+      uni.setStorageSync('info', this.info)
+    },
+    setOutputClassify(matter: string) {
+      this.info.outputClassify = matter
+      uni.setStorageSync('info', this.info)
     },
     logout() {
       uni.clearStorage()

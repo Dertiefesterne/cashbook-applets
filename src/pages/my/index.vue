@@ -2,7 +2,7 @@
 	<view class="contaniner">
 		<view class="top">
 			<view class="image-box">
-				<image :src="loginStore.avatar" mode="aspectFill" @click="previewImg" />
+				<image :src="avaSrc" mode="aspectFill" @click="previewImg" />
 			</view>
 			<view class="name-box" @click="toEditName">{{ loginStore.info.nickname }}<u-icon name="edit-pen-fill"
 					size="20"></u-icon></view>
@@ -12,16 +12,35 @@
 				<view>记账笔数 {{ bill_count }}</view>
 			</view>
 		</view>
+
 		<view class="content">
-			<view class="menu-item" @click="toEditInfo">个人信息 <u-icon name="arrow-right"></u-icon></view>
-			<view class="menu-item" @click="toEditClassify">类别管理<u-icon name="arrow-right"></u-icon></view>
-			<view class="menu-item" @click="toEditLabel">惯用词管理<u-icon name="arrow-right"></u-icon></view>
-			<view class="menu-item">购物清单<u-icon name="arrow-right"></u-icon></view>
-			<view class="menu-item">切换主题<u-icon name="arrow-right"></u-icon></view>
+			<view class="menu">
+				<view class="item" @click="toEditInfo">
+					<svg-icon iconName="icon-gerenxinxi" className="big-size"></svg-icon>
+					<p>个人信息</p>
+				</view>
+				<view class="item" @click="toEditClassify"> <svg-icon iconName="icon-fenlei"
+						className="big-size"></svg-icon>
+					<p>类别管理</p>
+				</view>
+				<view class="item" @click="toEditLabel"> <svg-icon iconName="icon-biaoqian" className="big-size"></svg-icon>
+					<p>惯用词管理</p>
+				</view>
+				<view class="item"> <svg-icon iconName="icon-qingdan" className="big-size"></svg-icon>
+					<p>购物清单</p>
+				</view>
+				<view class="item"> <svg-icon iconName="icon-zhuti" className="big-size"></svg-icon>
+					<p>切换主题</p>
+				</view>
+				<view class="item" @click="toEditCode"> <svg-icon iconName="icon-drxx04" className="big-size"></svg-icon>
+					<p>修改密码</p>
+				</view>
+			</view>
+			<view class="menu-item">使用手册<u-icon name="arrow-right"></u-icon></view>
+			<view class="menu-item">建议反馈<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item">关于我们<u-icon name="arrow-right"></u-icon></view>
-			<!-- <view @click="loginOut" v-if="loginStore.userID != -1" class="menu-item">退出登录<u-icon
-					name="arrow-right"></u-icon>
-			</view> -->
+			<view class="menu-item">导出账单<u-icon name="arrow-right"></u-icon></view>
+			<view class="cancellation" @click="loginOut">退出登录</view>
 		</view>
 	</view>
 </template>
@@ -33,6 +52,7 @@ import formattereTools from '@/utils/dataUtils'
 import { useloginStore } from '@/pinia-store/login'
 const loginStore = useloginStore()
 
+const avaSrc = loginStore.avatar ? loginStore.avatar : '/static/img/defaultAvatar.png'
 // 用户注册时间
 const timestamp = loginStore.info.register_timestamp
 const bill_count = loginStore.info.bill_count || 0
@@ -68,6 +88,10 @@ const loginOut = () => {
 }, toEditClassify = () => {
 	uni.navigateTo({
 		url: '/pages/editInfo/editClassify'
+	})
+}, toEditCode = () => {
+	uni.navigateTo({
+		url: '/pages/editInfo/editCode'
 	})
 }, previewImg = () => {
 	let imgsArray = [];
@@ -105,6 +129,7 @@ page {
 			width: 200rpx;
 			height: 200rpx;
 			border-radius: 50%;
+			border: 4px solid rgba(101, 101, 101, 0.4);
 
 			image {
 				width: 100%;
@@ -134,7 +159,24 @@ page {
 	.content {
 		background-color: #f8f8fa;
 		padding: 20rpx 0;
-		height: 100%;
+		height: 86%;
+		// overflow-y: auto;
+
+		.menu {
+			margin-bottom: 20rpx;
+			padding: 40rpx 0 10rpx;
+			background-color: #fff;
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+
+			.item {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				margin-bottom: 30rpx;
+			}
+		}
 
 		.menu-item {
 			padding: 0 40rpx;
@@ -145,6 +187,21 @@ page {
 			background-color: #fff;
 			margin-bottom: 20rpx;
 		}
+
+		.cancellation {
+			margin: 0 auto;
+			margin-top: 40rpx;
+			width: 75%;
+			line-height: 90rpx;
+			text-align: center;
+			height: 90rpx;
+			background: rgba(174, 208, 238, 0.5);
+			border-radius: 6rem;
+			font-weight: bold;
+			font-size: 30rpx;
+		}
 	}
+
+
 }
 </style>

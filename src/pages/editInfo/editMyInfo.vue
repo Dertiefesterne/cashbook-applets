@@ -4,11 +4,11 @@
                 个人信息
             </template></headTop>
         <view class="content">
-            <view class="menu-item">头像<image style="width: 80rpx; height: 80rpx; border-radius: 50%;"
-                    :src="loginStore.avatar" mode="aspectFill" @click="choosePic"></image>
+            <view class="menu-item">头像<image style="width: 80rpx; height: 80rpx; border-radius: 50%;" :src="avaSrc"
+                    mode="aspectFill" @click="choosePic" title="点击修改头像"></image>
             </view>
-            <view class="menu-item">ID <view class="icon">{{ loginStore.userID }}<u-icon name="arrow-right"
-                        @click="copyBtn"></u-icon>
+            <view class="menu-item">ID <view class="icon">{{ loginStore.userID }}
+                    <svg-icon title="复制" iconName="icon-fuzhi" @click="copyBtn(loginStore.userID)"></svg-icon>
                 </view>
             </view>
             <view class="menu-item" @click="toEditName">昵称
@@ -16,6 +16,8 @@
                 </view>
             </view>
             <view class="menu-item" @click="toEditCode">修改密码 <u-icon name="arrow-right"></u-icon></view>
+            <view class="menu-item" @click="toEditCode">记账笔数 <span>{{ loginStore.info.bill_count }}笔</span>
+            </view>
             <view class="menu-item" @click="toEditCode">注册时间 <span>{{ datefilters.dateFormattimes(timestamp, 'full')
             }}</span>
             </view>
@@ -38,7 +40,8 @@ import { pathToBase64, base64ToPath } from '@/uni_modules/image-tools/index.js'
 const loginStore = useloginStore()
 const name = ref(loginStore.info.nickname)
 const timestamp = loginStore.info.register_timestamp
-const src = "http://cdn.uviewui.com/uview/empty/car.png"
+
+const avaSrc = loginStore.avatar ? loginStore.avatar : '/static/img/defaultAvatar.png'
 onMounted(() => {
     // name.value = loginStore.info.nickname
     // console.log('用户昵称', loginStore.info.nickname)
@@ -116,9 +119,9 @@ const modifyNickName = async () => {
             }
         }
     });
-}, copyBtn = () => {
+}, copyBtn = (data: any) => {
     uni.setClipboardData({
-        data: '需要复制的内容',
+        data: data,
         success: function () {
             uni.showToast({
                 title: '复制成功',
@@ -189,7 +192,7 @@ function choosePic() {
 .container {
 
     .content {
-        padding: 120rpx 20rpx 0;
+        padding: 120rpx 20rpx 20rpx;
         background-color: #f8f8fa;
         height: 100%;
 
@@ -204,10 +207,17 @@ function choosePic() {
 
             .icon {
                 display: flex;
+                align-items: center;
+                justify-content: center;
 
-                .u-icon {
+                .u-icon,
+                i {
                     margin-left: 10rpx;
                 }
+            }
+
+            &:last-child {
+                margin-bottom: 0;
             }
         }
     }

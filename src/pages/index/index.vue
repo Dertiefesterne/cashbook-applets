@@ -67,9 +67,9 @@ const list = ref<[Bill[]]>([[]]),
     userID: loginStore.userID
   }),
   moneySum = ref<sumParams>({
-    daySum: 0,// 当前分页
-    monthSum: 0,// 分页大小
-    yearSum: 0 // 是否不再加载更多
+    daySum: 0,
+    monthSum: 0,
+    yearSum: 0
   }),
   billList = ref<listObject[]>([]),
   dataLoading = ref(false)

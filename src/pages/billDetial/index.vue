@@ -20,14 +20,16 @@
             <!-- 支出图标 -->
             <view class="gaid-box" v-if="billDetial.bill_type == -1">
                 <view v-for="index of 8" class="classify" @click="changeClassify(index - 1)">
-                    <BillTypeIconVue :classify="index - 1" :choose="(index - 1) == billDetial.classify" />
+                    <BillTypeIconVue :classify="index - 1" :choose="(index - 1) == billDetial.classify"
+                        :bg-color="filters.billTypeColor(index - 1)" />
                     <p>{{ filters.billTypeFilter(index - 1) }}</p>
                 </view>
             </view>
             <!-- 收入图标 -->
             <view class="gaid-box" v-else>
                 <view v-for="index of 5" class="classify" @click="changeClassify(index + 7)">
-                    <BillTypeIconVue :classify="index + 7" :choose="(index + 7) == billDetial.classify" />
+                    <BillTypeIconVue :classify="index + 7" :choose="(index + 7) == billDetial.classify"
+                        :bg-color="filters.billTypeColor(index + 7)" />
                     <p>{{ filters.billTypeFilter(index + 7) }}</p>
                 </view>
             </view>

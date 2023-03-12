@@ -1,6 +1,6 @@
 <template>
     <view v-if="type == 'big'">
-        <view class="box box1" :class="{ mask: !choose }" :style="filters.billTypeColor(classify)">
+        <view class="box box1" :class="{ mask: !choose }" :style="`background:${bgColor}`">
             <i class="iconfont" :class="filters.billTypeIcon(classify)" style="font-size:40rpx"></i>
         </view>
     </view>
