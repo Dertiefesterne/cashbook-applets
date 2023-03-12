@@ -111,31 +111,31 @@ export default {
 	billTypeColor2(index: number) {
 		switch (index) {
 			case 0:
-				return '#1890ff';
+				return 'rgba(24,144,255,0.6)';
 			case 1:
-				return '#91cb74;';
+				return 'rgba(145,203,116,0.6)';
 			case 2:
-				return '#fac858';
+				return 'rgba(250,200,88,0.6)';
 			case 3:
-				return '#ee6666';
+				return 'rgba(238,102,102,0.6)';
 			case 4:
-				return '#73c0de';
+				return 'rgba(115,192,222,0.6)';
 			case 5:
-				return '#3ca272';
+				return 'rgba(60,162,114,0.6)';
 			case 6:
-				return '#fc8452';
+				return 'rgba(252,132,82,0.6)';
 			case 7:
-				return '#9a60b4';
+				return 'rgba(154,96,180,0.6)';
 			case 8:
-				return '#1890ff';
+				return 'rgba(234,124,204,0.6)';
 			case 9:
-				return '#91cb74';
+				return 'rgba(24,144,255,0.6)';
 			case 10:
-				return '#fac858';
+				return 'rgba(145,203,116,0.6)';
 			case 11:
-				return '#ee6666';
+				return 'rgba(250,200,88,0.6)';
 			case 12:
-				return '#73c0de';
+				return 'rgba(238,102,102,0.6)';
 			default:
 				return '#abecfe';
 		}

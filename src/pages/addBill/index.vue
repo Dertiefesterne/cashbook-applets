@@ -126,7 +126,7 @@
         <u-popup :show="isAddClassify" class="addClassify" mode="center" @close="isAddClassify = false">
             <view class="head-title">添加分类</view>
             <p>分类名称:</p>
-            <view class="input-box"> <input v-model.trim="classify" maxlength="4"
+            <view class="input-box"> <input v-model.trim="classify" maxlength="2"
                     @input="classify = classify.replace(/ /g, '')" />
                 <text v-if="classify.length" class="matter-num">{{
                     classify.length
@@ -139,7 +139,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 // 引入 
 import { onLoad } from '@dcloudio/uni-app';
 import formattereTools from '@/utils/dataUtils'
@@ -152,8 +152,23 @@ import BillTypeIconVue from '../../components/billTypeIcon.vue'
 const loginStore = useloginStore()
 const minDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, -1), 'sDate')
 const maxDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, 1), 'sDate')
-const customOutPutClassify = loginStore.info.outputClassify?.split(',')
-const customInPutClassify = loginStore.info.inputClassify?.split(',')
+
+const customOutPutClassify = computed(() => {
+    if (loginStore.info.outputClassify != '')
+        return loginStore.info.outputClassify.split(',')
+    else
+        return []
+})
+
+const customInPutClassify = computed(() => {
+    if (loginStore.info.inputClassify != '')
+        return loginStore.info.inputClassify.split(',')
+    else
+        return []
+})
+
+
+
 const add: number = -1
 const billID = ref(),
     billDetial = ref(),
@@ -361,12 +376,28 @@ const changeChoose = (type: number) => {
     addNewClassify = async () => {
         if (classify.value == '') return
         isAddClassify.value = false
-        const res = userInfoApi.updateUserClassify({ userID: loginStore.userID, customClassify: classify.value })
-        if ((await res).statusCode == 200) {
+        let params = {}
+        if (chooseType.value == -1) {
+            params = {
+                userID: loginStore.userID,
+                outputClassify: customOutPutClassify.value.length ? customOutPutClassify.value.join(',') + ',' + classify.value : classify.value
+            }
+        }
+        else {
+            params = {
+                userID: loginStore.userID,
+                inputClassify: customInPutClassify.value.length ? customInPutClassify.value.join(',') + ',' + classify.value : classify.value
+            }
+        }
+        console.log('保存参数', params, classify.value)
+        const res = await userInfoApi.updateUserClassify(params)
+        if (res.statusCode == 200) {
+            chooseType.value == -1 ? loginStore.setOutputClassify(res.data) : loginStore.setInputClassify(res.data)
             uni.showToast({ title: '添加成功', duration: 800 })
             classify.value = ''
         }
     }
+
 
 function inCalc() {
     let str = moneyDisplay.value
