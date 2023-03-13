@@ -36,12 +36,22 @@
 					<p>修改密码</p>
 				</view>
 			</view>
-			<view class="menu-item">使用手册<u-icon name="arrow-right"></u-icon></view>
-			<view class="menu-item">建议反馈<u-icon name="arrow-right"></u-icon></view>
-			<view class="menu-item">关于我们<u-icon name="arrow-right"></u-icon></view>
+			<view class="menu-item" @click="toUserManual">使用手册<u-icon name="arrow-right"></u-icon></view>
+			<view class="menu-item" @click="isAdvice = true">建议反馈<u-icon name="arrow-right"></u-icon></view>
+			<view class="menu-item" @click="toAboutUs">关于我们<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item">导出账单<u-icon name="arrow-right"></u-icon></view>
 			<view class="cancellation" @click="loginOut">退出登录</view>
 		</view>
+
+		<!-- 建议与反馈弹窗 -->
+		<u-popup :show="isAdvice" class="advice-popup" mode="center" @close="isAdvice = false">
+			<p class="head-title">建议与反馈</p>
+			<view @click="copyBtn">
+				<p>邮箱：1378279151@qq.com</p>
+				<p class="copy">将会尽快回复，点击可复制</p>
+			</view>
+			<view class="cancel" @click="isAdvice = false">取消</view>
+		</u-popup>
 	</view>
 </template>
 
@@ -56,6 +66,8 @@ const avaSrc = loginStore.avatar ? loginStore.avatar : '/static/img/defaultAvata
 // 用户注册时间
 const timestamp = loginStore.info.register_timestamp
 const bill_count = loginStore.info.bill_count || 0
+
+const isAdvice = ref(false)
 
 const loginOut = () => {
 	uni.showModal({
@@ -93,12 +105,34 @@ const loginOut = () => {
 	uni.navigateTo({
 		url: '/pages/editInfo/editCode'
 	})
+}, toUserManual = () => {
+	uni.navigateTo({
+		url: '/pages/use/userManual'
+	})
+}, toAboutUs = () => {
+	uni.navigateTo({
+		url: '/pages/use/aboutUs'
+	})
 }, previewImg = () => {
 	let imgsArray = [];
 	imgsArray[0] = loginStore.avatar;
 	uni.previewImage({
 		current: 0,
 		urls: imgsArray
+	});
+}, copyBtn = () => {
+	uni.setClipboardData({
+		data: "1378279151@qq.com",
+		success: function () {
+			uni.showToast({
+				title: '复制成功',
+			});
+		},
+		fail: function () {
+			uni.showToast({
+				title: '复制失败',
+			});
+		}
 	});
 }
 
@@ -203,5 +237,32 @@ page {
 	}
 
 
+}
+
+.advice-popup {
+	:deep(.u-popup__content) {
+		padding: 20rpx;
+		border-radius: 1rem;
+
+		.head-title {
+			font-size: 36rpx;
+			font-weight: bolder;
+			margin-bottom: 20rpx;
+		}
+
+		.copy {
+			margin-top: 5rpx;
+			font-size: 26rpx;
+			color: #999;
+		}
+
+		.cancel {
+			color: #2979ff;
+			font-size: 34rpx;
+			width: 100%;
+			text-align: right;
+			padding: 20rpx 20rpx 0;
+		}
+	}
 }
 </style>

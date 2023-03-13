@@ -43,6 +43,12 @@
 		},
 		{
 			"path": "pages/billDetial/classifyList"
+		},
+		{
+			"path": "pages/use/userManual"
+		},
+		{
+			"path": "pages/use/aboutUs"
 		}
 	],
 	"tabBar": {
