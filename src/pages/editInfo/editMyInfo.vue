@@ -214,6 +214,10 @@ function choosePic() {
                 i {
                     margin-left: 10rpx;
                 }
+
+                .svg-icon {
+                    margin-left: 3px;
+                }
             }
 
             &:last-child {

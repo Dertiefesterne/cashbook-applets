@@ -50,7 +50,7 @@
                     </text>
                 </view>
             </view>
-            <u-calendar :show="showDate" mode="single" @confirm="confirmDate" minDate="2022-12-17" maxDate="2023-03-13"
+            <u-calendar :show="showDate" mode="single" @confirm="confirmDate" :minDate="minDate" :maxDate="maxDate"
                 monthNum="3" closeOnClickOverlay @close="showDate = false"></u-calendar>
             <u-datetime-picker :show="showTime" v-model="value1" mode="time" @confirm="confirmTime" closeOnClickOverlay
                 @cancel="showTime = false"></u-datetime-picker>
@@ -99,9 +99,13 @@ import { Bill } from '@/entity/bill'
 import filters from '@/utils/filters'
 import { useloginStore } from '@/pinia-store/login'
 import { useStore } from '@/pinia-store/my'
+import dataUtils from '@/utils/dataUtils';
 import BillTypeIconVue from '../../components/billTypeIcon.vue'
 const loginStore = useloginStore()
 const userStore = useStore()
+
+const minDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, -1), 'sDate')
+const maxDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, 1), 'sDate')
 
 const billID = ref(),
     billDetial = ref(),

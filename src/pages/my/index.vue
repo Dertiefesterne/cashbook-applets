@@ -26,7 +26,7 @@
 				<view class="item" @click="toEditLabel"> <svg-icon iconName="icon-biaoqian" className="big-size"></svg-icon>
 					<p>惯用词管理</p>
 				</view>
-				<view class="item"> <svg-icon iconName="icon-qingdan" className="big-size"></svg-icon>
+				<view class="item" @click="shoppingList"> <svg-icon iconName="icon-qingdan" className="big-size"></svg-icon>
 					<p>购物清单</p>
 				</view>
 				<view class="item"> <svg-icon iconName="icon-zhuti" className="big-size"></svg-icon>
@@ -113,6 +113,10 @@ const loginOut = () => {
 	uni.navigateTo({
 		url: '/pages/use/aboutUs'
 	})
+}, shoppingList = () => {
+	uni.navigateTo({
+		url: '/pages/use/shoppingList'
+	})
 }, previewImg = () => {
 	let imgsArray = [];
 	imgsArray[0] = loginStore.avatar;
@@ -150,6 +154,7 @@ page {
 .contaniner {
 	width: 100%;
 	height: 100%;
+	overflow-y: auto;
 
 	.top {
 		width: 100%;
@@ -193,8 +198,8 @@ page {
 	.content {
 		background-color: #f8f8fa;
 		padding: 20rpx 0;
-		height: 86%;
-		// overflow-y: auto;
+		// height: 90%;
+		// // overflow-y: auto;
 
 		.menu {
 			margin-bottom: 20rpx;
@@ -224,7 +229,7 @@ page {
 
 		.cancellation {
 			margin: 0 auto;
-			margin-top: 40rpx;
+			margin-top: 20rpx;
 			width: 75%;
 			line-height: 90rpx;
 			text-align: center;

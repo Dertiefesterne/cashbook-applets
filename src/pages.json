@@ -49,6 +49,9 @@
 		},
 		{
 			"path": "pages/use/aboutUs"
+		},
+		{
+			"path": "pages/use/shoppingList"
 		}
 	],
 	"tabBar": {

@@ -154,7 +154,7 @@ const minDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, -1), 'sDate')
 const maxDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, 1), 'sDate')
 
 const customOutPutClassify = computed(() => {
-    if (loginStore.info.outputClassify != '')
+    if (loginStore.info.outputClassify)
         return loginStore.info.outputClassify.split(',')
     else
         return []

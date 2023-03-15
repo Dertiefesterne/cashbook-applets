@@ -6,7 +6,7 @@
     </view>
     <view v-else>
         <view class="box box2" :class="{ mask: !choose }" :style="`background:${bgColor}`">
-            <i class="iconfont" :class="filters.billTypeIcon(classify)" style="font-size:40rpx;color: #505050;"></i>
+            <i class="iconfont" :class="filters.billTypeIcon(classify)" style="font-size:30rpx;color: #505050;"></i>
         </view>
     </view>
 </template>

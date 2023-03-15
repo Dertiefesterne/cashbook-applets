@@ -22,7 +22,7 @@
 						<span>{{ item.count }}笔</span>
 					</view>
 					<view class="flex">
-						-{{ item.sums }}￥
+						-{{ item.sums.toFixed(2) }}￥
 						<u-icon name="arrow-right"></u-icon>
 					</view>
 				</view>
