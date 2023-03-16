@@ -23,8 +23,8 @@
             </picker-view>
         </view>
         <!-- 日历弹窗选择器 -->
-        <u-calendar :show="showDate" mode="single" @confirm="confirmDate" :minDate="minDate" :maxDate="maxDate"
-            monthNum="3" closeOnClickOverlay @close="showDate = false"></u-calendar>
+        <u-calendar :show="showDate" mode="single" @confirm="confirmDate" :minDate="minDate" :maxDate="maxDate" monthNum="3"
+            closeOnClickOverlay @close="showDate = false"></u-calendar>
     </view>
 </template>
 
@@ -34,6 +34,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { onLoad } from '@dcloudio/uni-app';
 import formattereTools from '@/utils/dataUtils'
 import billServer from '@/api/billApi'
+import userInfoApi from '@/api/userInfoApi';
 import dataUtils from '@/utils/dataUtils';
 import { useloginStore } from '@/pinia-store/login'
 const loginStore = useloginStore()
@@ -96,6 +97,9 @@ const _close = () => {
         show.value = false
         inputText.value = ''
         emit('addBill', Number(res.data.time))
+        //调用接口增加账单总数
+        const rr = await userInfoApi.addBillCount({ userID: loginStore.userID })
+        loginStore.setInfoBillCount(loginStore.info.bill_count + 1)
     }
 }, confirmDate = (e: Event) => {
     showDate.value = false

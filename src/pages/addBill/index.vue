@@ -22,19 +22,29 @@
                 <!-- 系统默认标签 -->
                 <view class="scroll-item">
                     <view class="gaid-box">
-                        <view v-for="index of 8" class="classify" @click="changeClassify(index - 1)">
+                        <view v-for="index of 7" class="classify" @click="changeClassify(index - 1)">
                             <BillTypeIconVue :classify="index - 1" :choose="(index - 1) == billForm.classify"
                                 :bg-color="filters.billTypeColor(index - 1)" />
                             <p>{{ filters.billTypeFilter(index - 1) }}</p>
                         </view>
+                        <view class="classify" @click="isAddClassify = true" v-if="customOutPutClassify.length == 0">
+                            <BillTypeIconVue :classify="add" :choose="billForm.classify == -1"
+                                :bg-color="filters.billTypeColor(add)" />
+                            <p>添加</p>
+                        </view>
+                        <view class="classify" @click="changeClassify(13)" v-else>
+                            <BillTypeIconVue :classify="Number(13)" :choose="billForm.classify == 13"
+                                :bg-color="filters.customBillTypeColor(13)" />
+                            <p>{{ customOutPutClassify[0] }}</p>
+                        </view>
                     </view>
                 </view>
                 <!-- 自定义 -->
-                <view class="scroll-item">
+                <view class="scroll-item" v-if="customOutPutClassify.length">
                     <view class="gaid-box">
-                        <view v-for="(item, index) in customOutPutClassify" class="classify"
-                            @click="changeClassify(index + 13)">
-                            <BillTypeIconVue :classify="index + 13" :choose="(index + 13) == billForm.classify"
+                        <view v-for="(item, index) in customOutPutClassify.slice(1)" class="classify"
+                            @click="changeClassify(index + 14)">
+                            <BillTypeIconVue :classify="index + 14" :choose="(index + 14) == billForm.classify"
                                 :bg-color="filters.customBillTypeColor(index)" />
                             <p>{{ item }}</p>
                         </view>
@@ -58,7 +68,7 @@
                         :bg-color="filters.customBillTypeColor(index)" />
                     <p>{{ item }}</p>
                 </view>
-                <view class="classify" @click="isAddClassify = true" v-if="customInPutClassify.length < 3">
+                <view class="classify" @click="isAddClassify = true" v-if="customInPutClassify?.length < 3">
                     <BillTypeIconVue :classify="add" :choose="billForm.classify == -1"
                         :bg-color="filters.billTypeColor(add)" />
                     <p>添加</p>
@@ -154,7 +164,7 @@ const minDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, -1), 'sDate')
 const maxDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, 1), 'sDate')
 
 const customOutPutClassify = computed(() => {
-    if (loginStore.info.outputClassify)
+    if (loginStore.info.outputClassify != '')
         return loginStore.info.outputClassify.split(',')
     else
         return []
@@ -162,7 +172,7 @@ const customOutPutClassify = computed(() => {
 
 const customInPutClassify = computed(() => {
     if (loginStore.info.inputClassify != '')
-        return loginStore.info.inputClassify.split(',')
+        return loginStore.info.inputClassify?.split(',')
     else
         return []
 })

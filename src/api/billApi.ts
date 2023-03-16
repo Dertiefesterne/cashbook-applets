@@ -6,11 +6,12 @@
 
   analyzeBill(data:any) {
     return http.request({
-        url: '/analyze/tokenizer/nlp',
+        url: '/analyze/tokenizer/quicklyNlp',
         method: 'GET',
         data
     })
   },
+
  
  addBill(data:any) {
      return http.request({

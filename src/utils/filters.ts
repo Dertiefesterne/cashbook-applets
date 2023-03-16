@@ -20,10 +20,11 @@ export default {
 				return '交通';
 			case 5:
 				return '娱乐';
+			// case 6:
+			// 	return '教育';
 			case 6:
-				return '教育';
-			case 7:
 				return '医疗';
+
 			case 8:
 				return '其他';
 			case 9:
@@ -55,10 +56,11 @@ export default {
 				return 'icon-jiaotong';
 			case 5:
 				return 'icon-yule';
+			// case 6:
+			// 	return 'icon-jiaoyu';
 			case 6:
-				return 'icon-jiaoyu';
-			case 7:
 				return 'icon-yiliao';
+
 			case 8:
 				return 'icon-qita';
 			case 9:
@@ -90,9 +92,13 @@ export default {
 			case 5:
 				return '#fbd5b8';
 			case 6:
-				return '#99fbf2';
-			case 7:
 				return '#e2f4a8';
+
+			case 7:
+				return '#99fbf2';
+
+
+
 			case 8:
 				return '#d8d6fe';
 			case 9:
@@ -148,6 +154,8 @@ export default {
 				return '#f5cffe';
 			case 2:
 				return '#d8d6fe';
+			default:
+				return '#99fbf2';
 		}
 	}
 }

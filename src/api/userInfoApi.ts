@@ -28,6 +28,13 @@ export default {
             method: 'POST',
             data
         })
+    },
+    addBillCount(data: any) {
+        return http.request({
+            url: '/userInfo/update/bill_count',
+            method: 'POST',
+            data
+        })
     }
 
 }

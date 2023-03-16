@@ -19,7 +19,7 @@
             </view>
             <!-- 支出图标 -->
             <view class="gaid-box" v-if="billDetial.bill_type == -1">
-                <view v-for="index of 8" class="classify" @click="changeClassify(index - 1)">
+                <view v-for="index of 7" class="classify" @click="changeClassify(index - 1)">
                     <BillTypeIconVue :classify="index - 1" :choose="(index - 1) == billDetial.classify"
                         :bg-color="filters.billTypeColor(index - 1)" />
                     <p>{{ filters.billTypeFilter(index - 1) }}</p>
