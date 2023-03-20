@@ -11,7 +11,7 @@
         <view class="content">
             <u-subsection :list="list" :current="curNow" @change="sectionChange"></u-subsection>
             <view class="input-box">
-                <input v-model="NewClassify" maxlength="2" @input="NewClassify = NewClassify.replace(/ /g, '')" /><text
+                <input v-model="NewClassify" maxlength="3" @input="NewClassify = NewClassify.replace(/ /g, '')" /><text
                     @click="addNewLabel">添加</text>
             </view>
             <p class="advice"> 建议字数：2</p>
@@ -95,6 +95,8 @@ const addNewLabel = async () => {
             url: '/pages/my/index'
         })
     }
+    userInfoApi.updataClassify({ userID: userID, outputClassify: outputClassify.value.join(',') })
+    userInfoApi.updataClassify({ userID: userID, inputClassify: inputClassify.value.join(',') })
 }, addOutputClassify = async () => {
 
     if (outputClassify.value?.length == 3) {

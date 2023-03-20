@@ -22,31 +22,34 @@
                 <!-- 系统默认标签 -->
                 <view class="scroll-item">
                     <view class="gaid-box">
-                        <view v-for="index of 7" class="classify" @click="changeClassify(index - 1)">
-                            <BillTypeIconVue :classify="index - 1" :choose="(index - 1) == billForm.classify"
-                                :bg-color="filters.billTypeColor(index - 1)" />
-                            <p>{{ filters.billTypeFilter(index - 1) }}</p>
+                        <view v-for="item in defaultOutputClassify" class="classify"
+                            @click="changeClassify(item.classifyId)">
+                            <BillTypeIconVue :classify="item.classifyId" :choose="item.classifyId == billForm.classify"
+                                :bg-color="item.color" />
+                            <p>{{ item.classifyDesc }}</p>
                         </view>
-                        <view class="classify" @click="isAddClassify = true" v-if="customOutPutClassify.length == 0">
-                            <BillTypeIconVue :classify="add" :choose="billForm.classify == -1"
-                                :bg-color="filters.billTypeColor(add)" />
+                        <view class="classify" @click="isAddClassify = true"
+                            v-if="customClassify.inuseCustomOutput.length == 0">
+                            <BillTypeIconVue :classify="add" :choose="billForm.classify == -1" bg-color="#b9b9b9;" />
                             <p>添加</p>
                         </view>
-                        <view class="classify" @click="changeClassify(13)" v-else>
-                            <BillTypeIconVue :classify="Number(13)" :choose="billForm.classify == 13"
-                                :bg-color="filters.customBillTypeColor(13)" />
-                            <p>{{ customOutPutClassify[0] }}</p>
+                        <view class="classify" @click="changeClassify(customClassify.inuseCustomOutput[0].classifyId)"
+                            v-else>
+                            <BillTypeIconVue :classify="customClassify.inuseCustomOutput[0].classifyId"
+                                :choose="billForm.classify == customClassify.inuseCustomOutput[0].classifyId"
+                                bg-color="#b9b9b9;" />
+                            <p>{{ customClassify.inuseCustomOutput[0].classifyDesc }}</p>
                         </view>
                     </view>
                 </view>
                 <!-- 自定义 -->
                 <view class="scroll-item" v-if="customOutPutClassify.length">
                     <view class="gaid-box">
-                        <view v-for="(item, index) in customOutPutClassify.slice(1)" class="classify"
-                            @click="changeClassify(index + 14)">
-                            <BillTypeIconVue :classify="index + 14" :choose="(index + 14) == billForm.classify"
-                                :bg-color="filters.customBillTypeColor(index)" />
-                            <p>{{ item }}</p>
+                        <view v-for="(item, index) in customClassify.inuseCustomOutput.slice(1)" class="classify"
+                            @click="changeClassify(item.classifyId)">
+                            <BillTypeIconVue :classify="item.classifyId" :choose="item.classifyId == billForm.classify"
+                                bg-color="#b9b9b9;" />
+                            <p>{{ item.classifyDesc }}</p>
                         </view>
                         <view class="classify" @click="isAddClassify = true" v-if="customOutPutClassify.length < 3">
                             <BillTypeIconVue :classify="add" :choose="billForm.classify == -1"
@@ -156,12 +159,15 @@ import formattereTools from '@/utils/dataUtils'
 import billServer from '@/api/billApi'
 import userInfoApi from '@/api/userInfoApi';
 import filters from '@/utils/filters'
+import { classify, customClassify, defaultOutputClassify, defaultInputClassify, inuseCustomOutputClassify } from '@/utils/staticData'
 import dataUtils from '@/utils/dataUtils';
 import { useloginStore } from '@/pinia-store/login'
 import BillTypeIconVue from '../../components/billTypeIcon.vue'
 const loginStore = useloginStore()
 const minDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, -1), 'sDate')
 const maxDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, 1), 'sDate')
+
+const customClassify = ref<customClassify>()
 
 const customOutPutClassify = computed(() => {
     if (loginStore.info.outputClassify != '')
@@ -211,9 +217,10 @@ const billForm = reactive({
     matter: '',
     /**  账单分类 */
     classify: 0,
+    /**  账单分类名 */
+    classifyName: '',
     /**  账单备注 */
     notes: '',
-    full_sentences: ''
 })
 
 const tags = ['外卖', '淘宝', '打车', '吃饭', '零食', '超市', '买菜', '旅游', '机票']
@@ -357,6 +364,10 @@ const changeChoose = (type: number) => {
             uni.showToast({ title: '请输入该账单金额', icon: 'none' })
             return
         }
+        if (billForm.bill_type == -1)
+            billForm.classifyName = defaultOutputClassify.find(e => e.classifyId == billForm.classify)?.classifyDesc || ''
+        else
+            billForm.classifyName = defaultInputClassify.find(e => e.classifyId == billForm.classify)?.classifyDesc || ''
         const params = billForm
         console.log('保存参数', { ...params })
         const res = await billServer.addBill({ ...params })
@@ -428,8 +439,15 @@ onLoad((option) => {
     }
 })
 
+async function getCustomClassify() {
+    customClassify.value = await inuseCustomOutputClassify()
+    console.log('自定义', customClassify.value)
+}
+
+
 onMounted(() => {
-    console.log('用户信息---', loginStore.info)
+    getCustomClassify()
+    console.log('用户信息---', loginStore.info, customOutputClassify.value)
     let arr = []
     if (loginStore.info.customMatter)
         recommendTags.value = loginStore.info.customMatter.split(',')

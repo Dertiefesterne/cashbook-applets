@@ -15,6 +15,13 @@ export default {
             data
         })
     },
+    updataClassify(data: any) {
+        return http.request({
+            url: '/userInfo/update/userClassify',
+            method: 'POST',
+            data
+        })
+    },
     updateUserMatter(data: any) {
         return http.request({
             url: '/userInfo/update/matterlabel',
@@ -33,6 +40,13 @@ export default {
         return http.request({
             url: '/userInfo/update/bill_count',
             method: 'POST',
+            data
+        })
+    },
+    getClassifyList(data: any) {
+        return http.request({
+            url: '/userInfo/update/classifyList',
+            method: 'GET',
             data
         })
     }
