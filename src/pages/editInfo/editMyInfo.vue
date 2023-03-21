@@ -40,11 +40,14 @@ import { pathToBase64, base64ToPath } from '@/uni_modules/image-tools/index.js'
 const loginStore = useloginStore()
 const name = ref(loginStore.info.nickname)
 const timestamp = loginStore.info.register_timestamp
-
-const avaSrc = loginStore.avatar ? loginStore.avatar : '/static/img/defaultAvatar.png'
+const avaSrc = ref('')
 onMounted(() => {
     // name.value = loginStore.info.nickname
     // console.log('用户昵称', loginStore.info.nickname)
+    if (loginStore.avatar.length)
+        avaSrc.value = loginStore.avatar
+    else
+        avaSrc.value = '/static/img/defaultAvatar.png'
 })
 
 const imgSrc = ref('')
@@ -159,6 +162,7 @@ function choosePic() {
                     pathToBase64(path.path).then(async (base64: any) => {
                         console.log('base64--', base64); // 这就是转为base64格式的图片
                         imgSrc.value = base64
+                        avaSrc.value = base64
                         loginStore.setAvatar(base64)
                         // const params = {
                         //     name: 'yy',

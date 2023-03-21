@@ -61,8 +61,14 @@ import userServer from '@/api/userApi'
 import formattereTools from '@/utils/dataUtils'
 import { useloginStore } from '@/pinia-store/login'
 const loginStore = useloginStore()
+const avaSrc = ref('')
+onMounted(() => {
+	if (loginStore.avatar.length)
+		avaSrc.value = loginStore.avatar
+	else
+		avaSrc.value = '/static/img/defaultAvatar.png'
+})
 
-const avaSrc = loginStore.avatar ? loginStore.avatar : '/static/img/defaultAvatar.png'
 // 用户注册时间
 const timestamp = loginStore.info.register_timestamp
 const bill_count = loginStore.info.bill_count || 0

@@ -94,7 +94,7 @@ export function CustomClassify() {
 
 
 
-export const defaultInputClassify: classify[] = [
+export const defaultInputClassify: classifyType[] = [
     {
         classifyId: 0,
         classifyName: '其他',

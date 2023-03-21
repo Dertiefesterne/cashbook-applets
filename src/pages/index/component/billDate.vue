@@ -13,11 +13,11 @@
                 <view class="bill">
                     <view class="items">
                         <view class="item" :style="`background:${filters.billTypeColor(item.classify)}`">
-                            <i class="iconfont" :class="filters.billTypeIcon(item.classify)"></i>
+                            <i class="iconfont" :class="filterClassifyIcon(item.bill_type, item.classify)"></i>
                         </view>
                         <view>
                             <p style="margin-bottom: 5rpx;">{{ item.matter }} | {{
-                                filters.billTypeFilter(item.classify)
+                                item.classifyName ? item.classifyName : filters.billTypeFilter(item.classify)
                             }}
                             </p>
                             <p>{{ formattereTools.dateFormatString(item.time, "time") }}</p>
@@ -40,11 +40,13 @@ import { useStore } from '@/pinia-store/my'
 import formattereTools from '@/utils/dataUtils'
 import { Bill } from '@/entity/bill'
 import filters from '@/utils/filters'
+import { classifyType, defaultOutputClassify, defaultInputClassify, CustomClassify } from '@/utils/staticData'
 const loginStore = useloginStore()
 const userStore = useStore()
 
 const emits = defineEmits(['chooseValue', 'deleteBill'])
-
+const inuseOutput = ref<classifyType[]>([])
+const inuseInput = ref<classifyType[]>([])
 const props = defineProps({
     // 写法一
     msg2: String,
@@ -102,6 +104,35 @@ const toBillDetial = (billID: number, billIndex: number) => {
         console.log('发送消息成功')
     }
 
+function filterClassifyIcon(billType: number, id: number) {
+    if (billType == -1) {
+        let index = inuseOutput.value.findIndex(e => e.classifyId == id)
+        if (index != -1)
+            return inuseOutput.value[index].icon
+        else
+            return "自定义";
+    }
+    else {
+        let index = inuseInput.value.findIndex(e => e.classifyId == id)
+        if (index != -1)
+            return inuseInput.value[index].icon
+        else
+            return "自定义";
+    }
+}
+
+async function getCustomClassify() {
+    const res = await CustomClassify()
+    inuseOutput.value = defaultOutputClassify.concat(res.inuseCustomOutput)
+    inuseInput.value = defaultInputClassify.concat(res.inuseCustomInput)
+}
+
+onMounted(() => {
+    // 如果用户账单总数为0就return
+    if (loginStore.info.bill_count) {
+        getCustomClassify()
+    }
+})
 </script>
 
 <style lang="less" scoped>

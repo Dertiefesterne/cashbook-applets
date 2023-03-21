@@ -158,7 +158,7 @@ import formattereTools from '@/utils/dataUtils'
 import billServer from '@/api/billApi'
 import userInfoApi from '@/api/userInfoApi';
 import filters from '@/utils/filters'
-import { customClassifyType, defaultOutputClassify, defaultInputClassify, CustomClassify } from '@/utils/staticData'
+import { classifyType, customClassifyType, defaultOutputClassify, defaultInputClassify, CustomClassify } from '@/utils/staticData'
 import dataUtils from '@/utils/dataUtils';
 import { useloginStore } from '@/pinia-store/login'
 import BillTypeIconVue from '../../components/billTypeIcon.vue'
@@ -166,6 +166,9 @@ const loginStore = useloginStore()
 const minDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, -1), 'sDate')
 const maxDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, 1), 'sDate')
 
+
+const inuseOutput = ref<classifyType[]>([])
+const inuseInput = ref<classifyType[]>([])
 const customClassify = ref<customClassifyType>({
     allCustomOutput: [],
     inuseCustomOutput: [],
@@ -365,10 +368,7 @@ const changeChoose = (type: number) => {
             uni.showToast({ title: '请输入该账单金额', icon: 'none' })
             return
         }
-        if (billForm.bill_type == -1)
-            billForm.classifyName = defaultOutputClassify.find(e => e.classifyId == billForm.classify)?.classifyName || ''
-        else
-            billForm.classifyName = defaultInputClassify.find(e => e.classifyId == billForm.classify)?.classifyName || ''
+        billForm.classifyName = filterClassifyName(billForm.bill_type, billForm.classify)
         const params = billForm
         console.log('保存参数', { ...params })
         const res = await billServer.addBill({ ...params })
@@ -422,6 +422,22 @@ const changeChoose = (type: number) => {
         getCustomClassify()
     }
 
+function filterClassifyName(billType: number, id: number) {
+    if (billType == -1) {
+        let index = inuseOutput.value.findIndex(e => e.classifyId == id)
+        if (index != -1)
+            return inuseOutput.value[index].classifyName
+        else
+            return "自定义";
+    }
+    else {
+        let index = inuseInput.value.findIndex(e => e.classifyId == id)
+        if (index != -1)
+            return inuseInput.value[index].classifyName
+        else
+            return "自定义";
+    }
+}
 
 function inCalc() {
     let str = moneyDisplay.value
@@ -445,6 +461,8 @@ onLoad((option) => {
 async function getCustomClassify() {
     customClassify.value = await CustomClassify()
     console.log('自定义', customClassify.value)
+    inuseOutput.value = defaultOutputClassify.concat(customClassify.value.inuseCustomOutput)
+    inuseInput.value = defaultInputClassify.concat(customClassify.value.inuseCustomInput)
     dataLoad.value = true
 }
 

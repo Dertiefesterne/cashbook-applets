@@ -17,8 +17,9 @@
 				<view v-for="(item, index) in classifyList" class="classifyItem"
 					@click="toClassifyListDetial(item.classify)">
 					<view class="flex">
-						<BillTypeIconVue :classify="item.classify" type="small" :bg-color="filters.billTypeColor2(index)" />
-						{{ filterClassify(chooseType, item.classify) }}
+						<BillTypeIconVue :icon="filterClassifyIcon(chooseType, item.classify)" type="small"
+							:bg-color="filters.billTypeColor2(index)" />
+						{{ filterClassifyName(chooseType, item.classify) }}
 						<span>{{ item.count }}笔</span>
 					</view>
 					<view class="flex">
@@ -171,9 +172,9 @@ const getYearGroupData = async (year: string, mon: string) => {
 		}
 		classifyList.value = res.data
 		for (let i = 0; i < res.data.length; i++) {
-			mySectorData.value.categories.push(filterClassify(chooseType.value, res.data[i].classify))
+			mySectorData.value.categories.push(filterClassifyName(chooseType.value, res.data[i].classify))
 			// series部分
-			temp2.data.push({ name: filterClassify(chooseType.value, res.data[i].classify), value: res.data[i].sums })
+			temp2.data.push({ name: filterClassifyName(chooseType.value, res.data[i].classify), value: res.data[i].sums })
 		}
 		mySectorData.value.series.push(temp2)
 		console.log('圆饼图数据', mySectorData.value)
@@ -227,7 +228,7 @@ async function getCustomClassify() {
 	console.log('所有的类别---', inuseCustomOutput.value, inuseCustomInput.value)
 }
 
-function filterClassify(billType: number, id: number) {
+function filterClassifyName(billType: number, id: number) {
 	if (billType == -1) {
 		let index = inuseCustomOutput.value.findIndex(e => e.classifyId == id)
 		if (index != -1)
@@ -243,6 +244,26 @@ function filterClassify(billType: number, id: number) {
 			return "自定义";
 	}
 }
+
+function filterClassifyIcon(billType: number, id: number) {
+	if (billType == -1) {
+		let index = inuseCustomOutput.value.findIndex(e => e.classifyId == id)
+		if (index != -1)
+			return inuseCustomOutput.value[index].icon
+		else
+			return "自定义";
+	}
+	else {
+		let index = inuseCustomInput.value.findIndex(e => e.classifyId == id)
+		if (index != -1)
+			return inuseCustomInput.value[index].icon
+		else
+			return "自定义";
+	}
+}
+
+
+
 
 onMounted(() => {
 	// 如果用户账单总数为0就return

@@ -18,6 +18,8 @@ export interface Bill {
 	matter: string
 	/**  账单分类 */
 	classify: number
+	/**  账单名 */
+	classifyName: string
 	/**  账单备注 */
 	notes: string
 	/**  账单完整句子（一句话记账才会有值） */
