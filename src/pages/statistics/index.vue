@@ -18,7 +18,7 @@
 					@click="toClassifyListDetial(item.classify)">
 					<view class="flex">
 						<BillTypeIconVue :classify="item.classify" type="small" :bg-color="filters.billTypeColor2(index)" />
-						{{ filters.billTypeFilter(item.classify) }}
+						{{ filterClassify(chooseType, item.classify) }}
 						<span>{{ item.count }}笔</span>
 					</view>
 					<view class="flex">
@@ -51,6 +51,7 @@ import histogram from './component/histogramChart.vue'
 import LineChart from './component/LineChart.vue';
 import sectorChart from './component/sectorChart.vue';
 import BillTypeIconVue from '../../components/billTypeIcon.vue'
+import { classifyType, defaultOutputClassify, defaultInputClassify, CustomClassify } from '@/utils/staticData'
 const loginStore = useloginStore()
 const storeUserID = loginStore.userID
 
@@ -69,6 +70,9 @@ interface classifyItem {
 	sums: number,
 	count: number,
 }
+
+const inuseCustomOutput = ref<classifyType[]>([])
+const inuseCustomInput = ref<classifyType[]>([])
 
 const ready = ref(false),
 	noBill = ref(false),
@@ -91,30 +95,7 @@ const ready = ref(false),
 	currentClassifyMonth = ref(0),
 	chooseType = ref<number>(-1)
 
-
 const year = new Date().getFullYear() + ''
-
-const chartData = {
-	categories: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-	series: [
-		{
-			name: '支出',
-			data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		}
-	]
-}, chartData3 = {
-	categories: ['1班', '2班', '3班', '4班', '5班'],
-	series: [
-		{
-			name: '支出',
-			data: [{ "name": "一班", "value": 50 }, { "name": "二班", "value": 30 }, { "name": "三班", "value": 20 }, { "name": "四班", "value": 18 }, { "name": "五班", "value": 8 }]
-		}
-	]
-},
-	columns = [
-		['2022', '2023'],
-		['01', '02']
-	]
 
 
 const getYearGroupData = async (year: string, mon: string) => {
@@ -170,15 +151,13 @@ const getYearGroupData = async (year: string, mon: string) => {
 	},
 	getDayGroupData = async (month: string) => {
 		initDayGroupData(month)
-		console.log('yyyyyyyyyyyyyy', LineRangeData.value[0], month)
 		const params = { userID: Number(storeUserID), groupType: "day", billType: chooseType.value, month: month }
 		const res = await billServer.getBillChartData(params)
-		console.log('结果month', res.data)
 		for (let i = 0; i < res.data.length; i++) {
 			let index = Number(res.data[i].date.slice(8)) - 1
 			myLineData.value.series[0].data[index] = res.data[i].sums
 		}
-		console.log('结果month2', myLineData.value)
+		console.log('折线图数据', myLineData.value)
 	},
 	getClassifyGroupData = async (month: string) => {
 		// 每次切换月份，初始化图表数据
@@ -190,17 +169,15 @@ const getYearGroupData = async (year: string, mon: string) => {
 			name: month + '月分类',
 			data: []
 		}
-		console.log('分类图表', res.data)
 		classifyList.value = res.data
 		for (let i = 0; i < res.data.length; i++) {
-			mySectorData.value.categories.push(filters.billTypeFilter(res.data[i].classify))
+			mySectorData.value.categories.push(filterClassify(chooseType.value, res.data[i].classify))
 			// series部分
-			temp2.data.push({ name: filters.billTypeFilter(res.data[i].classify), value: res.data[i].sums })
+			temp2.data.push({ name: filterClassify(chooseType.value, res.data[i].classify), value: res.data[i].sums })
 		}
 		mySectorData.value.series.push(temp2)
-
-		console.log('classify2', mySectorData.value)
-		ready.value = true
+		console.log('圆饼图数据', mySectorData.value)
+		setTimeout(() => { ready.value = true })
 	},
 	changeYearGroup = (e: any) => {
 		console.log(e, typeof e)
@@ -243,10 +220,34 @@ const getYearGroupData = async (year: string, mon: string) => {
 		getClassifyGroupData(mm)
 	}
 
+async function getCustomClassify() {
+	const res = await CustomClassify()
+	inuseCustomOutput.value = defaultOutputClassify.concat(res.inuseCustomOutput)
+	inuseCustomInput.value = defaultInputClassify.concat(res.inuseCustomInput)
+	console.log('所有的类别---', inuseCustomOutput.value, inuseCustomInput.value)
+}
+
+function filterClassify(billType: number, id: number) {
+	if (billType == -1) {
+		let index = inuseCustomOutput.value.findIndex(e => e.classifyId == id)
+		if (index != -1)
+			return inuseCustomOutput.value[index].classifyName
+		else
+			return "自定义";
+	}
+	else {
+		let index = inuseCustomInput.value.findIndex(e => e.classifyId == id)
+		if (index != -1)
+			return inuseCustomInput.value[index].classifyName
+		else
+			return "自定义";
+	}
+}
 
 onMounted(() => {
 	// 如果用户账单总数为0就return
 	if (loginStore.info.bill_count) {
+		getCustomClassify()
 		reload()
 	} else {
 		noBill.value = true

@@ -20,12 +20,12 @@
                 <p class="advice">不可删除</p>
                 <!-- 支出 -->
                 <view class="label-box2" v-if="curNow == 0">
-                    <u-tag v-for="item in defaultOutputClassify" :text="item.classifyDesc">
+                    <u-tag v-for="item in defaultOutputClassify" :text="item.classifyName">
                     </u-tag>
                 </view>
                 <!-- 收入 -->
                 <view class="label-box2" v-else>
-                    <u-tag v-for="item in defaultInputClassify" :text="item.classifyDesc">
+                    <u-tag v-for="item in defaultInputClassify" :text="item.classifyName">
                     </u-tag>
                 </view>
             </view>

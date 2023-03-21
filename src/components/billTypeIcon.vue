@@ -1,7 +1,7 @@
 <template>
     <view v-if="type == 'big'">
         <view class="box box1" :class="{ mask: !choose }" :style="`background:${bgColor}`">
-            <i class="iconfont" :class="filters.billTypeIcon(classify)" style="font-size:40rpx"></i>
+            <i class="iconfont" :class="icon" style="font-size:40rpx"></i>
         </view>
     </view>
     <view v-else>
@@ -31,6 +31,10 @@ const props = defineProps({
     bgColor: {
         type: String,
         default: '#1890ff'
+    },
+    icon: {
+        type: String,
+        default: 'icon-jushoucang'
     }
 })
 const color = () => {
