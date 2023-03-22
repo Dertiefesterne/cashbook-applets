@@ -1,8 +1,10 @@
 <template>
     <view class="container">
-        <headTop> <template v-slot:title>
+        <headTop>
+            <template v-slot:title>
                 个人信息
-            </template></headTop>
+            </template>
+        </headTop>
         <view class="content">
             <view class="menu-item">头像<image style="width: 80rpx; height: 80rpx; border-radius: 50%;" :src="avaSrc"
                     mode="aspectFill" @click="choosePic" title="点击修改头像"></image>
@@ -42,8 +44,6 @@ const name = ref(loginStore.info.nickname)
 const timestamp = loginStore.info.register_timestamp
 const avaSrc = ref('')
 onMounted(() => {
-    // name.value = loginStore.info.nickname
-    // console.log('用户昵称', loginStore.info.nickname)
     if (loginStore.avatar.length)
         avaSrc.value = loginStore.avatar
     else
@@ -136,6 +136,11 @@ const modifyNickName = async () => {
             });
         }
     });
+}, toMy = () => {
+    console.log('back')
+    uni.switchTab({
+        url: '/pages/my/index'
+    })
 }
 //选择照片
 function choosePic() {

@@ -1,15 +1,21 @@
 <template>
     <view>
         <view class="head">
-            <view class="icon-l" @click="back">
+            <view class="icon-l" @click="back" v-if="!edit">
                 <u-icon name="arrow-left" size="20"></u-icon>
+            </view>
+            <view class="icon-l" v-else>
+                <text class="text">账单详情</text>
             </view>
             <view class="text" :class="{ 'chooseBorder': chooseType == -1 }" @click="changeChoose(-1)">
                 支出</view>
             <view class="text" :class="{ 'chooseBorder': chooseType == 1 }" @click="changeChoose(1)">
                 收入</view>
-            <view class="icon-r" @click="savaBill">
+            <view class="icon-r" @click="savaBill" v-if="!edit">
                 <u-icon name="checkmark" size="20"></u-icon>
+            </view>
+            <view class="icon-r" @click="deleteBill" v-else>
+                <u-icon name="trash" size="20"></u-icon>
             </view>
         </view>
         <view class="content" v-if="dataLoad">
@@ -22,36 +28,28 @@
                 <!-- 系统默认标签 -->
                 <view class="scroll-item">
                     <view class="gaid-box">
-                        <view v-for="item in defaultOutputClassify" class="classify"
-                            @click="changeClassify(item.classifyId)">
-                            <BillTypeIconVue :icon="item.icon" :choose="item.classifyId == billForm.classify"
+                        <view v-for="item in allClassify.allOutput.slice(0, 8)" class="classify"
+                            @click="changeClassify(item.classify_id)">
+                            <BillTypeIconVue :icon="item.icon" :choose="item.classify_id == billForm.classify"
                                 :bg-color="item.color" />
-                            <p>{{ item.classifyName }}</p>
+                            <p>{{ item.classify_name }}</p>
                         </view>
-                        <view class="classify" @click="isAddClassify = true"
-                            v-if="customClassify?.inuseCustomOutput.length == 0">
+                        <view class="classify" @click="isAddClassify = true" v-if="allClassify.allOutput.length == 7">
                             <BillTypeIconVue icon="icon-tianjia" :choose="billForm.classify == -1" bg-color="#b9b9b9;" />
                             <p>添加</p>
-                        </view>
-                        <view class="classify"
-                            @click="changeClassify(Number(customClassify?.inuseCustomOutput[0].classifyId))" v-else>
-                            <BillTypeIconVue :icon="customClassify?.inuseCustomOutput[0].icon"
-                                :choose="billForm.classify == customClassify?.inuseCustomOutput[0].classifyId"
-                                bg-color="#99fbf2;" />
-                            <p>{{ customClassify?.inuseCustomOutput[0].classifyName }}</p>
                         </view>
                     </view>
                 </view>
                 <!-- 自定义 -->
-                <view class="scroll-item" v-if="customOutPutClassify.length">
+                <view class="scroll-item" v-if="allClassify.allOutput.length > 8">
                     <view class="gaid-box">
-                        <view v-for="(item, index) in customClassify?.inuseCustomOutput.slice(1)" class="classify"
-                            @click="changeClassify(item.classifyId)">
-                            <BillTypeIconVue :icon="item.icon" :choose="item.classifyId == billForm.classify"
+                        <view v-for="(item, index) in allClassify.allOutput.slice(8)" class="classify"
+                            @click="changeClassify(item.classify_id)">
+                            <BillTypeIconVue :icon="item.icon" :choose="item.classify_id == billForm.classify"
                                 :bg-color="filters.customBillTypeColor(index)" />
-                            <p>{{ item.classifyName }}</p>
+                            <p>{{ item.classify_name }}</p>
                         </view>
-                        <view class="classify" @click="isAddClassify = true" v-if="customOutPutClassify.length < 3">
+                        <view class="classify" @click="isAddClassify = true" v-if="allClassify.allOutput.length < 10">
                             <BillTypeIconVue icon="icon-tianjia" :choose="billForm.classify == -1" bg-color="#b9b9b9;" />
                             <p>添加</p>
                         </view>
@@ -60,18 +58,12 @@
             </scroll-view>
             <!-- 收入图标 -->
             <view class="gaid-box" v-if="chooseType == 1">
-                <view v-for="item in defaultInputClassify" class="classify" @click="changeClassify(item.classifyId)">
-                    <BillTypeIconVue :icon="item.icon" :choose="item.classifyId == billForm.classify"
+                <view v-for="item in allClassify.allInput" class="classify" @click="changeClassify(item.classify_id)">
+                    <BillTypeIconVue :icon="item.icon" :choose="item.classify_id == billForm.classify"
                         :bg-color="item.color" />
-                    <p>{{ item.classifyName }}</p>
+                    <p>{{ item.classify_name }}</p>
                 </view>
-                <view v-for="(item, index) in customClassify?.inuseCustomInput" class="classify"
-                    @click="changeClassify(item.classifyId)">
-                    <BillTypeIconVue :icon="item.icon" :choose="(item.classifyId) == billForm.classify"
-                        :bg-color="filters.customBillTypeColor(index)" />
-                    <p>{{ item.classifyName }}</p>
-                </view>
-                <view class="classify" @click="isAddClassify = true" v-if="customInPutClassify?.length < 3">
+                <view class="classify" @click="isAddClassify = true" v-if="allClassify.allInput.length < 8">
                     <BillTypeIconVue icon="icon-tianjia" :choose="billForm.classify == -1" bg-color="#b9b9b9;" />
                     <p>添加</p>
                 </view>
@@ -166,15 +158,14 @@ const loginStore = useloginStore()
 const minDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, -1), 'sDate')
 const maxDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, 1), 'sDate')
 
-
-const inuseOutput = ref<classifyType[]>([])
-const inuseInput = ref<classifyType[]>([])
-const customClassify = ref<customClassifyType>({
-    allCustomOutput: [],
-    inuseCustomOutput: [],
-    allCustomInput: [],
-    inuseCustomInput: []
-})
+const allClassify = ref<customClassifyType>(
+    {
+        allOutput: [],
+        inuseOutput: [],
+        allInput: [],
+        inuseInput: []
+    }
+)
 const dataLoad = ref(false)
 const customOutPutClassify = computed(() => {
     if (loginStore.info.outputClassify != '')
@@ -190,15 +181,12 @@ const customInPutClassify = computed(() => {
         return []
 })
 
-const billID = ref(),
-    billDetial = ref(),
-    chooseType = ref<number>(-1),
+const chooseType = ref<number>(-1),
     moneyDisplay = ref('0'),
     showDate = ref(false),
     showTime = ref(false),
     isAddClassify = ref(false),
     datetimeValue = ref(),
-    time = ref(),
     lastTime = ref(''),
     classify = ref(''),
     recommendTags = ref<string[]>([])
@@ -222,7 +210,7 @@ const billForm = reactive({
     /**  账单分类 */
     classify: 0,
     /**  账单分类名 */
-    classifyName: '',
+    classify_name: '',
     /**  账单备注 */
     notes: '',
 })
@@ -234,7 +222,6 @@ const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0']
  * 获取获取账单详情
  */
 const changeChoose = (type: number) => {
-    billForm.classify = 0
     chooseType.value = type
 },
     changeClassify = (type: number) => {
@@ -338,7 +325,10 @@ const changeChoose = (type: number) => {
         // 点击完成
         else if (e == '完成') {
             // 保存该账单
-            savaBill()
+            if (edit.value)
+                modifyBill()
+            else
+                savaBill()
         }
         // 运算符不能一起,如果最后一位是运算符就不能再输入运算符
         else if (e == '+' || e == '-' || e == '.') {
@@ -368,25 +358,13 @@ const changeChoose = (type: number) => {
             uni.showToast({ title: '请输入该账单金额', icon: 'none' })
             return
         }
-        billForm.classifyName = filterClassifyName(billForm.bill_type, billForm.classify)
+        billForm.classify_name = filterClassifyName(billForm.bill_type, billForm.classify)
         const params = billForm
         console.log('保存参数', { ...params })
         const res = await billServer.addBill({ ...params })
         if (res.data == '添加成功') {
             uni.showToast({ title: '添加成功', duration: 800 })
-
-            // 如果添加的账单时间距离(最新一条账单)超过7天，就刷新
-            if (formattereTools.dateFormatterDispose(billForm.timestamp, Number(lastTime.value))) {
-                uni.reLaunch({
-                    url: '/pages/index/index'
-                })
-            }
-            // 
-            else {
-                uni.switchTab({
-                    url: '/pages/index/index'
-                })
-            }
+            jumpPage()
             // 更新用户的账单数
             loginStore.setInfoBillCount(loginStore.info.bill_count + 1)
         }
@@ -418,26 +396,100 @@ const changeChoose = (type: number) => {
             uni.showToast({ title: '添加成功', duration: 800 })
             classify.value = ''
         }
-        userInfoApi.updataClassify(params)
+        const rr = await userInfoApi.updataClassify(params)
+        console.log('rr', rr)
         getCustomClassify()
+    },
+    modifyBill = async () => {
+        let money = Number(moneyDisplay.value)
+        billForm.money = money
+        billForm.bill_type = chooseType.value
+        billForm.classify_name = filterClassifyName(billForm.bill_type, billForm.classify)
+        // 保存修改后的账单
+        const params = { ...billForm }
+        console.log('修改后的账单', params)
+        const res = billServer.updateBill(params)
+        if ((await res).statusCode == 200) {
+            uni.showToast({ title: '修改成功', duration: 800 })
+            jumpPage()
+        }
     }
 
 function filterClassifyName(billType: number, id: number) {
     if (billType == -1) {
-        let index = inuseOutput.value.findIndex(e => e.classifyId == id)
+        let index = allClassify.value.inuseOutput.findIndex(e => e.classify_id == id)
         if (index != -1)
-            return inuseOutput.value[index].classifyName
+            return allClassify.value.inuseOutput[index].classify_name
         else
             return "自定义";
     }
     else {
-        let index = inuseInput.value.findIndex(e => e.classifyId == id)
+        let index = allClassify.value.inuseInput.findIndex(e => e.classify_id == id)
         if (index != -1)
-            return inuseInput.value[index].classifyName
+            return allClassify.value.inuseInput[index].classify_name
         else
             return "自定义";
     }
 }
+
+const deleteBill = () => {
+    uni.showModal({
+        title: '提示',
+        content: '确定删除该账单吗？',
+        success: async (res) => {
+            if (res.confirm) {
+                const params = {
+                    userID: loginStore.userID,
+                    billID: billForm.bill_id,
+                }
+                console.log('删除参数', params)
+                const res = billServer.deleteBill(params)
+                if ((await res).data == '删除成功') {
+                    uni.showToast({ title: '删除成功', duration: 800 })
+                    jumpPage()
+                }
+            }
+        },
+    })
+},
+    jumpPage = () => {
+        // 如果修改的账单时间距离(最新一条账单)超过7天，就刷新
+        // if (formattereTools.dateFormatterDispose(billForm.timestamp, Number(lastTime.value))) {
+        //     uni.reLaunch({
+        //         url: '/pages/index/index'
+        //     })
+        // }
+        // else {
+        //     uni.switchTab({
+        //         url: '/pages/index/index'
+        //     })
+        // }
+        uni.reLaunch({
+            url: '/pages/index/index'
+        })
+    }, getBillDetail = async (id: number) => {
+        const res = await billServer.getBillDetial({ userID: Number(loginStore.userID), billID: id })
+        console.log('获取账单详情--', res.data)
+        billForm.bill_id = res.data.bill_id
+        billForm.bill_type = res.data.bill_id
+        /**  账单时间 */
+        billForm.data_time = res.data.time
+        /**  账单时间戳 */
+        billForm.timestamp = res.data.timestamp
+        /**  账单金额 */
+        billForm.money = res.data.money
+        /**  账单事项 */
+        billForm.matter = res.data.matter
+        /**  账单分类 */
+        billForm.classify = res.data.classify
+        /**  账单分类名 */
+        billForm.classify_name = res.data.classify_name
+        /**  账单备注 */
+        billForm.notes = res.data.notes
+        chooseType.value = res.data.bill_type
+        moneyDisplay.value = billForm.money + ''
+    }
+
 
 function inCalc() {
     let str = moneyDisplay.value
@@ -448,10 +500,20 @@ function inCalc() {
         return '完成'
 }
 
+const edit = ref(false)
+
 onLoad((option) => {
+    if (option && option.bill_id) {
+        getBillDetail(option.bill_id)
+        //编辑账单
+        edit.value = true;
+        billForm.bill_id = option.bill_id
+    }
+    else {
+        edit.value = false;
+    }
     if (option && option.lastTime) {
         lastTime.value = option.lastTime;
-        console.log('lastTime', lastTime.value, typeof lastTime.value)
     }
     else {
         lastTime.value = new Date().getTime() + ''
@@ -459,17 +521,15 @@ onLoad((option) => {
 })
 
 async function getCustomClassify() {
-    customClassify.value = await CustomClassify()
-    console.log('自定义', customClassify.value)
-    inuseOutput.value = defaultOutputClassify.concat(customClassify.value.inuseCustomOutput)
-    inuseInput.value = defaultInputClassify.concat(customClassify.value.inuseCustomInput)
+    allClassify.value = await CustomClassify()
+    console.log('所有分类--', allClassify.value)
     dataLoad.value = true
 }
 
 onMounted(() => {
     dataLoad.value = false
     getCustomClassify()
-    console.log('用户信息---', loginStore.info, customClassify.value)
+    console.log('用户信息---', loginStore.info)
     let arr = []
     if (loginStore.info.customMatter)
         recommendTags.value = loginStore.info.customMatter.split(',')

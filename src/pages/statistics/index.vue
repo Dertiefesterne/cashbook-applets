@@ -15,7 +15,7 @@
 			<sectorChart :myData="mySectorData" :rangeData="LineRangeData" @changeMonthGroup="changeClassifyMonth" />
 			<view class="classifyList">
 				<view v-for="(item, index) in classifyList" class="classifyItem"
-					@click="toClassifyListDetial(item.classify)">
+					@click="toClassifyListDetial(item.classify, filterClassifyName(chooseType, item.classify))">
 					<view class="flex">
 						<BillTypeIconVue :icon="filterClassifyIcon(chooseType, item.classify)" type="small"
 							:bg-color="filters.billTypeColor2(index)" />
@@ -52,7 +52,7 @@ import histogram from './component/histogramChart.vue'
 import LineChart from './component/LineChart.vue';
 import sectorChart from './component/sectorChart.vue';
 import BillTypeIconVue from '../../components/billTypeIcon.vue'
-import { classifyType, defaultOutputClassify, defaultInputClassify, CustomClassify } from '@/utils/staticData'
+import { classifyType, defaultOutputClassify, defaultInputClassify, customClassifyType, CustomClassify } from '@/utils/staticData'
 const loginStore = useloginStore()
 const storeUserID = loginStore.userID
 
@@ -72,8 +72,15 @@ interface classifyItem {
 	count: number,
 }
 
-const inuseCustomOutput = ref<classifyType[]>([])
-const inuseCustomInput = ref<classifyType[]>([])
+const allClassify = ref<customClassifyType>(
+	{
+		allOutput: [],
+		inuseOutput: [],
+		allInput: [],
+		inuseInput: []
+	}
+)
+
 
 const ready = ref(false),
 	noBill = ref(false),
@@ -198,10 +205,10 @@ const getYearGroupData = async (year: string, mon: string) => {
 			url: '/pages/addBill/index'
 		})
 	},
-	toClassifyListDetial = (classify: number) => {
+	toClassifyListDetial = (classify: number, name: string) => {
 		uni.navigateTo({
 			// url: '/pages/billDetial/index'
-			url: `/pages/billDetial/classifyList?classify=${classify}&month=${currentClassifyMonth.value}&billType=${chooseType.value}`
+			url: `/pages/billDetial/classifyList?classify=${classify}&classify_name=${name}&month=${currentClassifyMonth.value}&billType=${chooseType.value}`
 		})
 	}, back = () => {
 		uni.switchTab({
@@ -222,24 +229,21 @@ const getYearGroupData = async (year: string, mon: string) => {
 	}
 
 async function getCustomClassify() {
-	const res = await CustomClassify()
-	inuseCustomOutput.value = defaultOutputClassify.concat(res.inuseCustomOutput)
-	inuseCustomInput.value = defaultInputClassify.concat(res.inuseCustomInput)
-	console.log('所有的类别---', inuseCustomOutput.value, inuseCustomInput.value)
+	allClassify.value = await CustomClassify()
 }
 
 function filterClassifyName(billType: number, id: number) {
 	if (billType == -1) {
-		let index = inuseCustomOutput.value.findIndex(e => e.classifyId == id)
+		let index = allClassify.value.allOutput.findIndex(e => e.classify_id == id)
 		if (index != -1)
-			return inuseCustomOutput.value[index].classifyName
+			return allClassify.value.allOutput[index].classify_name
 		else
 			return "自定义";
 	}
 	else {
-		let index = inuseCustomInput.value.findIndex(e => e.classifyId == id)
+		let index = allClassify.value.allInput.findIndex(e => e.classify_id == id)
 		if (index != -1)
-			return inuseCustomInput.value[index].classifyName
+			return allClassify.value.allInput[index].classify_name
 		else
 			return "自定义";
 	}
@@ -247,18 +251,18 @@ function filterClassifyName(billType: number, id: number) {
 
 function filterClassifyIcon(billType: number, id: number) {
 	if (billType == -1) {
-		let index = inuseCustomOutput.value.findIndex(e => e.classifyId == id)
+		let index = allClassify.value.allOutput.findIndex(e => e.classify_id == id)
 		if (index != -1)
-			return inuseCustomOutput.value[index].icon
+			return allClassify.value.allOutput[index].icon
 		else
-			return "自定义";
+			return "icon-jushoucang";
 	}
 	else {
-		let index = inuseCustomInput.value.findIndex(e => e.classifyId == id)
+		let index = allClassify.value.allInput.findIndex(e => e.classify_id == id)
 		if (index != -1)
-			return inuseCustomInput.value[index].icon
+			return allClassify.value.allInput[index].icon
 		else
-			return "自定义";
+			return "icon-jushoucang";
 	}
 }
 

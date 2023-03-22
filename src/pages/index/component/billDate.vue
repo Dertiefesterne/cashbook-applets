@@ -12,12 +12,12 @@
                 </view>
                 <view class="bill">
                     <view class="items">
-                        <view class="item" :style="`background:${filters.billTypeColor(item.classify)}`">
+                        <view class="item" :style="`background:${filterClassifyColor(item.bill_type, item.classify)}`">
                             <i class="iconfont" :class="filterClassifyIcon(item.bill_type, item.classify)"></i>
                         </view>
                         <view>
                             <p style="margin-bottom: 5rpx;">{{ item.matter }} | {{
-                                item.classifyName ? item.classifyName : filters.billTypeFilter(item.classify)
+                                filterClassifyName(item.bill_type, item.classify)
                             }}
                             </p>
                             <p>{{ formattereTools.dateFormatString(item.time, "time") }}</p>
@@ -40,13 +40,22 @@ import { useStore } from '@/pinia-store/my'
 import formattereTools from '@/utils/dataUtils'
 import { Bill } from '@/entity/bill'
 import filters from '@/utils/filters'
-import { classifyType, defaultOutputClassify, defaultInputClassify, CustomClassify } from '@/utils/staticData'
+import { classifyType, defaultOutputClassify, customClassifyType, defaultInputClassify, CustomClassify } from '@/utils/staticData'
 const loginStore = useloginStore()
 const userStore = useStore()
 
 const emits = defineEmits(['chooseValue', 'deleteBill'])
-const inuseOutput = ref<classifyType[]>([])
-const inuseInput = ref<classifyType[]>([])
+
+
+const allClassify = ref<customClassifyType>(
+    {
+        allOutput: [],
+        inuseOutput: [],
+        allInput: [],
+        inuseInput: []
+    }
+)
+
 const props = defineProps({
     // 写法一
     msg2: String,
@@ -83,7 +92,7 @@ const toBillDetial = (billID: number, billIndex: number) => {
     // console.log('个人修改账单---', userStore.gruopIndex, userStore.billIndex)
     uni.navigateTo({
         // url: '/pages/billDetial/index'
-        url: `/pages/billDetial/index?billID=${billID}`
+        url: `/pages/addBill/index?bill_id=${billID}`
     })
 },
     deleteBill = async (index: number, billID: number) => {
@@ -92,7 +101,6 @@ const toBillDetial = (billID: number, billIndex: number) => {
             billID: billID,
         }
         await billServer.deleteBill(params)
-        console.log('数据库删除成功')
         emits('deleteBill')
         /*最后再删除
         *（props.dayDate.splice(index, 1)写在emits后面，
@@ -106,25 +114,57 @@ const toBillDetial = (billID: number, billIndex: number) => {
 
 function filterClassifyIcon(billType: number, id: number) {
     if (billType == -1) {
-        let index = inuseOutput.value.findIndex(e => e.classifyId == id)
+        let index = allClassify.value.allOutput.findIndex(e => e.classify_id == id)
         if (index != -1)
-            return inuseOutput.value[index].icon
+            return allClassify.value.allOutput[index].icon
+        else
+            return "icon-jushoucang";
+    }
+    else {
+        let index = allClassify.value.allInput.findIndex(e => e.classify_id == id)
+        if (index != -1)
+            return allClassify.value.allInput[index].icon
+        else
+            return "icon-jushoucang";
+    }
+}
+
+function filterClassifyColor(billType: number, id: number) {
+    if (billType == -1) {
+        let index = allClassify.value.allOutput.findIndex(e => e.classify_id == id)
+        if (index != -1)
+            return allClassify.value.allOutput[index].color
+        else
+            return "#d98991;";
+    }
+    else {
+        let index = allClassify.value.allInput.findIndex(e => e.classify_id == id)
+        if (index != -1)
+            return allClassify.value.allInput[index].color
+        else
+            return "#d98991;";
+    }
+}
+
+function filterClassifyName(billType: number, id: number) {
+    if (billType == -1) {
+        let index = allClassify.value.allOutput.findIndex(e => e.classify_id == id)
+        if (index != -1)
+            return allClassify.value.allOutput[index].classify_name
         else
             return "自定义";
     }
     else {
-        let index = inuseInput.value.findIndex(e => e.classifyId == id)
+        let index = allClassify.value.allInput.findIndex(e => e.classify_id == id)
         if (index != -1)
-            return inuseInput.value[index].icon
+            return allClassify.value.allInput[index].classify_name
         else
             return "自定义";
     }
 }
 
 async function getCustomClassify() {
-    const res = await CustomClassify()
-    inuseOutput.value = defaultOutputClassify.concat(res.inuseCustomOutput)
-    inuseInput.value = defaultInputClassify.concat(res.inuseCustomInput)
+    allClassify.value = await CustomClassify()
 }
 
 onMounted(() => {

@@ -1,7 +1,7 @@
 <template>
     <view class="my-container">
         <headTop> <template v-slot:title>
-                {{ filters.billTypeFilter(classify) }}
+                {{ className }}
             </template></headTop>
         <view class="my-content">
             <view v-for="(item, index) in list">
@@ -25,14 +25,15 @@ import billDate from '@/pages/index/component/billDate.vue'
 const loginStore = useloginStore()
 const name = ref(loginStore.info.nickname)
 const classify = ref(0)
+const className = ref('')
 
 onLoad((option) => {
     if (option) {
         classify.value = option.classify
+        className.value = option.className
         getClassifyList(option.classify, option.month, option.billType)
     }
 })
-
 
 
 const list = ref<listObject[]>([])

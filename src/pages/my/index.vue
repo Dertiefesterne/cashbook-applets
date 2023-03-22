@@ -57,18 +57,25 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { onShow } from '@dcloudio/uni-app';
 import userServer from '@/api/userApi'
 import formattereTools from '@/utils/dataUtils'
 import { useloginStore } from '@/pinia-store/login'
 const loginStore = useloginStore()
 const avaSrc = ref('')
 onMounted(() => {
+	console.log('onM----')
 	if (loginStore.avatar.length)
 		avaSrc.value = loginStore.avatar
 	else
 		avaSrc.value = '/static/img/defaultAvatar.png'
 })
 
+onShow(() => {
+	console.log('oS----')
+	if (loginStore.avatar.length)
+		avaSrc.value = loginStore.avatar
+})
 // 用户注册时间
 const timestamp = loginStore.info.register_timestamp
 const bill_count = loginStore.info.bill_count || 0
