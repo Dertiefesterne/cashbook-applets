@@ -358,11 +358,12 @@ onMounted(() => {
 			margin-top: 30px;
 			border-radius: 10rpx;
 			background-color: var(--billBg);
+			padding: 25rpx 0 5rpx 0;
 
 			.classifyItem {
 				display: flex;
 				justify-content: space-between;
-				padding: 8rpx 5rpx 8px 5px;
+				padding: 0 5rpx 20rpx 3px;
 
 				.flex {
 					display: flex;

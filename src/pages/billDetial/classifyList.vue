@@ -63,6 +63,9 @@ const getClassifyList = async (classify: number, mon: number, type: number) => {
 
 <style lang="less" scoped>
 .my-container {
+    height: 100vh;
+    background-color: var(--keyBoradBg);
+    padding-bottom: 100rpx;
 
     .my-content {
         padding: 130rpx 20rpx 0;

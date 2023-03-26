@@ -201,7 +201,7 @@ page {
 	width: 100%;
 	overflow-y: auto;
 	color: var(--textColor);
-	padding-bottom: 100rpx;
+	padding-bottom: 120rpx;
 
 	.top {
 		width: 100%;
@@ -244,13 +244,13 @@ page {
 
 	.content {
 		background-color: var(--pickerContent);
-		padding: 20rpx 0;
+		// padding: 20rpx 0;
 
 		// height: 90%;
 		// // overflow-y: auto;
 		.menu {
-			margin-bottom: 20rpx;
-			padding: 40rpx 0 10rpx;
+			// margin-bottom: 20rpx;
+			padding: 60rpx 0 10rpx;
 			background-color: var(--pickerContent);
 			display: grid;
 			grid-template-columns: 1fr 1fr 1fr;
@@ -265,13 +265,13 @@ page {
 		}
 
 		.menu-item {
-			padding: 0 40rpx;
+			padding: 0 65rpx;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
 			height: 100rpx;
 			background-color: var(--pickerContent);
-			margin-bottom: 20rpx;
+			// margin-bottom: 20rpx;
 		}
 
 		.cancellation {
