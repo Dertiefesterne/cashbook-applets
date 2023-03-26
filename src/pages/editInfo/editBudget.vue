@@ -57,14 +57,14 @@ const modifyBudget = async () => {
 
         input {
             width: 100%;
-            border-bottom: 2px solid rgb(58, 58, 58);
+            border-bottom: 2px solid var(--weightBorderColor);
             margin: 100rpx 0 120rpx;
             font-size: 34rpx;
             font-weight: 600;
         }
 
         button {
-            background: rgba(174, 208, 238, 0.5);
+            background: var(--buttonBg);
             border-radius: 6rem;
 
             &::after {

@@ -6,7 +6,7 @@
                 <view class="first">
                     <view>
                         <p>今天支出</p>
-                        <p>{{ sumData.daySum ? sumData.daySum : 0 }}￥</p>
+                        <p>{{ sumData.daySum ? sumData.daySum.toFixed(2) : 0 }}￥</p>
                     </view>
                     <view @click="editBudget">点击设置预算
                         <i class="icon xianxing-15"></i>
@@ -72,7 +72,7 @@ const editBudget = () => {
 
     .content {
         padding: 40rpx;
-        background: #d0e2fa;
+        background: var(--billSumBg);
         border-radius: 1.5rem;
 
         .first {
@@ -93,7 +93,7 @@ const editBudget = () => {
         position: absolute;
         top: 0;
         right: 0;
-        background-color: rgba(255, 255, 255, 0.4);
+        background-color: var(--maskBg);
         z-index: 99;
     }
 }
@@ -104,7 +104,7 @@ const editBudget = () => {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: var(--modelBg);
 }
 
 .picker-content {
@@ -113,7 +113,7 @@ const editBudget = () => {
     left: 0;
     right: 0;
     z-index: 99;
-    background-color: #fff;
+    background-color: var(--pickerContent);
     border-radius: 20px 20px 0 0;
     transition: all 0.3s;
 }
@@ -129,6 +129,6 @@ const editBudget = () => {
     left: 0;
     right: 0;
     padding-bottom: 100rpx;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: var(--pickerContent);
 }
 </style>

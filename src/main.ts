@@ -9,6 +9,8 @@ import SvgIcon from '@/components/SvgIcon.vue';
 //svg方式引入图标（保留颜色）
 import './assets/iconfont.js';
 
+//主题色
+import '@/assets/theme.css'
 // import common from './utils/tool'
 
 // // 挂载

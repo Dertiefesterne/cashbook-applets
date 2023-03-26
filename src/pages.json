@@ -90,14 +90,4 @@
 		"navigationStyle": "custom"
 		//  #endif
 	}
-	// "globalStyle": {
-	// 	"navigationBarTextStyle": "black",
-	// 	"navigationBarTitleText": "七点专聘",
-	// 	"navigationBarBackgroundColor": "#ffffff",
-	// 	"backgroundColor": "#F8F8F8",
-	// 	"dynamicRpx": true,
-	// 	// #ifdef  H5
-	// 	"navigationStyle": "custom"
-	// 	//  #endif
-	// },
 }

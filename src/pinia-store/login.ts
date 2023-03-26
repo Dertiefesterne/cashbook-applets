@@ -21,6 +21,7 @@ export const useloginStore = defineStore({
       info: {} as userInfo, // 用户信息 , 包含 token
       userID: uni.getStorageSync('userID') ? Number(uni.getStorageSync('userID')) : -1,
       avatar: uni.getStorageSync('avatar') ? uni.getStorageSync('avatar') : '',
+      theme: uni.getStorageSync('theme') ? uni.getStorageSync('theme') : 'light',
     }
   },
   // actions 用来修改 state
@@ -64,6 +65,10 @@ export const useloginStore = defineStore({
     setAvatar(avatar: string) {
       uni.setStorageSync('avatar', avatar)
       this.avatar = avatar
+    },
+    setTheme(theme: string) {
+      uni.setStorageSync('theme', theme)
+      this.theme = theme
     }
   }
 })

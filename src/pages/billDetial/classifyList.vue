@@ -30,7 +30,7 @@ const className = ref('')
 onLoad((option) => {
     if (option) {
         classify.value = option.classify
-        className.value = option.className
+        className.value = option.classify_name
         getClassifyList(option.classify, option.month, option.billType)
     }
 })

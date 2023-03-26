@@ -15,7 +15,7 @@
             </view>
         </scroll-view> -->
         <view class="scrollx_items">
-            <qiun-data-charts type="column" width="5" :chartData="myData" :opts="opts2" />
+            <qiun-data-charts :background="theme" type="column" width="5" :chartData="myData" :opts="opts2" />
         </view>
     </view>
 </template>
@@ -25,6 +25,10 @@
 import { ref, onMounted, watch } from 'vue'
 import { chooseEven } from '@/entity/chart'
 
+import { useloginStore } from '@/pinia-store/login'
+const loginStore = useloginStore()
+
+const theme = loginStore.theme == 'light' ? '#fff' : '#101010'
 
 const emit = defineEmits(['update:modelValue', 'changeYearGroup']),
     props = defineProps({

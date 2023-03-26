@@ -17,22 +17,32 @@
 			<view class="menu">
 				<view class="item" @click="toEditInfo">
 					<svg-icon iconName="icon-gerenxinxi" className="big-size"></svg-icon>
+					<!-- <i class="iconfont icon-gerenxinxi"></i> -->
 					<p>个人信息</p>
 				</view>
-				<view class="item" @click="toEditClassify"> <svg-icon iconName="icon-fenlei"
-						className="big-size"></svg-icon>
+				<view class="item" @click="toEditClassify">
+					<svg-icon iconName="icon-fenlei" className="big-size"></svg-icon>
+					<!-- <i class="iconfont icon-fenlei"></i> -->
 					<p>类别管理</p>
 				</view>
-				<view class="item" @click="toEditLabel"> <svg-icon iconName="icon-biaoqian" className="big-size"></svg-icon>
+				<view class="item" @click="toEditLabel">
+					<svg-icon iconName="icon-biaoqian" className="big-size"></svg-icon>
+					<!-- <i class="iconfont icon-biaoqian"></i> -->
 					<p>惯用词管理</p>
 				</view>
-				<view class="item" @click="shoppingList"> <svg-icon iconName="icon-qingdan" className="big-size"></svg-icon>
+				<view class="item" @click="shoppingList">
+					<svg-icon iconName="icon-qingdan" className="big-size"></svg-icon>
+					<!-- <i class="iconfont icon-qingdan"></i> -->
 					<p>购物清单</p>
 				</view>
-				<view class="item"> <svg-icon iconName="icon-zhuti" className="big-size"></svg-icon>
+				<view class="item" @click="changeTheme">
+					<svg-icon iconName="icon-zhuti" className="big-size"></svg-icon>
+					<!-- <i class="iconfont icon-zhuti"></i> -->
 					<p>切换主题</p>
 				</view>
-				<view class="item" @click="toEditCode"> <svg-icon iconName="icon-drxx04" className="big-size"></svg-icon>
+				<view class="item" @click="toEditCode">
+					<svg-icon iconName="icon-drxx04" className="big-size"></svg-icon>
+					<!-- <i class="iconfont icon-drxx04"></i> -->
 					<p>修改密码</p>
 				</view>
 			</view>
@@ -61,6 +71,7 @@ import { onShow } from '@dcloudio/uni-app';
 import userServer from '@/api/userApi'
 import formattereTools from '@/utils/dataUtils'
 import { useloginStore } from '@/pinia-store/login'
+import cut from '@/utils/publicStyle'
 const loginStore = useloginStore()
 const avaSrc = ref('')
 onMounted(() => {
@@ -151,6 +162,15 @@ const loginOut = () => {
 			});
 		}
 	});
+}, changeTheme = () => {
+	if (loginStore.theme == 'light') {
+		cut(false)
+		loginStore.setTheme('balck')
+	}
+	else {
+		cut(true)
+		loginStore.setTheme('light')
+	}
 }
 
 onMounted(() => {
@@ -172,7 +192,7 @@ page {
 	.top {
 		width: 100%;
 		padding: 150rpx 0 20rpx;
-		background-color: #aed0ee;
+		background-color: var(--primaryColor);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -181,7 +201,7 @@ page {
 			width: 200rpx;
 			height: 200rpx;
 			border-radius: 50%;
-			border: 4px solid rgba(101, 101, 101, 0.4);
+			border: 4px solid var(--imageShadow);
 
 			image {
 				width: 100%;
@@ -209,7 +229,7 @@ page {
 	}
 
 	.content {
-		background-color: #f8f8fa;
+		background-color: var(--keyBoradBg);
 		padding: 20rpx 0;
 		// height: 90%;
 		// // overflow-y: auto;
@@ -217,7 +237,7 @@ page {
 		.menu {
 			margin-bottom: 20rpx;
 			padding: 40rpx 0 10rpx;
-			background-color: #fff;
+			background-color: var(--pickerContent);
 			display: grid;
 			grid-template-columns: 1fr 1fr 1fr;
 
@@ -236,7 +256,7 @@ page {
 			justify-content: space-between;
 			align-items: center;
 			height: 100rpx;
-			background-color: #fff;
+			background-color: var(--pickerContent);
 			margin-bottom: 20rpx;
 		}
 
@@ -247,7 +267,7 @@ page {
 			line-height: 90rpx;
 			text-align: center;
 			height: 90rpx;
-			background: rgba(174, 208, 238, 0.5);
+			background: var(--buttonBg);
 			border-radius: 6rem;
 			font-weight: bold;
 			font-size: 30rpx;
@@ -271,11 +291,11 @@ page {
 		.copy {
 			margin-top: 5rpx;
 			font-size: 26rpx;
-			color: #999;
+			color: var(--textLightColor);
 		}
 
 		.cancel {
-			color: #2979ff;
+			color: var(--addBtnColor);
 			font-size: 34rpx;
 			width: 100%;
 			text-align: right;

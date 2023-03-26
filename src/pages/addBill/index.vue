@@ -28,28 +28,28 @@
                 <!-- 系统默认标签 -->
                 <view class="scroll-item">
                     <view class="gaid-box">
-                        <view v-for="item in allClassify.allOutput.slice(0, 8)" class="classify"
+                        <view v-for="item in allClassify.inuseOutput.slice(0, 8)" class="classify"
                             @click="changeClassify(item.classify_id)">
                             <BillTypeIconVue :icon="item.icon" :choose="item.classify_id == billForm.classify"
                                 :bg-color="item.color" />
                             <p>{{ item.classify_name }}</p>
                         </view>
-                        <view class="classify" @click="isAddClassify = true" v-if="allClassify.allOutput.length == 7">
+                        <view class="classify" @click="isAddClassify = true" v-if="allClassify.inuseOutput.length == 7">
                             <BillTypeIconVue icon="icon-tianjia" :choose="billForm.classify == -1" bg-color="#b9b9b9;" />
                             <p>添加</p>
                         </view>
                     </view>
                 </view>
                 <!-- 自定义 -->
-                <view class="scroll-item" v-if="allClassify.allOutput.length > 8">
+                <view class="scroll-item" v-if="allClassify.inuseOutput.length > 7">
                     <view class="gaid-box">
-                        <view v-for="(item, index) in allClassify.allOutput.slice(8)" class="classify"
+                        <view v-for="(item, index) in allClassify.inuseOutput.slice(8)" class="classify"
                             @click="changeClassify(item.classify_id)">
                             <BillTypeIconVue :icon="item.icon" :choose="item.classify_id == billForm.classify"
                                 :bg-color="filters.customBillTypeColor(index)" />
                             <p>{{ item.classify_name }}</p>
                         </view>
-                        <view class="classify" @click="isAddClassify = true" v-if="allClassify.allOutput.length < 10">
+                        <view class="classify" @click="isAddClassify = true" v-if="allClassify.inuseOutput.length < 10">
                             <BillTypeIconVue icon="icon-tianjia" :choose="billForm.classify == -1" bg-color="#b9b9b9;" />
                             <p>添加</p>
                         </view>
@@ -58,12 +58,12 @@
             </scroll-view>
             <!-- 收入图标 -->
             <view class="gaid-box" v-if="chooseType == 1">
-                <view v-for="item in allClassify.allInput" class="classify" @click="changeClassify(item.classify_id)">
+                <view v-for="item in allClassify.inuseInput" class="classify" @click="changeClassify(item.classify_id)">
                     <BillTypeIconVue :icon="item.icon" :choose="item.classify_id == billForm.classify"
                         :bg-color="item.color" />
                     <p>{{ item.classify_name }}</p>
                 </view>
-                <view class="classify" @click="isAddClassify = true" v-if="allClassify.allInput.length < 8">
+                <view class="classify" @click="isAddClassify = true" v-if="allClassify.inuseInput.length < 8">
                     <BillTypeIconVue icon="icon-tianjia" :choose="billForm.classify == -1" bg-color="#b9b9b9;" />
                     <p>添加</p>
                 </view>
@@ -397,8 +397,14 @@ const changeChoose = (type: number) => {
             classify.value = ''
         }
         const rr = await userInfoApi.updataClassify(params)
-        console.log('rr', rr)
-        getCustomClassify()
+        console.log('保存类别成功rr', rr)
+        let temp = rr.data
+        if (chooseType.value == -1)
+            allClassify.value.inuseOutput.push(temp)
+        else
+            allClassify.value.inuseInput.push(temp)
+        console.log('保存类别成功后rr----', allClassify.value.inuseOutput, allClassify.value.inuseInput)
+        // getCustomClassify()
     },
     modifyBill = async () => {
         let money = Number(moneyDisplay.value)
@@ -547,7 +553,7 @@ onMounted(() => {
     padding: 0 40rpx;
     position: fixed;
     top: 0;
-    background: #dfdfe1;
+    background: var(--headBg);
     z-index: 2;
     display: flex;
     justify-content: center;
@@ -591,7 +597,7 @@ onMounted(() => {
 
         .yuan {
             font-size: 32rpx;
-            color: #999;
+            color: var(--textLightColor);
         }
     }
 
@@ -635,7 +641,7 @@ onMounted(() => {
 
             .matter-num {
                 font-size: 28rpx;
-                color: #999;
+                color: var(--textLightColor);
             }
         }
 
@@ -661,7 +667,7 @@ onMounted(() => {
         .tagsBox {
             overflow: hidden;
             width: 100%;
-            background: #d0e2fa;
+            background: var(--billSumBg);
             padding: 20rpx;
             position: relative;
 
@@ -685,7 +691,7 @@ onMounted(() => {
 
                 .tab {
                     padding: 5rpx 15rpx;
-                    background: #fff;
+                    background: var(--pickerContent);
                     border-radius: 0.5rem;
                     margin-right: 10rpx;
                     display: inline-block;
@@ -693,21 +699,21 @@ onMounted(() => {
             }
 
             .iconBox {
-                background: #d0e2fa;
+                background: var(--billSumBg);
             }
         }
 
         .but-box {
             width: 100%;
-            background: #f8f8fa;
+            background: var(--keyBoradBg);
             display: flex;
             padding: 20rpx;
 
             button {
                 width: 150rpx;
                 height: 100rpx;
-                background-color: #fff;
-                box-shadow: 0 5px 5px #dfdfe1;
+                background-color: var(--pickerContent);
+                box-shadow: 0 5px 5px var(--keyBoradShadow);
                 border-radius: 2rem;
             }
 
@@ -717,7 +723,7 @@ onMounted(() => {
 
             button:focus {
                 outline: none; //去除点击之后默认的边框
-                background: #fff;
+                background: var(--pickerContent);
             }
 
             .sub {
@@ -749,14 +755,15 @@ onMounted(() => {
 }
 
 .chooseBorder {
-    border-bottom: 2px solid #559eff;
+    // border-bottom: 2px solid #559eff;
+    border-bottom: 2px solid var(--addBtnColor);
 }
 
 .addClassify {
     :deep(.u-popup__content) {
         width: 70%;
         height: 36%;
-        background-color: #fff;
+        background-color: var(--pickerContent);
         position: relative;
         border-radius: 10rpx;
         padding: 40rpx;
@@ -776,7 +783,8 @@ onMounted(() => {
             width: 80%;
             display: flex;
             font-size: 32rpx;
-            border-bottom: 2px solid rgb(165, 165, 165);
+            // border-bottom: 2px solid rgb(165, 165, 165);
+            border-bottom: 2px solid var(--borderColor);
             align-items: center;
             padding: 5rpx 15rpx;
             margin: 0 auto;
@@ -788,7 +796,7 @@ onMounted(() => {
 
             .matter-num {
                 font-size: 28rpx;
-                color: #999;
+                color: var(--textLightColor);
             }
         }
 
@@ -803,12 +811,12 @@ onMounted(() => {
 
         .save {
             margin-top: 30rpx;
-            background: rgba(174, 208, 238, 0.5);
+            background: var(--buttonBg);
             text-align: center;
         }
 
         .cancel {
-            background-color: rgba(221, 222, 224, 0.5);
+            background-color: var(--cancelButtonBg);
             margin-top: 10rpx;
         }
     }

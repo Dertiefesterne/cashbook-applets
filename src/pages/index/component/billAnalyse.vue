@@ -1,7 +1,7 @@
 <template>
     <view>
         <view @click="show = true" class="icon-box">
-            <u-icon name="plus" color="#2979ff" size="40"></u-icon>
+            <u-icon name="plus" size="40"></u-icon>
         </view>
         <view class="picker-modal" v-if="show" @click="_close"></view>
         <view class="picker-content" :style="{ transform: show ? 'translateY(0)' : 'translateY(100%)' }">
@@ -118,6 +118,10 @@ const _close = () => {
 
     .u-icon {
         font-weight: 700;
+
+        :deep(.uicon-plus) {
+            color: var(--addBtnColor) !important;
+        }
     }
 }
 
@@ -127,7 +131,7 @@ const _close = () => {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: var()
 }
 
 .picker-content {
@@ -136,7 +140,7 @@ const _close = () => {
     left: 0;
     right: 0;
     z-index: 99;
-    background-color: #fff;
+    background-color: var(--pickerContent);
     border-radius: 20px 20px 0 0;
     transition: all 0.3s;
 }
@@ -152,7 +156,7 @@ const _close = () => {
     left: 0;
     right: 0;
     padding-bottom: 100rpx;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: var(--pickerContent);
 
     .content {
         width: 100%;

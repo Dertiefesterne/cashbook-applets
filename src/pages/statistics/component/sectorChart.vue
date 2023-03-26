@@ -7,7 +7,7 @@
         <u-picker :show="show" :columns="rangeData" closeOnClickOverlay @close="show = false"
             @confirm="chooseMonth"></u-picker>
         <view class="charts-box" v-if="myData?.categories.length">
-            <qiun-data-charts type="pie" :chartData="myData" />
+            <qiun-data-charts type="pie" :background="theme" :chartData="myData" />
         </view>
         <view class="no-charts" v-else>
             <i class="iconfont icon-zanwushuju" style="font-size:200rpx"></i>
@@ -22,6 +22,12 @@ import { ref, onMounted, watch } from 'vue'
 import type { PropType } from 'vue'
 import { chooseEven } from '@/entity/chart'
 import { sector } from '@/entity/chart'
+
+import { useloginStore } from '@/pinia-store/login'
+const loginStore = useloginStore()
+
+const theme = loginStore.theme == 'light' ? '#fff' : '#101010'
+
 const emit = defineEmits(['update:modelValue', 'changeMonthGroup']),
     props = defineProps({
         rangeData: {
@@ -104,7 +110,7 @@ watch(
 
         p,
         i {
-            color: #c0c4cc;
+            color: var(--lightColor);
         }
     }
 }

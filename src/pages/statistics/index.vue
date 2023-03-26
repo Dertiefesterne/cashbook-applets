@@ -206,6 +206,7 @@ const getYearGroupData = async (year: string, mon: string) => {
 		})
 	},
 	toClassifyListDetial = (classify: number, name: string) => {
+		console.log('name---', name)
 		uni.navigateTo({
 			// url: '/pages/billDetial/index'
 			url: `/pages/billDetial/classifyList?classify=${classify}&classify_name=${name}&month=${currentClassifyMonth.value}&billType=${chooseType.value}`
@@ -284,8 +285,8 @@ onMounted(() => {
 <style lang="less" scoped>
 .container {
 	width: 100%;
-	padding-top: 110rpx;
-
+	padding-top: 100rpx;
+	background-color: var(--pickerContent);
 	// .head {
 	// 	width: 100%;
 	// 	height: 100rpx;
@@ -315,7 +316,7 @@ onMounted(() => {
 		padding: 0 40rpx;
 		position: fixed;
 		top: 0;
-		background: #dfdfe1;
+		background: var(--headBg);
 		z-index: 2;
 		display: flex;
 		justify-content: center;
@@ -339,7 +340,8 @@ onMounted(() => {
 	}
 
 	.chooseBorder {
-		border-bottom: 2px solid #559eff;
+		// border-bottom: 2px solid #559eff;
+		border-bottom: 2px solid var(--addBtnColor);
 	}
 
 	.content {
@@ -347,8 +349,8 @@ onMounted(() => {
 		padding: 0 0 40rpx 0;
 
 		.classifyList {
-			padding: 0 70rpx;
-			margin-top: 40rpx;
+			padding: 60rpx 70rpx 0;
+			background-color: var(--pickerContent);
 
 			.classifyItem {
 				display: flex;
@@ -381,7 +383,7 @@ onMounted(() => {
 				font-size: 30rpx;
 				line-height: 25px;
 				// border-bottom: 1px solid #2979FF;
-				color: #2979FF;
+				color: var(--addBtnColor);
 				text-decoration: underline;
 			}
 
@@ -389,7 +391,7 @@ onMounted(() => {
 
 		p,
 		i {
-			color: #c0c4cc;
+			color: var(--lightColor);
 		}
 	}
 }

@@ -11,6 +11,7 @@
             </view>
             <view class="menu-item">ID <view class="icon">{{ loginStore.userID }}
                     <svg-icon title="复制" iconName="icon-fuzhi" @click="copyBtn(loginStore.userID)"></svg-icon>
+                    <!-- <i class="iconfont icon-fuzhi" title="复制" @click="copyBtn(loginStore.userID)"></i> -->
                 </view>
             </view>
             <view class="menu-item" @click="toEditName">昵称
@@ -202,7 +203,7 @@ function choosePic() {
 
     .content {
         padding: 120rpx 20rpx 20rpx;
-        background-color: #f8f8fa;
+        background-color: var(--keyBoradBg);
         height: 100%;
 
         .menu-item {
@@ -211,7 +212,7 @@ function choosePic() {
             justify-content: space-between;
             align-items: center;
             height: 100rpx;
-            background-color: #fff;
+            background-color: var(--pickerContent);
             margin-bottom: 20rpx;
 
             .icon {
@@ -242,7 +243,7 @@ function choosePic() {
         line-height: 90rpx;
         text-align: center;
         height: 90rpx;
-        background: rgba(174, 208, 238, 0.5);
+        background: var(--buttonBg);
         border-radius: 6rem;
         font-weight: bold;
         font-size: 30rpx;

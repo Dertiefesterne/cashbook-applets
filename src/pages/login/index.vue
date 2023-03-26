@@ -14,6 +14,8 @@
     <view class="login-btn">
       <button @click="confirmLogin" hover-class='none' :disabled="noRegister">登录</button>
       <button @click="registerUser" hover-class='none' :disabled="!noRegister">注册</button>
+      <button @click="test" hover-class='none'>哈哈</button>
+      <button @click="test2" hover-class='none'>哈哈2</button>
     </view>
   </view>
 </template>
@@ -23,6 +25,7 @@ import { ref, onMounted } from 'vue'
 import userServer from '@/api/userApi'
 import { debounce } from '@/utils/funTools'
 import { useloginStore } from '@/pinia-store/login'
+import cut from '@/utils/publicStyle'
 const loginStore = useloginStore()
 
 const userName = ref(''),
@@ -119,6 +122,12 @@ const registerUser = async () => {
     uni.reLaunch({
       url: '/pages/index/index'
     })
+  },
+  test = () => {
+    cut(true)
+  },
+  test2 = () => {
+    cut(false)
   }
 onMounted(() => {
 })
@@ -138,7 +147,8 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     padding-top: 300rpx;
-    background-color: #aed0ee;
+    // background-color: #aed0ee;
+    background: var(--primaryColor);
   }
 
   .table {
@@ -148,17 +158,17 @@ onMounted(() => {
     ::v-deep input {
       width: 100%;
       height: 100rpx;
-      border-bottom: 1px solid rgb(201, 201, 201);
+      border-bottom: 1px solid var(--borderColor);
     }
 
     .info-warn {
       display: flex;
       width: 1005;
       padding: 10rpx 0;
-      background-color: #fef5ec;
+      background-color: var(--warmBg);
       line-height: 35rpx;
       font-size: 26rpx;
-      color: red;
+      color: var(--warnColor);
 
       .u-icon {
         margin-right: 10rpx;
@@ -172,7 +182,7 @@ onMounted(() => {
 
     button {
       width: 100%;
-      background: rgba(174, 208, 238, 0.5);
+      background: var(--buttonBg);
       margin-top: 20rpx;
       border-radius: 6rem;
 

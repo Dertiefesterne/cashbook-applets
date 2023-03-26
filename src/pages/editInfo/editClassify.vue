@@ -95,6 +95,7 @@ const addNewLabel = async () => {
             url: '/pages/my/index'
         })
     }
+
     userInfoApi.updataClassify({ userID: userID, outputClassify: outputClassify.value.join(',') })
     userInfoApi.updataClassify({ userID: userID, inputClassify: inputClassify.value.join(',') })
 }, addOutputClassify = async () => {
@@ -145,7 +146,7 @@ const addNewLabel = async () => {
             // padding: 0 140rpx;
             input {
                 width: 200rpx;
-                border-bottom: 2px solid rgb(58, 58, 58);
+                border-bottom: 2px solid var(--weightBorderColor);
                 font-size: 34rpx;
                 font-weight: 600;
             }
@@ -155,7 +156,7 @@ const addNewLabel = async () => {
                 height: 25px;
                 text-align: center;
                 line-height: 25px;
-                background: rgba(174, 208, 238, 0.5);
+                background: var(--buttonBg);
                 border-radius: 10px;
                 white-space: nowrap;
             }
@@ -163,7 +164,7 @@ const addNewLabel = async () => {
 
         .advice {
             font-size: 12px;
-            color: #999;
+            color: var(--textLightColor);
         }
 
         .alreadyAdd {

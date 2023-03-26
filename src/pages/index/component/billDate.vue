@@ -182,7 +182,7 @@ onMounted(() => {
     .content {
         margin: 0 40rpx;
         padding: 30rpx;
-        background: #f6f7f8;
+        background: var(--billBg);
         border-radius: 1.5rem;
 
         .head {

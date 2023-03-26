@@ -267,7 +267,7 @@ onMounted(() => {
     padding: 0 40rpx;
     position: fixed;
     top: 0;
-    background: #dfdfe1;
+    background: var(--headBg);
     z-index: 2;
   }
 
@@ -287,7 +287,7 @@ onMounted(() => {
       margin-bottom: 40rpx;
 
       .addBtn {
-        background: #bcd4e7;
+        background: var(--addBtnBg);
       }
     }
   }
@@ -298,7 +298,7 @@ onMounted(() => {
     bottom: 200rpx;
     width: 100rpx;
     height: 100rpx;
-    background-color: #bcd4e7;
+    background-color: var(--addBtnBg);
     display: flex;
     justify-content: center;
     align-items: center;

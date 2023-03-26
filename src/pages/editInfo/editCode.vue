@@ -142,7 +142,7 @@ const modifyNickName = async () => {
 
         input {
             width: 100%;
-            border-bottom: 2px solid rgb(58, 58, 58);
+            border-bottom: 2px solid var(--weightBorderColor);
             margin-top: 20rpx;
             font-size: 30rpx;
         }
@@ -152,7 +152,7 @@ const modifyNickName = async () => {
     .confirm {
         margin-top: 60rpx;
         width: 100%;
-        background: rgba(174, 208, 238, 0.5);
+        background: var(--buttonBg);
         border-radius: 6rem;
 
         &::after {
