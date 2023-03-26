@@ -135,10 +135,14 @@ const modifyNickName = async () => {
 
 <style lang="less" scoped>
 .container {
+    height: 100vh;
+    background-color: var(--pickerContent);
+    color: var(--textColor);
+    padding-bottom: 100rpx;
 
     .content {
-        padding: 100rpx 140rpx 0;
-        margin-top: 120rpx;
+        padding: 220rpx 140rpx 0;
+        // margin-top: 120rpx;
 
         input {
             width: 100%;

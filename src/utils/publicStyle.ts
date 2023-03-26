@@ -15,32 +15,34 @@ const cut = (cutcheack: Boolean) => {
     document.getElementsByTagName('body')[0].style.setProperty('--weightBorderColor', cutcheack ? '#3A3A3A' : '#999')
     document.getElementsByTagName('body')[0].style.setProperty('--warmBg', cutcheack ? '#fef5ec' : '#999')
     document.getElementsByTagName('body')[0].style.setProperty('--warnColor', cutcheack ? '#FF0000' : '#999')
-    document.getElementsByTagName('body')[0].style.setProperty('--buttonBg', cutcheack ? 'rgba(174, 208, 238, 0.5)' : '#999')
-    document.getElementsByTagName('body')[0].style.setProperty('--cancelButtonBg', cutcheack ? 'rgba(221, 222, 224, 0.5)' : '#999')
+    document.getElementsByTagName('body')[0].style.setProperty('--buttonBg', cutcheack ? 'rgba(174, 208, 238, 0.5)' : '#454340')
+    document.getElementsByTagName('body')[0].style.setProperty('--cancelButtonBg', cutcheack ? 'rgba(221, 222, 224, 0.5)' : 'rgba(221, 222, 224, 0.5)')
 
     document.getElementsByTagName('body')[0].style.setProperty('--headBg', cutcheack ? '#dfdfe1' : '#1d1d1d')
-    document.getElementsByTagName('body')[0].style.setProperty('--addBtnBg', cutcheack ? '#bcd4e7' : '#999')
-    document.getElementsByTagName('body')[0].style.setProperty('--addBtnColor', cutcheack ? '#2979ff' : '#999')
+    document.getElementsByTagName('body')[0].style.setProperty('--addBtnBg', cutcheack ? '#bcd4e7' : '#343434')
+    document.getElementsByTagName('body')[0].style.setProperty('--addBtnColor', cutcheack ? '#2979ff' : '#2979ff')
     document.getElementsByTagName('body')[0].style.setProperty('--modelBg', cutcheack ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.4)')
 
     document.getElementsByTagName('body')[0].style.setProperty('--pickerContent', cutcheack ? '#fff' : '#101010')
 
-    document.getElementsByTagName('body')[0].style.setProperty('--billBg', cutcheack ? '#f6f7f8' : '#999')
-    document.getElementsByTagName('body')[0].style.setProperty('--billSumBg', cutcheack ? '#d0e2fa' : '#999')
+    document.getElementsByTagName('body')[0].style.setProperty('--billBg', cutcheack ? '#f6f7f8' : '#343434')
+    document.getElementsByTagName('body')[0].style.setProperty('--billSumBg', cutcheack ? '#d0e2fa' : '#f3e4b9')
     document.getElementsByTagName('body')[0].style.setProperty('--maskBg', cutcheack ? 'rgba(255, 255, 255, 0.4)' : '#999')
 
-    document.getElementsByTagName('body')[0].style.setProperty('--textLightColor', cutcheack ? '#999999' : '#fff')
+    document.getElementsByTagName('body')[0].style.setProperty('--textLightColor', cutcheack ? '#999999' : '#999')
     document.getElementsByTagName('body')[0].style.setProperty('--lightColor', cutcheack ? '#c0c4cc' : '#fff')
 
-    document.getElementsByTagName('body')[0].style.setProperty('--keyBoradBg', cutcheack ? '#f8f8fa' : '#fff')
-    document.getElementsByTagName('body')[0].style.setProperty('--keyBoradShadow', cutcheack ? '#dfdfe1' : '#fff')
+    document.getElementsByTagName('body')[0].style.setProperty('--keyBoradBg', cutcheack ? '#f8f8fa' : '#282828')
+    document.getElementsByTagName('body')[0].style.setProperty('--keyBoradHead', cutcheack ? '#d0e2fa' : '#1d1d1d')
+    document.getElementsByTagName('body')[0].style.setProperty('--keyBoradBtn', cutcheack ? '#fff' : '#585858')
+    document.getElementsByTagName('body')[0].style.setProperty('--keyBoradShadow', cutcheack ? '#dfdfe1' : '#000')
 
-    document.getElementsByTagName('body')[0].style.setProperty('--imageShadow', cutcheack ? 'rgba(101, 101, 101, 0.4)' : '#fff')
+    document.getElementsByTagName('body')[0].style.setProperty('--imageShadow', cutcheack ? 'rgba(101, 101, 101, 0.4)' : 'rgba(125, 125, 125, 0.4)')
+    document.getElementsByTagName('body')[0].style.setProperty('--textColor', cutcheack ? '#282828' : '#d2d2d2')
+    document.getElementsByTagName('body')[0].style.setProperty('--textSecondColor', cutcheack ? '#282828' : '#fefefe')
+    document.getElementsByTagName('body')[0].style.setProperty('--textThirdColor', cutcheack ? '#282828' : '#eeeeee')
 
-
-
-
-
+    document.getElementsByTagName('body')[0].style.setProperty('--menuItem', cutcheack ? '#f8f8fa' : '#181818')
 
 
 
@@ -51,9 +53,6 @@ const cut = (cutcheack: Boolean) => {
     document.getElementsByTagName('body')[0].style.setProperty('--rightBgcColor', cutcheack ? '#070707' : '#F4F4F4')
 
     // 文字颜色
-    document.getElementsByTagName('body')[0].style.setProperty('--textColor', cutcheack ? '#fff' : '#282828')
-    document.getElementsByTagName('body')[0].style.setProperty('--textSecondColor', cutcheack ? '#000' : '#fff')
-    document.getElementsByTagName('body')[0].style.setProperty('--textThirdColor', cutcheack ? '#7c7c83' : '#282828')
     document.getElementsByTagName('body')[0].style.setProperty('--textFourthColor', cutcheack ? '#fff' : '#999999')
     document.getElementsByTagName('body')[0].style.setProperty('--textFifthColor', cutcheack ? '#999999' : '#fff')
     document.getElementsByTagName('body')[0].style.setProperty('--textSixthColor', cutcheack ? '#7c7c83' : '#787878')

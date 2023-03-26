@@ -268,6 +268,7 @@ onMounted(() => {
     position: fixed;
     top: 0;
     background: var(--headBg);
+    color: var(--textColor);
     z-index: 2;
   }
 
@@ -276,6 +277,7 @@ onMounted(() => {
     flex-direction: column;
     padding-top: 100rpx;
     width: 100%;
+    background-color: var(--pickerContent);
 
     button::after {
       border: none;
@@ -288,6 +290,7 @@ onMounted(() => {
 
       .addBtn {
         background: var(--addBtnBg);
+        color: var(--textSecondColor);
       }
     }
   }
@@ -298,7 +301,7 @@ onMounted(() => {
     bottom: 200rpx;
     width: 100rpx;
     height: 100rpx;
-    background-color: var(--addBtnBg);
+    background-color: #bcd4e7;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -554,6 +554,7 @@ onMounted(() => {
     position: fixed;
     top: 0;
     background: var(--headBg);
+    color: var(--textColor);
     z-index: 2;
     display: flex;
     justify-content: center;
@@ -574,9 +575,14 @@ onMounted(() => {
         position: absolute;
         right: 20rpx;
     }
+
+    :depp(.uicon-checkmark) {
+        color: var(--textColor) !important;
+    }
 }
 
 .content {
+    background-color: var(--pickerContent);
     padding: 100rpx 0 600rpx;
     width: 100%;
 
@@ -585,6 +591,7 @@ onMounted(() => {
         flex-direction: row-reverse;
         padding: 20rpx 40rpx;
         width: 100%;
+        color: var(--textColor);
 
         text {
             white-space: normal;
@@ -625,6 +632,7 @@ onMounted(() => {
     .date-box {
         padding: 0 40rpx;
         margin-top: 50rpx;
+        color: var(--textColor);
 
         .matter {
             display: flex;
@@ -633,6 +641,10 @@ onMounted(() => {
 
             .u-icon {
                 margin-right: 20rpx;
+
+                :depp(.uicon-edit-pen) {
+                    color: var(--textColor) !important;
+                }
             }
 
             .matter-input {
@@ -667,12 +679,13 @@ onMounted(() => {
         .tagsBox {
             overflow: hidden;
             width: 100%;
-            background: var(--billSumBg);
+            background: var(--keyBoradHead);
             padding: 20rpx;
             position: relative;
 
             text {
                 white-space: nowrap;
+                color: var(--textThirdColor);
             }
 
             .iconBox {
@@ -691,7 +704,7 @@ onMounted(() => {
 
                 .tab {
                     padding: 5rpx 15rpx;
-                    background: var(--pickerContent);
+                    background: var(--keyBoradBtn);
                     border-radius: 0.5rem;
                     margin-right: 10rpx;
                     display: inline-block;
@@ -699,7 +712,7 @@ onMounted(() => {
             }
 
             .iconBox {
-                background: var(--billSumBg);
+                background: var(--keyBoradHead);
             }
         }
 
@@ -712,7 +725,8 @@ onMounted(() => {
             button {
                 width: 150rpx;
                 height: 100rpx;
-                background-color: var(--pickerContent);
+                color: var(--textSecondColor);
+                background-color: var(--keyBoradBtn);
                 box-shadow: 0 5px 5px var(--keyBoradShadow);
                 border-radius: 2rem;
             }

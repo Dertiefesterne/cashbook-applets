@@ -28,7 +28,8 @@ const back = () => {
     padding: 0 40rpx;
     position: fixed;
     top: 0;
-    background: #dfdfe1;
+    background: var(--headBg);
+    color: var(--textColor);
     z-index: 2;
     display: flex;
     align-items: center;

@@ -25,6 +25,10 @@ const loginStore = useloginStore()
 
 <style lang="less" scoped>
 .container {
+    height: 100vh;
+    background-color: var(--pickerContent);
+    color: var(--textColor);
+    padding-bottom: 100rpx;
 
     .content {
         padding: 100rpx 140rpx 0;

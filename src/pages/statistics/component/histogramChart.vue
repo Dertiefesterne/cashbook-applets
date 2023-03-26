@@ -130,6 +130,7 @@ onMounted(() => {
         padding: 10rpx 20rpx 0;
         display: flex;
         float: right;
+        color: var(--textColor);
     }
 
     .charts-box {

@@ -131,10 +131,13 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .big-contaniner {
+    color: var(--textColor);
+
     .month-picker {
         padding: 10rpx 20rpx 0;
         display: flex;
         float: right;
+        color: var(--textColor) !important;
     }
 
     .charts-box {

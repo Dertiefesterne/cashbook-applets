@@ -15,7 +15,7 @@
                         <view class="item" :style="`background:${filterClassifyColor(item.bill_type, item.classify)}`">
                             <i class="iconfont" :class="filterClassifyIcon(item.bill_type, item.classify)"></i>
                         </view>
-                        <view>
+                        <view class="text">
                             <p style="margin-bottom: 5rpx;">{{ item.matter }} | {{
                                 filterClassifyName(item.bill_type, item.classify)
                             }}
@@ -23,7 +23,7 @@
                             <p>{{ formattereTools.dateFormatString(item.time, "time") }}</p>
                         </view>
                     </view>
-                    <view class="items">
+                    <view class="items text">
                         {{ item.bill_type == 1 ? "+" : "-" }}{{ item.money.toFixed(2) }}
                     </view>
                 </view>
@@ -189,6 +189,7 @@ onMounted(() => {
             display: flex;
             justify-content: space-between;
             margin-bottom: 15rpx;
+            color: var(--textSecondColor);
         }
 
         .bill-list {
@@ -215,6 +216,10 @@ onMounted(() => {
                         border-radius: 2rem;
                         margin: 0 15rpx;
                     }
+                }
+
+                .text {
+                    color: var(--textSecondColor);
                 }
             }
 

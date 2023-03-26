@@ -19,10 +19,10 @@ onLaunch(() => {
     }
     else {
       uni.setTabBarStyle({
-        "color": "#fff", // tab 上的文字默认颜色
+        "color": "#cfcfcf", // tab 上的文字默认颜色
         "selectedColor": "#3376e5", // tab 上的文字选中时的颜色
         "borderStyle": "white", // tabbar 上边框的颜色，可选值 black/white
-        "backgroundColor": "#101010", // tab 的背景色
+        "backgroundColor": "#1d1d1d", // tab 的背景色
       })
       cut(false)
     }

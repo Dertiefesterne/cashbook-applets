@@ -166,10 +166,22 @@ const loginOut = () => {
 	if (loginStore.theme == 'light') {
 		cut(false)
 		loginStore.setTheme('balck')
+		uni.setTabBarStyle({
+			"color": "#cfcfcf", // tab 上的文字默认颜色
+			"selectedColor": "#3376e5", // tab 上的文字选中时的颜色
+			"borderStyle": "white", // tabbar 上边框的颜色，可选值 black/white
+			"backgroundColor": "#1d1d1d", // tab 的背景色
+		})
 	}
 	else {
 		cut(true)
 		loginStore.setTheme('light')
+		uni.setTabBarStyle({
+			"color": "#bfbfbf", // tab 上的文字默认颜色
+			"selectedColor": "#3376e5", // tab 上的文字选中时的颜色
+			"borderStyle": "black", // tabbar 上边框的颜色，可选值 black/white
+			"backgroundColor": "#ffffff", // tab 的背景色
+		})
 	}
 }
 
@@ -185,14 +197,16 @@ page {
 }
 
 .contaniner {
+	height: 100vh;
 	width: 100%;
-	height: 100%;
 	overflow-y: auto;
+	color: var(--textColor);
+	padding-bottom: 100rpx;
 
 	.top {
 		width: 100%;
 		padding: 150rpx 0 20rpx;
-		background-color: var(--primaryColor);
+		background-color: var(--keyBoradHead);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -229,11 +243,11 @@ page {
 	}
 
 	.content {
-		background-color: var(--keyBoradBg);
+		background-color: var(--pickerContent);
 		padding: 20rpx 0;
+
 		// height: 90%;
 		// // overflow-y: auto;
-
 		.menu {
 			margin-bottom: 20rpx;
 			padding: 40rpx 0 10rpx;
@@ -279,8 +293,9 @@ page {
 
 .advice-popup {
 	:deep(.u-popup__content) {
-		padding: 20rpx;
+		padding: 50rpx;
 		border-radius: 1rem;
+		background-color: var(--menuItem);
 
 		.head-title {
 			font-size: 36rpx;

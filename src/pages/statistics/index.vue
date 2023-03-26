@@ -19,10 +19,12 @@
 					<view class="flex">
 						<BillTypeIconVue :icon="filterClassifyIcon(chooseType, item.classify)" type="small"
 							:bg-color="filters.billTypeColor2(index)" />
-						{{ filterClassifyName(chooseType, item.classify) }}
-						<span>{{ item.count }}笔</span>
+						<span class="text">
+							{{ filterClassifyName(chooseType, item.classify) }}
+						</span>
+						<span class="text">{{ item.count }}笔</span>
 					</view>
-					<view class="flex">
+					<view class="flex text">
 						-{{ item.sums.toFixed(2) }}￥
 						<u-icon name="arrow-right"></u-icon>
 					</view>
@@ -317,6 +319,7 @@ onMounted(() => {
 		position: fixed;
 		top: 0;
 		background: var(--headBg);
+		color: var(--textColor);
 		z-index: 2;
 		display: flex;
 		justify-content: center;
@@ -349,17 +352,25 @@ onMounted(() => {
 		padding: 0 0 40rpx 0;
 
 		.classifyList {
-			padding: 60rpx 70rpx 0;
-			background-color: var(--pickerContent);
+			// padding: 60rpx 70rpx 0;
+			width: 85%;
+			margin: 0 auto;
+			margin-top: 30px;
+			border-radius: 10rpx;
+			background-color: var(--billBg);
 
 			.classifyItem {
 				display: flex;
 				justify-content: space-between;
-				margin-bottom: 10rpx;
+				padding: 8rpx 5rpx 8px 5px;
 
 				.flex {
 					display: flex;
 					align-items: center;
+				}
+
+				.text {
+					color: var(--textColor);
 				}
 			}
 		}

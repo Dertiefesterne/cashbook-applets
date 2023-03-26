@@ -1,5 +1,5 @@
 <template>
-    <view class="container">
+    <view class="my-container">
         <headTop>
             <template v-slot:title>
                 个人信息
@@ -25,8 +25,10 @@
             }}</span>
             </view>
         </view>
-        <view class="cancellation" @click="loginOut">退出登录</view>
-        <view class="cancellation" @click="cancellationAcount">注销账号</view>
+        <view>
+            <view class="cancellation" @click="loginOut">退出登录</view>
+            <view class="cancellation" @click="cancellationAcount">注销账号</view>
+        </view>
     </view>
 </template>
 
@@ -199,20 +201,23 @@ function choosePic() {
 
 
 <style lang="less" scoped>
-.container {
+.my-container {
+    height: 100vh;
+    background-color: var(--pickerContent);
+    color: var(--textColor);
+    padding-bottom: 100rpx;
 
     .content {
-        padding: 120rpx 20rpx 20rpx;
-        background-color: var(--keyBoradBg);
-        height: 100%;
+        padding: 120rpx 20px 20rpx;
 
         .menu-item {
             padding: 0 40rpx;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-radius: 10rpx;
             height: 100rpx;
-            background-color: var(--pickerContent);
+            background-color: var(--menuItem);
             margin-bottom: 20rpx;
 
             .icon {

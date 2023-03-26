@@ -161,6 +161,7 @@ const _close = () => {
     .content {
         width: 100%;
         padding: 40rpx;
+        color: var(--textColor);
 
         .label-box {
             display: flex;

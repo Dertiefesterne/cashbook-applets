@@ -93,6 +93,7 @@ watch(
         padding: 10rpx 20rpx 0;
         display: flex;
         float: right;
+        color: var(--textColor);
     }
 
     /* 请根据需求修改图表容器尺寸，如果父容器没有高度图表则会显示异常 */
