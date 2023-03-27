@@ -4,6 +4,7 @@ import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 import cut from '@/utils/publicStyle'
 const loginStore = useloginStore()
 onLaunch(() => {
+
   console.log("App Launch", uni.getStorageSync('userID'), loginStore.userID, uni.getStorageSync('info'), loginStore.info,);
   if (uni.getStorageSync('theme')) {
     // 全局保存用户ID
@@ -26,6 +27,9 @@ onLaunch(() => {
       })
       cut(false)
     }
+  }
+  else {
+    cut(true)
   }
   if (uni.getStorageSync('userID')) {
     // 全局保存用户ID
