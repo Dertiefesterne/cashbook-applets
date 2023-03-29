@@ -21,5 +21,12 @@ export default {
             method: 'GET',
             data
         })
+    },
+    delete(data: any) {
+        return http.request({
+            url: '/toBuy/delete',
+            method: 'POST',
+            data
+        })
     }
 }
