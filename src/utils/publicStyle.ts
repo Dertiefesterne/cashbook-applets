@@ -13,8 +13,8 @@ const cut = (cutcheack: Boolean) => {
     document.getElementsByTagName('body')[0].style.setProperty('--primaryColor', cutcheack ? '#aed0ee' : '#999')
     document.getElementsByTagName('body')[0].style.setProperty('--borderColor', cutcheack ? '#C9C9C9' : '#999')
     document.getElementsByTagName('body')[0].style.setProperty('--weightBorderColor', cutcheack ? '#3A3A3A' : '#999')
-    document.getElementsByTagName('body')[0].style.setProperty('--warmBg', cutcheack ? '#fef5ec' : '#999')
-    document.getElementsByTagName('body')[0].style.setProperty('--warnColor', cutcheack ? '#FF0000' : '#999')
+    document.getElementsByTagName('body')[0].style.setProperty('--warmBg', cutcheack ? '#fef5ec' : '#fef5ec')
+    document.getElementsByTagName('body')[0].style.setProperty('--warnColor', cutcheack ? '#FF0000' : '#FF0000')
     document.getElementsByTagName('body')[0].style.setProperty('--buttonBg', cutcheack ? 'rgba(174, 208, 238, 0.5)' : '#454340')
     document.getElementsByTagName('body')[0].style.setProperty('--cancelButtonBg', cutcheack ? 'rgba(221, 222, 224, 0.5)' : 'rgba(221, 222, 224, 0.5)')
 
@@ -27,10 +27,12 @@ const cut = (cutcheack: Boolean) => {
 
     document.getElementsByTagName('body')[0].style.setProperty('--billBg', cutcheack ? '#f6f7f8' : '#343434')
     document.getElementsByTagName('body')[0].style.setProperty('--billSumBg', cutcheack ? '#d0e2fa' : '#f3e4b9')
+    document.getElementsByTagName('body')[0].style.setProperty('--billSumBg2', cutcheack ? 'rgba(208,226,250,0.4)' : 'rgba(243,228,185,0.7)')
+    document.getElementsByTagName('body')[0].style.setProperty('--billSumColor', cutcheack ? '#2979ff' : '#f3e4b9')
     document.getElementsByTagName('body')[0].style.setProperty('--maskBg', cutcheack ? 'rgba(255, 255, 255, 0.4)' : '#999')
 
     document.getElementsByTagName('body')[0].style.setProperty('--textLightColor', cutcheack ? '#999999' : '#999')
-    document.getElementsByTagName('body')[0].style.setProperty('--lightColor', cutcheack ? '#c0c4cc' : '#fff')
+    document.getElementsByTagName('body')[0].style.setProperty('--lightColor', cutcheack ? '#c0c4cc' : '#7e7f80')
 
     document.getElementsByTagName('body')[0].style.setProperty('--keyBoradBg', cutcheack ? '#f8f8fa' : '#282828')
     document.getElementsByTagName('body')[0].style.setProperty('--keyBoradHead', cutcheack ? '#d0e2fa' : '#1d1d1d')

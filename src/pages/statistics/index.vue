@@ -13,7 +13,7 @@
 			<histogram :myData="myHistogramData" :rangeData="histogramRangeData" @changeYearGroup="changeYearGroup" />
 			<LineChart :myData="myLineData" :rangeData="LineRangeData" @changeMonthGroup="changeMonthGroup"></LineChart>
 			<sectorChart :myData="mySectorData" :rangeData="LineRangeData" @changeMonthGroup="changeClassifyMonth" />
-			<view class="classifyList">
+			<view class="classifyList" v-if="classifyList.length">
 				<view v-for="(item, index) in classifyList" class="classifyItem"
 					@click="toClassifyListDetial(item.classify, filterClassifyName(chooseType, item.classify))">
 					<view class="flex">
@@ -22,7 +22,7 @@
 						<span class="text">
 							{{ filterClassifyName(chooseType, item.classify) }}
 						</span>
-						<span class="text">{{ item.count }}笔</span>
+						<span class="textlight">{{ item.count }}笔</span>
 					</view>
 					<view class="flex text">
 						-{{ item.sums.toFixed(2) }}￥
@@ -363,7 +363,7 @@ onMounted(() => {
 			.classifyItem {
 				display: flex;
 				justify-content: space-between;
-				padding: 0 5rpx 20rpx 3px;
+				padding: 0 10rpx 20rpx 3px;
 
 				.flex {
 					display: flex;
@@ -372,6 +372,12 @@ onMounted(() => {
 
 				.text {
 					color: var(--textColor);
+					margin-right: 10rpx;
+				}
+
+				.textlight {
+					color: var(--lightColor);
+					font-size: 14px;
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 import http from '@/utils/request'
 
 export default {
-    update(data: any) {
+    changeState(data: any) {
         return http.request({
             url: '/toBuy/changeState',
             method: 'POST',
@@ -25,6 +25,12 @@ export default {
     delete(data: any) {
         return http.request({
             url: '/toBuy/delete',
+            method: 'POST',
+            data
+        })
+    }, update(data: any) {
+        return http.request({
+            url: '/toBuy/update',
             method: 'POST',
             data
         })
