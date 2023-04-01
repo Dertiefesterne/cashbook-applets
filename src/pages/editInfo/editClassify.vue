@@ -136,7 +136,7 @@ const addNewLabel = async () => {
 .container {
     height: 100vh;
     background-color: var(--pickerContent);
-    color: var(--textColor);
+    // color: var(--textColor);
     padding-bottom: 100rpx;
 
     .content {
@@ -160,7 +160,7 @@ const addNewLabel = async () => {
                 height: 25px;
                 text-align: center;
                 line-height: 25px;
-                background: var(--buttonBg);
+                background: var(--buttonBg2);
                 border-radius: 10px;
                 white-space: nowrap;
             }

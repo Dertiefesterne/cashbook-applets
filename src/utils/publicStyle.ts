@@ -16,6 +16,7 @@ const cut = (cutcheack: Boolean) => {
     document.getElementsByTagName('body')[0].style.setProperty('--warmBg', cutcheack ? '#fef5ec' : '#fef5ec')
     document.getElementsByTagName('body')[0].style.setProperty('--warnColor', cutcheack ? '#FF0000' : '#FF0000')
     document.getElementsByTagName('body')[0].style.setProperty('--buttonBg', cutcheack ? 'rgba(174, 208, 238, 0.5)' : '#454340')
+    document.getElementsByTagName('body')[0].style.setProperty('--buttonBg2', cutcheack ? 'rgba(174, 208, 238, 0.5)' : '#80b8f8')
     document.getElementsByTagName('body')[0].style.setProperty('--cancelButtonBg', cutcheack ? 'rgba(221, 222, 224, 0.5)' : 'rgba(221, 222, 224, 0.5)')
 
     document.getElementsByTagName('body')[0].style.setProperty('--headBg', cutcheack ? '#dfdfe1' : '#1d1d1d')

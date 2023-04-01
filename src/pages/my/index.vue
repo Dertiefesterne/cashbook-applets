@@ -50,7 +50,9 @@
 			<view class="menu-item" @click="isAdvice = true">建议反馈<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item" @click="toAboutUs">关于我们<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item">导出账单<u-icon name="arrow-right"></u-icon></view>
-			<view class="cancellation" @click="loginOut">退出登录</view>
+			<view class="cancellation-box">
+				<view class="cancellation" @click="loginOut">退出登录</view>
+			</view>
 		</view>
 
 		<!-- 建议与反馈弹窗 -->
@@ -201,6 +203,7 @@ page {
 	width: 100%;
 	overflow-y: auto;
 	color: var(--textColor);
+	background-color: var(--pickerContent);
 	padding-bottom: 120rpx;
 
 	.top {
@@ -274,17 +277,21 @@ page {
 			// margin-bottom: 20rpx;
 		}
 
-		.cancellation {
-			margin: 0 auto;
-			margin-top: 20rpx;
-			width: 75%;
-			line-height: 90rpx;
-			text-align: center;
-			height: 90rpx;
-			background: var(--buttonBg);
-			border-radius: 6rem;
-			font-weight: bold;
-			font-size: 30rpx;
+		.cancellation-box {
+			width: 100%;
+			padding: 20rpx 0;
+
+			.cancellation {
+				margin: 0 auto;
+				width: 75%;
+				line-height: 90rpx;
+				text-align: center;
+				height: 90rpx;
+				background: var(--buttonBg);
+				border-radius: 6rem;
+				font-weight: bold;
+				font-size: 30rpx;
+			}
 		}
 	}
 

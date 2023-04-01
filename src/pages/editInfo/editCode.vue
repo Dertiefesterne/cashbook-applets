@@ -156,7 +156,7 @@ const modifyNickName = async () => {
     .confirm {
         margin-top: 60rpx;
         width: 100%;
-        background: var(--buttonBg);
+        background: var(--buttonBg2);
         border-radius: 6rem;
 
         &::after {

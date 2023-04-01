@@ -27,8 +27,11 @@
                         <span v-if="item.item_budget">￥{{ showNumber(item.item_budget) }}</span>
                     </view>
                 </view>
-                <view class="sum">共<span class="stress2">{{ toBuyList.filter(e => e.state == 'N').length
-                }}</span>件物品，预计花费<span class="stress2">{{ showNumber(getSum()) }}</span>元</view>
+                <view class="sum">
+                    <i class="iconfont icon-biaodan"></i>
+                    共<span class="stress2">{{ toBuyList.filter(e => e.state == 'N').length
+                    }}</span>件物品，预计花费<span class="stress2">{{ showNumber(getSum()) }}</span>元
+                </view>
             </view>
             <view class="no-charts" v-else>
                 <i class="iconfont icon-zanwushuju" style="font-size:200rpx"></i>
@@ -47,7 +50,7 @@
                 <span>预算:</span>
                 <input v-model="itemBudget" maxlength="10" type="number" @input="processNum" />
             </view>
-            <p>结果只保留两位小数</p>
+            <view class="tip"><i class="iconfont icon-tishi"></i>结果只保留两位小数</view>
             <view class="but-box">
                 <button hover-class='none' class="save" @click="saveItem(0)" v-if="!editItem.id">保存并继续</button>
                 <button hover-class='none' :class="editItem.id ? 'save' : 'cancel'" @click=saveItem(1)>保存</button>
@@ -256,6 +259,10 @@ onMounted(() => {
             background-color: var(--billSumBg2);
             box-shadow: 0px 0px 3px 3px var(--billSumBg2);
             border-radius: 10px;
+
+            .icon-biaodan {
+                margin-right: 5px;
+            }
         }
 
         .compeleted {
@@ -354,8 +361,14 @@ onMounted(() => {
 
         .tip {
             display: flex;
+            align-items: center;
             color: var(--lightColor);
             font-size: 24rpx;
+
+            .icon-tishi {
+                font-size: 24rpx;
+                margin-right: 2px;
+            }
         }
 
         button {
