@@ -19,8 +19,8 @@
                 </p>
                 <p class="advice">增加账单页面个性推荐</p>
                 <view class="label-box">
-                    <u-tag v-for="(item, index) in selectedLabel" plain plainFill :text="item" closable
-                        :show="selectedLabel.includes(item)" @close="selectedLabel.splice(index, 1)"></u-tag>
+                    <u-tag v-for="(item, index) in selectedLabel" :text="item" closable :show="selectedLabel.includes(item)"
+                        @close="selectedLabel.splice(index, 1)"></u-tag>
                 </view>
             </view>
         </view>
@@ -121,6 +121,7 @@ const addNewLabel = async () => {
 
         .alreadyAdd {
             margin-top: 40rpx;
+            color: var(--textColor);
 
             .label-box {
                 display: flex;

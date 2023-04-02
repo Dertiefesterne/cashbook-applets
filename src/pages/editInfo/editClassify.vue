@@ -16,8 +16,7 @@
             </view>
             <p class="advice"> 建议字数：2</p>
             <view class="alreadyAdd">
-                <p> 系统分类</p>
-                <p class="advice">不可删除</p>
+                <p> 系统分类<span class="advice">(不可删除)</span></p>
                 <!-- 支出 -->
                 <view class="label-box2" v-if="curNow == 0">
                     <u-tag v-for="item in defaultOutputClassify" :text="item.classify_name">
@@ -32,14 +31,14 @@
             <view class="alreadyAdd">
                 <p> 自定义类别<sapn>({{ curNow ? inputClassify?.length : outputClassify?.length }}/3)</sapn>
                 </p>
-                <p class="advice">最多设置3个</p>
+                <!-- <p class="advice">最多设置3个</p> -->
                 <view class="label-box2" v-if="curNow == 0">
-                    <u-tag v-for="(item, index) in outputClassify" plain plainFill closable :text="item"
+                    <u-tag v-for="(item, index) in outputClassify" closable :text="item"
                         :show="outputClassify.includes(item)" @close="outputClassify.splice(index, 1)"></u-tag>
                 </view>
                 <view class="label-box2" v-else>
-                    <u-tag v-for="(item, index) in inputClassify" plain plainFill closable :text="item"
-                        :show="inputClassify.includes(item)" @close="inputClassify.splice(index, 1)"></u-tag>
+                    <u-tag v-for="(item, index) in inputClassify" closable :text="item" :show="inputClassify.includes(item)"
+                        @close="inputClassify.splice(index, 1)"></u-tag>
                 </view>
             </view>
         </view>
@@ -167,12 +166,14 @@ const addNewLabel = async () => {
         }
 
         .advice {
+            margin-left: 3px;
             font-size: 12px;
             color: var(--textLightColor);
         }
 
         .alreadyAdd {
             margin-top: 40rpx;
+            color: var(--textColor);
 
             .label-box {
                 margin-top: 20rpx;
@@ -194,6 +195,14 @@ const addNewLabel = async () => {
                     margin-bottom: 15rpx;
                 }
             }
+        }
+
+        :deep(.u-subsection--button) {
+            background-color: var(--menuItem) !important;
+
+            //     .u-subsection__item {
+            //         background-color: var(--pickerContent);
+            //     }
         }
     }
 

@@ -22,6 +22,13 @@ export default {
             data
         })
     },
+    addClassify(data: any) {
+        return http.request({
+            url: '/userInfo/update/addUserClassify',
+            method: 'POST',
+            data
+        })
+    },
     updateUserMatter(data: any) {
         return http.request({
             url: '/userInfo/update/matterlabel',

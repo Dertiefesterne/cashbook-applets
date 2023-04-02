@@ -226,6 +226,7 @@ const changeChoose = (type: number) => {
 },
     changeClassify = (type: number) => {
         billForm.classify = type
+        console.log('billForm.classify', billForm.classify)
     },
     confirmDate = (e: Event) => {
         showDate.value = false
@@ -377,16 +378,25 @@ const changeChoose = (type: number) => {
         if (classify.value == '') return
         isAddClassify.value = false
         let params = {}
+        let params2 = {}
         if (chooseType.value == -1) {
             params = {
                 userID: loginStore.userID,
                 outputClassify: customOutPutClassify.value.length ? customOutPutClassify.value.join(',') + ',' + classify.value : classify.value
+            }
+            params2 = {
+                userID: loginStore.userID,
+                outputClassify: classify.value
             }
         }
         else {
             params = {
                 userID: loginStore.userID,
                 inputClassify: customInPutClassify.value.length ? customInPutClassify.value.join(',') + ',' + classify.value : classify.value
+            }
+            params2 = {
+                userID: loginStore.userID,
+                inputClassify: classify.value
             }
         }
         console.log('保存参数', params, classify.value)
@@ -396,7 +406,7 @@ const changeChoose = (type: number) => {
             uni.showToast({ title: '添加成功', duration: 800 })
             classify.value = ''
         }
-        const rr = await userInfoApi.updataClassify(params)
+        const rr = await userInfoApi.addClassify(params2)
         console.log('保存类别成功rr', rr)
         let temp = rr.data
         if (chooseType.value == -1)
@@ -626,6 +636,10 @@ onMounted(() => {
             display: flex;
             flex-direction: column;
             align-items: center;
+
+            p {
+                color: var(--textFourthColor);
+            }
         }
     }
 

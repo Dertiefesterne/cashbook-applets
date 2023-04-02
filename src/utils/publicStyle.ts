@@ -44,6 +44,8 @@ const cut = (cutcheack: Boolean) => {
     document.getElementsByTagName('body')[0].style.setProperty('--textColor', cutcheack ? '#282828' : '#d2d2d2')
     document.getElementsByTagName('body')[0].style.setProperty('--textSecondColor', cutcheack ? '#282828' : '#fefefe')
     document.getElementsByTagName('body')[0].style.setProperty('--textThirdColor', cutcheack ? '#282828' : '#eeeeee')
+    document.getElementsByTagName('body')[0].style.setProperty('--textFourthColor', cutcheack ? '#282828' : '#b6b6b6')
+
 
     document.getElementsByTagName('body')[0].style.setProperty('--menuItem', cutcheack ? '#f8f8fa' : '#181818')
 
@@ -56,7 +58,6 @@ const cut = (cutcheack: Boolean) => {
     document.getElementsByTagName('body')[0].style.setProperty('--rightBgcColor', cutcheack ? '#070707' : '#F4F4F4')
 
     // 文字颜色
-    document.getElementsByTagName('body')[0].style.setProperty('--textFourthColor', cutcheack ? '#fff' : '#999999')
     document.getElementsByTagName('body')[0].style.setProperty('--textFifthColor', cutcheack ? '#999999' : '#fff')
     document.getElementsByTagName('body')[0].style.setProperty('--textSixthColor', cutcheack ? '#7c7c83' : '#787878')
     document.getElementsByTagName('body')[0].style.setProperty('--textBorderColor', cutcheack ? '#1a1a1f' : '#EEEEEE')

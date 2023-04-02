@@ -198,16 +198,15 @@ function grouping(group: Array<groupBill>, data: Array<Bill>) {
 async function getNextList() {
   uni.showLoading({ title: '加载中' })
   ++page.value.pageCurrent!
-  // 新分页的分组结果
-  // const res_group = await billServer.getBillGroup(page.value)
   // 新分页的账单数据
-  const res_data = await billServer.getBillPage(page.value)
+  const res = await billServer.getBillPage(page.value)
+  console.log('新分页的账单数据', res)
   // 没有更多数据了
-  if (res_data.data && res_data.data.length == 0) {
+  if (res.data.length == 0) {
     page.value.notMore = true
     uni.showToast({ title: '没有更多了', icon: 'none', duration: 800, mask: true })
   } else {
-    res_data.data.forEach((e: Bill) => {
+    res.data.forEach((e: Bill) => {
       if (billList.value.length == 0 || billList.value[billList.value.length - 1]?.date != e.time.slice(5, 10)) {
         let temp: listObject = {
           date: e.time.slice(5, 10),

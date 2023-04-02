@@ -24,7 +24,7 @@
                         </view>
                     </view>
                     <view class="items text">
-                        {{ item.bill_type == 1 ? "+" : "-" }}{{ item.money.toFixed(2) }}
+                        {{ item.bill_type == 1 ? "+" : "-" }}{{ parseFloat(item.money.toFixed(2)) }}
                     </view>
                 </view>
             </view>
@@ -79,7 +79,8 @@ const props = defineProps({
 })
 
 const dataListSum = computed(() => {
-    return props.dayDate.reduce((sum, e) => sum + Number(e.money * e.bill_type || 0), 0).toFixed(2)
+    let sum = props.dayDate.reduce((sum, e) => sum + Number(e.money * e.bill_type || 0), 0).toFixed(2)
+    return parseFloat(sum)
 })
 
 const allChoose = ref([]),
