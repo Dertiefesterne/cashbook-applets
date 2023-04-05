@@ -22,10 +22,10 @@
 						<span class="text">
 							{{ filterClassifyName(chooseType, item.classify) }}
 						</span>
-						<span class="textlight">{{ item.count }}笔</span>
+						<span class="text">| {{ item.count }}笔</span>
 					</view>
 					<view class="flex text">
-						-{{ item.sums.toFixed(2) }}￥
+						{{ chooseType == 1 ? "+" : "-" }}{{ item.sums.toFixed(2) }}￥
 						<u-icon name="arrow-right"></u-icon>
 					</view>
 				</view>
@@ -109,6 +109,8 @@ const year = new Date().getFullYear() + ''
 
 
 const getYearGroupData = async (year: string, mon: string) => {
+	histogramRangeData.value = []
+	LineRangeData.value = []
 	const params = { userID: storeUserID, groupType: "year", billType: chooseType.value }
 	const res = await billServer.getBillChartData(params)
 	let arr = res.data.map((item: yearGroupItem) => item.date)
@@ -122,6 +124,10 @@ const getYearGroupData = async (year: string, mon: string) => {
 	if (!LineRangeData.value[0].includes(mon))
 		LineRangeData.value[0].unshift(mon)
 	console.log('有数据的年\月份信息', histogramRangeData.value, LineRangeData.value)
+	setTimeout(() => {
+		ready.value = true,
+			console.log('ready--', ready.value)
+	})
 },
 	getMonthGroupData = async (year: string) => {
 		// 每次切换年份，初始化图表数据
@@ -187,7 +193,6 @@ const getYearGroupData = async (year: string, mon: string) => {
 		}
 		mySectorData.value.series.push(temp2)
 		console.log('圆饼图数据', mySectorData.value)
-		setTimeout(() => { ready.value = true })
 	},
 	changeYearGroup = (e: any) => {
 		console.log(e, typeof e)

@@ -99,6 +99,12 @@
       method: 'GET',
       data
     })
+  },
+  exportExcel(){
+    return http.request({
+      url:'/bill/exportExcel',
+      method: 'GET',
+    })
   }
 }
  // 指定类型

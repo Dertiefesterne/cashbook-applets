@@ -20,6 +20,7 @@ export const useloginStore = defineStore({
     return {
       info: {} as userInfo, // 用户信息 , 包含 token
       userID: uni.getStorageSync('userID') ? Number(uni.getStorageSync('userID')) : -1,
+      passWord: uni.getStorageSync('passWord') ? uni.getStorageSync('passWord') : '',
       avatar: uni.getStorageSync('avatar') ? uni.getStorageSync('avatar') : '',
       theme: uni.getStorageSync('theme') ? uni.getStorageSync('theme') : 'light',
     }
@@ -29,6 +30,10 @@ export const useloginStore = defineStore({
     login(userID: number) {
       uni.setStorageSync('userID', userID)
       this.userID = userID
+    },
+    setPassWord(passWord: string) {
+      uni.setStorageSync('passWord', passWord)
+      this.passWord = passWord
     },
     setInfo(info: userInfo) {
       this.info = { ...info }

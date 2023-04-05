@@ -6,6 +6,9 @@
             </template>
         </headTop>
         <view class="content">
+            <view class="image-box">
+                <image src="../../static/img/appIcon.png" mode="aspectFill" />
+            </view>
         </view>
     </view>
 </template>
@@ -33,6 +36,17 @@ const loginStore = useloginStore()
     .content {
         padding: 100rpx 140rpx 0;
 
+        .image-box {
+            width: 150rpx;
+            height: 150rpx;
+            margin: 0 auto;
+            margin-top: 100rpx !important;
+
+            image {
+                width: 100%;
+                height: 100%;
+            }
+        }
     }
 }
 </style>

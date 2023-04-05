@@ -49,7 +49,7 @@
 			<view class="menu-item" @click="toUserManual">使用手册<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item" @click="isAdvice = true">建议反馈<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item" @click="toAboutUs">关于我们<u-icon name="arrow-right"></u-icon></view>
-			<view class="menu-item">导出账单<u-icon name="arrow-right"></u-icon></view>
+			<view class="menu-item" @click="exportExcel">导出账单<u-icon name="arrow-right"></u-icon></view>
 			<view class="cancellation-box">
 				<view class="cancellation" @click="loginOut">退出登录</view>
 			</view>
@@ -58,11 +58,20 @@
 		<!-- 建议与反馈弹窗 -->
 		<u-popup :show="isAdvice" class="advice-popup" mode="center" @close="isAdvice = false">
 			<p class="head-title">建议与反馈</p>
-			<view @click="copyBtn">
-				<p>邮箱：1378279151@qq.com</p>
+			<view @click="copyBtn(email)">
+				<p>邮箱：{{ email }}</p>
 				<p class="copy">将会尽快回复，点击可复制</p>
 			</view>
 			<view class="cancel" @click="isAdvice = false">取消</view>
+		</u-popup>
+		<!-- 下载表格弹窗 -->
+		<u-popup :show="isExport" class="advice-popup" mode="center" @close="isExport = false">
+			<p class="head-title">请复制下面链接前往浏览器进行下载</p>
+			<view @click="copyBtn(exportExcelUrl)">
+				<p>{{ exportExcelUrl }}</p>
+				<p class="copy">点击可复制</p>
+			</view>
+			<view class="cancel" @click="isExport = false">取消</view>
 		</u-popup>
 	</view>
 </template>
@@ -73,9 +82,13 @@ import { onShow } from '@dcloudio/uni-app';
 import userServer from '@/api/userApi'
 import formattereTools from '@/utils/dataUtils'
 import { useloginStore } from '@/pinia-store/login'
+import billApi from '@/api/billApi';
 import cut from '@/utils/publicStyle'
 const loginStore = useloginStore()
 const avaSrc = ref('')
+
+const email = '1378279151@qq.com';
+const exportExcelUrl = 'http://localhost:8080/bill/exportExcel/' + loginStore.userID + '/' + loginStore.passWord
 onMounted(() => {
 	console.log('onM----')
 	if (loginStore.avatar.length)
@@ -93,7 +106,8 @@ onShow(() => {
 const timestamp = loginStore.info.register_timestamp
 const bill_count = loginStore.info.bill_count || 0
 
-const isAdvice = ref(false)
+const isAdvice = ref(false),
+	isExport = ref(false)
 
 const loginOut = () => {
 	uni.showModal({
@@ -150,9 +164,9 @@ const loginOut = () => {
 		current: 0,
 		urls: imgsArray
 	});
-}, copyBtn = () => {
+}, copyBtn = (data: string) => {
 	uni.setClipboardData({
-		data: "1378279151@qq.com",
+		data: data,
 		success: function () {
 			uni.showToast({
 				title: '复制成功',
@@ -185,6 +199,12 @@ const loginOut = () => {
 			"backgroundColor": "#ffffff", // tab 的背景色
 		})
 	}
+}, exportExcel = async () => {
+	// console.log('导出---')
+	// await billApi.exportExcel()
+	//弹出弹窗
+	isExport.value = true
+
 }
 
 onMounted(() => {
@@ -229,6 +249,8 @@ page {
 
 		.name-box {
 			display: flex;
+			font-size: 32rpx;
+			margin-top: 10rpx;
 		}
 
 		.info-box {

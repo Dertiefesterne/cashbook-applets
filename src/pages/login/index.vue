@@ -14,8 +14,8 @@
     <view class="login-btn">
       <button @click="confirmLogin" hover-class='none' :disabled="noRegister">登录</button>
       <button @click="registerUser" hover-class='none' :disabled="!noRegister">注册</button>
-      <button @click="test" hover-class='none'>哈哈</button>
-      <button @click="test2" hover-class='none'>哈哈2</button>
+      <!-- <button @click="test" hover-class='none'>哈哈</button>
+      <button @click="test2" hover-class='none'>哈哈2</button> -->
     </view>
   </view>
 </template>
@@ -59,6 +59,7 @@ const confirmLogin = async () => {
     let userID: number = res.data
     // 全局保存用户ID
     loginStore.login(userID)
+    loginStore.setPassWord(passWord.value)
     getUserInfo(userID)
   } else if (res.data == 0) {
     uni.showToast({

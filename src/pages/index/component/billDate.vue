@@ -24,7 +24,7 @@
                         </view>
                     </view>
                     <view class="items text">
-                        {{ item.bill_type == 1 ? "+" : "-" }}{{ parseFloat(item.money.toFixed(2)) }}
+                        {{ item.bill_type == 1 ? "+" : "-" }}{{ parseFloat(item.money.toFixed(2)) }}￥
                     </view>
                 </view>
             </view>

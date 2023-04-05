@@ -68,7 +68,7 @@ const modifyBudget = async () => {
         }
 
         button {
-            background: var(--buttonBg);
+            background: var(--buttonBg2);
             border-radius: 6rem;
 
             &::after {
