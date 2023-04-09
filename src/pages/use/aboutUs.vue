@@ -9,6 +9,10 @@
             <view class="image-box">
                 <image src="../../static/img/appIcon.png" mode="aspectFill" />
             </view>
+            <p>简易记帐V1.2.0</p>
+            <p>更方便快捷的操作 更清晰简洁的界面</p>
+            <p>帮你养成记账好习惯~</p>
+            <view>邮箱：Dertiefesterne@gmail.com</view>
         </view>
     </view>
 </template>

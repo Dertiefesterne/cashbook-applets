@@ -11,6 +11,13 @@
         data
     })
   },
+  getAnalyzeClassify(data:any){
+      return http.request({
+        url:'/analyze/tokenizer/getCustomClassify',
+        method: 'GET',
+        data
+      })
+  },
 
  
  addBill(data:any) {

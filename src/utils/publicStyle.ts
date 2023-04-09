@@ -49,52 +49,5 @@ const cut = (cutcheack: Boolean) => {
 
     document.getElementsByTagName('body')[0].style.setProperty('--menuItem', cutcheack ? '#f8f8fa' : '#181818')
 
-
-
-
-
-
-    document.getElementsByTagName('body')[0].style.setProperty('--leftBgcColor', cutcheack ? '#0f0f10' : '#fff')
-    document.getElementsByTagName('body')[0].style.setProperty('--rightBgcColor', cutcheack ? '#070707' : '#F4F4F4')
-
-    // 文字颜色
-    document.getElementsByTagName('body')[0].style.setProperty('--textFifthColor', cutcheack ? '#999999' : '#fff')
-    document.getElementsByTagName('body')[0].style.setProperty('--textSixthColor', cutcheack ? '#7c7c83' : '#787878')
-    document.getElementsByTagName('body')[0].style.setProperty('--textBorderColor', cutcheack ? '#1a1a1f' : '#EEEEEE')
-    document.getElementsByTagName('body')[0].style.setProperty('--textHoverColor', cutcheack ? '#4D699A' : '#4D699A')
-
-    //按钮颜色
-    document.getElementsByTagName('body')[0].style.setProperty('--editButton', cutcheack ? '#23252b' : '#ED3938')
-    document.getElementsByTagName('body')[0].style.setProperty('--iconBorderColor', cutcheack ? '#242429' : '#7c7c7c')
-    document.getElementsByTagName('body')[0].style.setProperty('--alreadyAttentionBgc', cutcheack ? '#23252b' : '#EEEEEE ')
-    document.getElementsByTagName('body')[0].style.setProperty('--alreadyAttentionBorder', cutcheack ? '#4a4a51' : '#BFBFBF')
-    document.getElementsByTagName('body')[0].style.setProperty('--cancelButtonBorder', cutcheack ? '#202022' : '#DDDDDD')
-    document.getElementsByTagName('body')[0].style.setProperty('--paginationBorderColor', cutcheack ? '#38373d' : '#DDDDDD')
-
-    //表单颜色
-    document.getElementsByTagName('body')[0].style.setProperty('--formBgcColor', cutcheack ? '#070707' : '#F4F4F4')
-    document.getElementsByTagName('body')[0].style.setProperty('--formBorderColor', cutcheack ? '#232329' : '#DDDDDD')
-    document.getElementsByTagName('body')[0].style.setProperty('--formSwitchBgc', cutcheack ? '#282828' : '#BFBFBF')
-    document.getElementsByTagName('body')[0].style.setProperty('--formCollapseBgc', cutcheack ? '#0c0c0e' : '#EEEEEE')
-
-    //弹窗颜色
-    document.getElementsByTagName('body')[0].style.setProperty('--collectionDialogBgc', cutcheack ? '#151517' : '#F4F4F4 ')
-    document.getElementsByTagName('body')[0].style.setProperty('--collectionDialogBorder', cutcheack ? '#1c1c21' : '#DDDDDD')
-    document.getElementsByTagName('body')[0].style.setProperty('--collectionDialogInput', cutcheack ? '#2b2b31' : '#EEEEEE')
-    document.getElementsByTagName('body')[0].style.setProperty('--collectionDialogButton', cutcheack ? '#2b2b31' : '#999999')
-
-    //"上传认证"按钮颜色
-    document.getElementsByTagName('body')[0].style.setProperty('--certificationLabelBgc', cutcheack ? '#23252b' : '#fff')
-    document.getElementsByTagName('body')[0].style.setProperty('--certificationLabelBorder', cutcheack ? '#292930' : '#BFBFBF')
-
-    //七点专聘部分颜色
-    document.getElementsByTagName('body')[0].style.setProperty('--changeTitleBgc', cutcheack ? '#18181d' : '#fff')
-    document.getElementsByTagName('body')[0].style.setProperty('--changeChoiceBgc', cutcheack ? '#131314' : '#BFBFBF')
-
-    //头像框颜色
-    document.getElementsByTagName('body')[0].style.setProperty('--avaterBgcColor', cutcheack ? 'rgba(40,40,46,0.3)' : 'rgba(221,221,221,0.3)')
-
-    // 我的资料部分颜色
-    //document.getElementsByTagName("body")[0].style.setProperty("--materialAvaterTip", cutcheack ? "#86868d" : "#282828");
 }
 export default cut

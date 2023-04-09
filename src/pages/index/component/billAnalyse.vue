@@ -11,7 +11,7 @@
                     <!-- 标签展示栏 -->
                     <view class="label-box">
                         <textarea :placeholder="placeholder" v-model="inputText" maxlength="15" auto-focus
-                            :style="inputText.length ? 'height:40rpx' : 'height:80rpx'" />
+                            :style="inputText.length ? 'height:40rpx' : 'height:80rpx'" @input="inputBilling" />
                         <u-icon name="grid" size="25" @click="toAddBill"></u-icon>
                     </view>
                     <view class="buttom-content">
@@ -35,6 +35,7 @@ import { onLoad } from '@dcloudio/uni-app';
 import formattereTools from '@/utils/dataUtils'
 import billServer from '@/api/billApi'
 import userInfoApi from '@/api/userInfoApi';
+import customApi from '@/api/customClassifyMatter';
 import dataUtils from '@/utils/dataUtils';
 import { useloginStore } from '@/pinia-store/login'
 const loginStore = useloginStore()
@@ -80,6 +81,10 @@ const billForm = reactive({
     full_sentences: ''
 })
 
+
+const analyzeClassifyId = ref(0),
+    analyzeClassifyName = ref('')
+
 // 点击关闭
 const _close = () => {
     show.value = false
@@ -91,7 +96,8 @@ const _close = () => {
     if (inputText.value == '') {
         return
     }
-    const res = await billServer.analyzeBill({ analyzeText: inputText.value, userID: loginStore.userID })
+
+    const res = await billServer.analyzeBill({ analyzeText: inputText.value, userID: loginStore.userID, classifyId: analyzeClassifyId.value, classifyName: analyzeClassifyName.value })
     console.log('请求结果', res)
     if (res.statusCode == 200) {
         show.value = false
@@ -100,14 +106,26 @@ const _close = () => {
         //调用接口增加账单总数
         const rr = await userInfoApi.addBillCount({ userID: loginStore.userID })
         loginStore.setInfoBillCount(loginStore.info.bill_count + 1)
+        analyzeClassifyId.value = 0
+        analyzeClassifyName.value = ''
     }
+
 }, confirmDate = (e: Event) => {
     showDate.value = false
     const Data = JSON.parse(JSON.stringify(e));
     let data_time = Data[0]
     console.log('Date', Data, data_time)
-}
+}, inputBilling = async () => {
+    console.log('正在输入', inputText.value)
+    // const res = await customApi.getClassify({ userID: loginStore.userID, keyword: inputText.value.replace(/ /g, '') })
+    const res = await billServer.getAnalyzeClassify({ analyzeText: inputText.value, userID: loginStore.userID })
+    if (res.statusCode == 200) {
+        console.log(res)
+        analyzeClassifyId.value = res.data.classify_id
+        analyzeClassifyName.value = res.data.classify_name
+    }
 
+}
 </script>
 
 <style lang="scss" scoped>
