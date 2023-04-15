@@ -51,30 +51,36 @@ import { ref, onMounted, watch } from 'vue'
 import { onLoad } from '@dcloudio/uni-app';
 import headTop from '@/components/headTop.vue';
 import userInfoApi from '@/api/userInfoApi';
-import userApi from '@/api/userApi';
-import { defaultOutputClassify, defaultInputClassify } from '@/utils/staticData'
+import { customClassifyType, CustomClassify, defaultOutputClassify, defaultInputClassify } from '@/utils/staticData'
 import { useloginStore } from '@/pinia-store/login'
 const loginStore = useloginStore()
 const name = ref(loginStore.info.nickname)
 const NewClassify = ref('')
 const userID = loginStore.userID
-const outputClassify = ref<string[]>([])
-const inputClassify = ref<string[]>([])
+const outputClassify = ref<any[]>([])
+const inputClassify = ref<any[]>([])
 const curNow = ref(0)
 const list = ['支出类别', '收入类别']
+
+const allClassify = ref<customClassifyType>(
+    {
+        allOutput: [],
+        inuseOutput: [],
+        allInput: [],
+        inuseInput: []
+    }
+)
+
+
 onMounted(() => {
-    //获取用户惯用词
-    getUserInfoLabel()
+    //获取用户的自定义类别
+    getCustomClassify()
 })
 
-async function getUserInfoLabel() {
-    const res = await userApi.getInformation({ userID: userID })
-    console.log('userInfo----', res.data)
-    if (res.data.outputClassify)
-        outputClassify.value = res.data.outputClassify.split(',')
-    if (res.data.inputClassify)
-        inputClassify.value = res.data.inputClassify.split(',')
-    console.log('2', inputClassify.value)
+async function getCustomClassify() {
+    allClassify.value = await CustomClassify()
+    outputClassify.value = allClassify.value.inuseOutput.filter(e => e.isSys == 'N').map(e => e.classify_name)
+    inputClassify.value = allClassify.value.inuseInput.filter(e => e.isSys == 'N').map(e => e.classify_name)
 }
 
 const addNewLabel = async () => {
@@ -85,18 +91,25 @@ const addNewLabel = async () => {
     }
 
 }, saveLabel = async () => {
-    const res = userInfoApi.updateUserClassify({ userID: userID, outputClassify: outputClassify.value.join(','), inputClassify: inputClassify.value.join(',') })
-    if ((await res).statusCode == 200) {
-        uni.showToast({ title: '保存成功', duration: 500 })
-        loginStore.setInputClassify(inputClassify.value.join(","))
-        loginStore.setOutputClassify(outputClassify.value.join(","))
-        uni.switchTab({
-            url: '/pages/my/index'
-        })
+    if (curNow.value == 0) {
+        const res = userInfoApi.updataClassify({ userID: userID, outputClassify: outputClassify.value.join(',') })
+        if ((await res).statusCode == 200) {
+            uni.showToast({ title: '保存成功', duration: 500 })
+            uni.switchTab({
+                url: '/pages/my/index'
+            })
+        }
+    }
+    else {
+        const res = userInfoApi.updataClassify({ userID: userID, inputClassify: inputClassify.value.join(',') })
+        if ((await res).statusCode == 200) {
+            uni.showToast({ title: '保存成功', duration: 500 })
+            uni.switchTab({
+                url: '/pages/my/index'
+            })
+        }
     }
 
-    userInfoApi.updataClassify({ userID: userID, outputClassify: outputClassify.value.join(',') })
-    userInfoApi.updataClassify({ userID: userID, inputClassify: inputClassify.value.join(',') })
 }, addOutputClassify = async () => {
 
     if (outputClassify.value?.length == 3) {

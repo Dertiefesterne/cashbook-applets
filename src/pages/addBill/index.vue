@@ -99,8 +99,8 @@
             <view class="keyboard">
                 <view class="tagsBox">
                     <scroll-view class="uni-swiper-tab" scroll-x>
-                        <text v-for="item in recommendTags" class="tab" @click="changeMatter(item)">{{
-                            item
+                        <text v-for="item in recommendTags" class="tab" @click="changeMatter(item.keyword)">{{
+                            item.keyword
                         }}</text>
                     </scroll-view>
                     <view class=" iconBox">
@@ -150,6 +150,7 @@ import formattereTools from '@/utils/dataUtils'
 import billServer from '@/api/billApi'
 import userInfoApi from '@/api/userInfoApi';
 import filters from '@/utils/filters'
+import customApi from '@/api/customClassifyMatter';
 import { classifyType, customClassifyType, defaultOutputClassify, defaultInputClassify, CustomClassify } from '@/utils/staticData'
 import dataUtils from '@/utils/dataUtils';
 import { useloginStore } from '@/pinia-store/login'
@@ -167,19 +168,6 @@ const allClassify = ref<customClassifyType>(
     }
 )
 const dataLoad = ref(false)
-const customOutPutClassify = computed(() => {
-    if (loginStore.info.outputClassify != '')
-        return loginStore.info.outputClassify.split(',')
-    else
-        return []
-})
-
-const customInPutClassify = computed(() => {
-    if (loginStore.info.inputClassify != '')
-        return loginStore.info.inputClassify?.split(',')
-    else
-        return []
-})
 
 const chooseType = ref<number>(-1),
     moneyDisplay = ref('0'),
@@ -189,7 +177,7 @@ const chooseType = ref<number>(-1),
     datetimeValue = ref(),
     lastTime = ref(''),
     classify = ref(''),
-    recommendTags = ref<string[]>([])
+    recommendTags = ref<selectedClassifyNode[]>([])
 
 // 保存参数信息
 const billForm = reactive({
@@ -215,7 +203,43 @@ const billForm = reactive({
     notes: '',
 })
 
-const tags = ['外卖', '淘宝', '打车', '吃饭', '零食', '超市', '买菜', '旅游', '机票']
+const tags = [{
+    classify_id: 2,
+    classify_name: '餐饮',
+    keyword: '外卖'
+}, {
+    classify_id: 2,
+    classify_name: '餐饮',
+    keyword: '淘宝'
+}, {
+    classify_id: 2,
+    classify_name: '餐饮',
+    keyword: '打车'
+}, {
+    classify_id: 2,
+    classify_name: '餐饮',
+    keyword: '吃饭'
+}, {
+    classify_id: 2,
+    classify_name: '餐饮',
+    keyword: '零食'
+}, {
+    classify_id: 2,
+    classify_name: '餐饮',
+    keyword: '超市'
+}, {
+    classify_id: 2,
+    classify_name: '餐饮',
+    keyword: '买菜'
+}, {
+    classify_id: 2,
+    classify_name: '餐饮',
+    keyword: '旅游'
+}, {
+    classify_id: 2,
+    classify_name: '餐饮',
+    keyword: '机票'
+}]
 const buttons = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0']
 
 /**
@@ -377,37 +401,25 @@ const changeChoose = (type: number) => {
     addNewClassify = async () => {
         if (classify.value == '') return
         isAddClassify.value = false
-        let params = {}
         let params2 = {}
         if (chooseType.value == -1) {
-            params = {
-                userID: loginStore.userID,
-                outputClassify: customOutPutClassify.value.length ? customOutPutClassify.value.join(',') + ',' + classify.value : classify.value
-            }
             params2 = {
                 userID: loginStore.userID,
                 outputClassify: classify.value
             }
         }
         else {
-            params = {
-                userID: loginStore.userID,
-                inputClassify: customInPutClassify.value.length ? customInPutClassify.value.join(',') + ',' + classify.value : classify.value
-            }
             params2 = {
                 userID: loginStore.userID,
                 inputClassify: classify.value
             }
         }
-        console.log('保存参数', params, classify.value)
-        const res = await userInfoApi.updateUserClassify(params)
-        if (res.statusCode == 200) {
-            chooseType.value == -1 ? loginStore.setOutputClassify(res.data) : loginStore.setInputClassify(res.data)
+        console.log('保存参数', params2, classify.value)
+        const rr = await userInfoApi.addClassify(params2)
+        if (rr.statusCode == 200) {
             uni.showToast({ title: '添加成功', duration: 800 })
             classify.value = ''
         }
-        const rr = await userInfoApi.addClassify(params2)
-        console.log('保存类别成功rr', rr)
         let temp = rr.data
         if (chooseType.value == -1)
             allClassify.value.inuseOutput.push(temp)
@@ -544,16 +556,42 @@ async function getCustomClassify() {
 
 onMounted(() => {
     dataLoad.value = false
+    //获取用户的类别词
+    getUserInfoCustom()
     getCustomClassify()
-    console.log('用户信息---', loginStore.info)
-    let arr = []
-    if (loginStore.info.customMatter)
-        recommendTags.value = loginStore.info.customMatter.split(',')
+    console.log('推荐标签', recommendTags.value)
+})
+
+
+async function getUserInfoCustom() {
+    const res = await customApi.get({ userID: loginStore.userID })
+    recommendTags.value = []
+    res.data.forEach((e: { keyword: string; classify_id: number; classify_name: string; }) => {
+        if (e.keyword.indexOf(',') != -1) {
+            var arr = e.keyword.split(',')
+            arr.forEach((item: any) => {
+                let temp: selectedClassifyNode = {
+                    classify_id: e.classify_id,
+                    classify_name: e.classify_name,
+                    keyword: item
+                }
+                recommendTags.value.push(temp)
+            })
+        }
+        else {
+            recommendTags.value.push(e)
+        }
+    })
     if (recommendTags.value.length < 9) {
         recommendTags.value = recommendTags.value.concat(tags.slice(0, 9 - recommendTags.value.length))
     }
-    console.log('推荐标签', recommendTags.value)
-})
+}
+
+interface selectedClassifyNode {
+    classify_id: number,
+    classify_name: string,
+    keyword: string
+}
 </script>
 
 <style lang="less" scoped>

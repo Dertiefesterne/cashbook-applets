@@ -20,12 +20,10 @@
             </view>
             <p class="advice"> 建议字数2~6字</p>
             <view class="alreadyAdd">
-                <p> 已添加<sapn>({{ selectedLabel.length }}/8)</sapn>
+                <p> 已添加<sapn>({{ saveClassify.length }}/8)</sapn>
                 </p>
                 <p class="advice">增加账单页面个性推荐</p>
                 <view class="label-box">
-                    <u-tag v-for="(item, index) in selectedLabel" :text="item" closable :show="selectedLabel.includes(item)"
-                        @close="selectedLabel.splice(index, 1)"></u-tag>
                     <u-tag v-for="(item, index) in saveClassify" :text="`${item.classify_name}-${item.keyword}`" closable
                         :show="saveClassify.includes(item)" @close="saveClassify.splice(index, 1)"></u-tag>
                 </view>
@@ -54,7 +52,6 @@ const loginStore = useloginStore()
 const name = ref(loginStore.info.nickname)
 const newLabel = ref('')
 const userID = loginStore.userID
-const selectedLabel = ref<string[]>([])
 const close2 = ref(true)
 const show = ref(false)
 const selectedClassify = reactive({
@@ -115,16 +112,10 @@ const selectedList = [[{
 }]]
 
 onMounted(() => {
-    //获取用户惯用词
-    //getUserInfoLabel()
     //获取用户的类别词
     getUserInfoCustom()
 })
 
-async function getUserInfoLabel() {
-    if (loginStore.info.customMatter)
-        selectedLabel.value = loginStore.info.customMatter.split(',')
-}
 async function getUserInfoCustom() {
     const res = await customApi.get({ userID: userID })
     console.log('获取用户的类别词', res.data)
@@ -149,18 +140,6 @@ async function getUserInfoCustom() {
 }
 
 const addNewLabel = async () => {
-    // if (selectedLabel.value.length == 8) {
-    //     newLabel.value = ''
-    //     return
-    // }
-    // else if (selectedLabel.value.includes(newLabel.value)) {
-    //     uni.showToast({ title: '请勿添加重复标签', icon: 'none', duration: 1000 })
-    //     return
-    // }
-    // else
-    //     selectedLabel.value.push(newLabel.value)
-    // newLabel.value = ''
-
     if (saveClassify.value.length > 8) {
         selectedClassify.classify = 0
         selectedClassify.classifyName = ''
@@ -201,8 +180,6 @@ const addNewLabel = async () => {
     },
 
     saveLabel = async () => {
-        // const res = userInfoApi.updateUserMatter({ userID: userID, customMatter: selectedLabel.value.join(',') })
-        // loginStore.setInfoCustomMatter(selectedLabel.value.join(","))
         saveClassifyTree.value.forEach(async e => {
             const res = await customApi.update({ ...e, userID: userID })
         })

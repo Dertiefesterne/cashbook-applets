@@ -9,7 +9,11 @@
             <view class="menu-item">头像<image style="width: 80rpx; height: 80rpx; border-radius: 50%;" :src="avaSrc"
                     mode="aspectFill" @click="choosePic" title="点击修改头像"></image>
             </view>
-            <view class="menu-item">ID <view class="icon">{{ loginStore.userID }}
+            <view class="menu-item">账号名<view class="icon">{{ loginStore.info.user_name }}
+                    <svg-icon title="复制" iconName="icon-fuzhi" @click="copyBtn(loginStore.info.user_name)"></svg-icon>
+                </view>
+            </view>
+            <view class="menu-item">账号ID <view class="icon">{{ loginStore.userID }}
                     <svg-icon title="复制" iconName="icon-fuzhi" @click="copyBtn(loginStore.userID)"></svg-icon>
                     <!-- <i class="iconfont icon-fuzhi" title="复制" @click="copyBtn(loginStore.userID)"></i> -->
                 </view>
@@ -18,7 +22,7 @@
                 <view class="icon">{{ name }}<u-icon name="arrow-right"></u-icon>
                 </view>
             </view>
-            <view class="menu-item" @click="toEditCode">修改密码 <u-icon name="arrow-right"></u-icon></view>
+            <!-- <view class="menu-item" @click="toEditCode">修改密码 <u-icon name="arrow-right"></u-icon></view> -->
             <view class="menu-item" @click="toEditCode">记账笔数 <span>{{ loginStore.info.bill_count }}笔</span>
             </view>
             <view class="menu-item" @click="toEditCode">注册时间 <span>{{ datefilters.dateFormattimes(timestamp, 'full')

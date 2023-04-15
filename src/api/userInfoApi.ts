@@ -8,13 +8,6 @@ export default {
             data
         })
     },
-    updateUserClassify(data: any) {
-        return http.request({
-            url: '/userInfo/update/classify',
-            method: 'POST',
-            data
-        })
-    },
     updataClassify(data: any) {
         return http.request({
             url: '/userInfo/update/userClassify',
@@ -25,13 +18,6 @@ export default {
     addClassify(data: any) {
         return http.request({
             url: '/userInfo/update/addUserClassify',
-            method: 'POST',
-            data
-        })
-    },
-    updateUserMatter(data: any) {
-        return http.request({
-            url: '/userInfo/update/matterlabel',
             method: 'POST',
             data
         })
