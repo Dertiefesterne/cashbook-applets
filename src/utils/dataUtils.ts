@@ -135,5 +135,26 @@ export default {
         // 31天时间
         var monTime = 31 * 24 * 3600 * 1000
         return time + (direction * monTime) + ''
+    },
+    floatToint(moneyDisplay: string) {
+        var src = ''
+        let index = moneyDisplay.indexOf('.')
+        if (index != -1) {
+            if (moneyDisplay.length - index == 3) {
+                src = moneyDisplay.replace('.', '')
+            }
+            else if (moneyDisplay.length - index == 2) {
+                src = moneyDisplay.replace('.', '') + '0'
+            }
+        }
+        else
+            src = Number(moneyDisplay) + '00'
+        return parseInt(src)
+    },
+    showNumber(n: number) {
+        let f = n / 100;
+        let s = n % 100;
+        let src = f + '.' + s
+        return parseFloat(src)
     }
 }

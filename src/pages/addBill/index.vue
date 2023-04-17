@@ -130,7 +130,7 @@
         <u-popup :show="isAddClassify" class="addClassify" mode="center" @close="isAddClassify = false">
             <view class="head-title">添加分类</view>
             <p>分类名称:</p>
-            <view class="input-box"> <input v-model.trim="classify" maxlength="3"
+            <view class="input-box"> <input v-model="classify" maxlength="3"
                     @input="classify = classify.replace(/ /g, '')" />
                 <text v-if="classify.length" class="matter-num">{{
                     classify.length
@@ -143,16 +143,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed, nextTick, watch } from 'vue'
 // 引入 
 import { onLoad } from '@dcloudio/uni-app';
-import formattereTools from '@/utils/dataUtils'
 import billServer from '@/api/billApi'
 import userInfoApi from '@/api/userInfoApi';
 import filters from '@/utils/filters'
 import customApi from '@/api/customClassifyMatter';
 import { classifyType, customClassifyType, defaultOutputClassify, defaultInputClassify, CustomClassify } from '@/utils/staticData'
 import dataUtils from '@/utils/dataUtils';
+import { showNumber } from '@/utils/funTools'
 import { useloginStore } from '@/pinia-store/login'
 import BillTypeIconVue from '../../components/billTypeIcon.vue'
 const loginStore = useloginStore()
@@ -188,7 +188,7 @@ const billForm = reactive({
     /**  账单类型 */
     bill_type: -1,
     /**  账单时间 */
-    data_time: formattereTools.dateFormattere(new Date(), 'full'),
+    data_time: dataUtils.dateFormattere(new Date(), 'full'),
     /**  账单时间戳 */
     timestamp: new Date().getTime() + '',
     /**  账单金额 */
@@ -290,11 +290,12 @@ const changeChoose = (type: number) => {
             uni.showToast({ title: '运算式长度超出上限', icon: 'none', duration: 800 })
             return
         }
-        // 金额最多8位数，否则超出上限
-        // if (moneyDisplay.value.length > 15) {
-        //     uni.showToast({ title: '运算式长度超出上限', icon: 'none', duration: 800 })
-        //     return
-        // }
+        let dotIndex = moneyDisplay.value.indexOf('.')
+        if (moneyDisplay.value.length - dotIndex > 3) {
+            uni.showToast({ title: '最多两位小数', icon: 'none', duration: 800 })
+            //截掉超出的最后一位
+            moneyDisplay.value.slice(0, moneyDisplay.value.length - 1)
+        }
         if (e == '=') {
             let lastNum = moneyDisplay.value[moneyDisplay.value.length - 1]
             if (lastNum == '+' || lastNum == '-' || lastNum == '.') {
@@ -376,7 +377,8 @@ const changeChoose = (type: number) => {
             moneyDisplay.value = '0'
     },
     savaBill = async () => {
-        let money = Number(moneyDisplay.value)
+        //浮点数转为整数存进数据库中
+        let money = dataUtils.floatToint(moneyDisplay.value)
         billForm.money = money
         billForm.bill_type = chooseType.value
         if (billForm.money == 0) {
@@ -429,7 +431,9 @@ const changeChoose = (type: number) => {
         // getCustomClassify()
     },
     modifyBill = async () => {
-        let money = Number(moneyDisplay.value)
+        //let money = Number(moneyDisplay.value)
+        //浮点数转为整数存进数据库中
+        let money = dataUtils.floatToint(moneyDisplay.value)
         billForm.money = money
         billForm.bill_type = chooseType.value
         billForm.classify_name = filterClassifyName(billForm.bill_type, billForm.classify)
@@ -482,7 +486,7 @@ const deleteBill = () => {
 },
     jumpPage = () => {
         // 如果修改的账单时间距离(最新一条账单)超过7天，就刷新
-        // if (formattereTools.dateFormatterDispose(billForm.timestamp, Number(lastTime.value))) {
+        // if (dataUtils.dateFormatterDispose(billForm.timestamp, Number(lastTime.value))) {
         //     uni.reLaunch({
         //         url: '/pages/index/index'
         //     })
@@ -515,8 +519,25 @@ const deleteBill = () => {
         /**  账单备注 */
         billForm.notes = res.data.notes
         chooseType.value = res.data.bill_type
-        moneyDisplay.value = billForm.money + ''
+        moneyDisplay.value = showNumber(billForm.money) + ''
+    }, inspectNum = (num: string) => {
+        let dotIndex = num.indexOf('.')
+        if (num.length - dotIndex > 3 && dotIndex != -1) {
+            uni.showToast({ title: '最多输入两位小数', icon: 'none', duration: 800 })
+            //截掉超出的最后一位
+            console.log('截点前后', num, dotIndex, num.slice(0, dotIndex + 3))
+            moneyDisplay.value = num.slice(0, dotIndex + 3)
+
+        }
     }
+
+watch(
+    moneyDisplay,
+    (newProps) => {
+        console.log('改变了')
+        inspectNum(newProps)
+    },
+);
 
 
 function inCalc() {

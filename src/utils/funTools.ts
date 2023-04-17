@@ -24,3 +24,28 @@ export function throttle(fn: () => void, time: number = 2000) {
         }, time);
     };
 }
+
+
+export function showNumber(n: number) {
+    let f = n / 100;
+    let s = n % 100;
+    let src = f + '.' + s
+    return parseFloat(src)
+}
+
+
+export function floatToint(moneyDisplay: string) {
+    var src = ''
+    let index = moneyDisplay.indexOf('.')
+    if (index != -1) {
+        if (moneyDisplay.length - index == 3) {
+            src = moneyDisplay.replace('.', '')
+        }
+        else if (moneyDisplay.length - index == 2) {
+            src = moneyDisplay.replace('.', '') + '0'
+        }
+    }
+    else
+        src = Number(moneyDisplay) + '00'
+    return parseInt(src)
+}

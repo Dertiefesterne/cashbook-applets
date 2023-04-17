@@ -6,7 +6,7 @@
                 <view class="first">
                     <view>
                         <p>今天支出</p>
-                        <p>{{ sumData.daySum ? sumData.daySum.toFixed(2) : 0 }}￥</p>
+                        <p>{{ sumData.daySum ? showNumber(sumData.daySum) : 0 }}￥</p>
                     </view>
                     <view @click="editBudget">点击设置预算
                         <i class="icon xianxing-15"></i>
@@ -16,11 +16,11 @@
                 <view class="second">
                     <view>
                         <p>本月结余</p>
-                        <p>{{ sumData.monthSum ? sumData.monthSum.toFixed(2) : '0' }}￥</p>
+                        <p>{{ sumData.monthSum ? showNumber(sumData.monthSum) : '0' }}￥</p>
                     </view>
                     <view>
                         <p>本月剩余预算</p>
-                        <p>{{ surplus ? surplus : 0 }}￥</p>
+                        <p>{{ surplus ? showNumber(surplus) : 0 }}￥</p>
                     </view>
                 </view>
             </view>
@@ -52,15 +52,20 @@ const props = defineProps({
 const surplus = computed(() => {
     if (props.sumData.monthSum > 0)
         return loginStore.info.budget
-    else
-        return (loginStore.info.budget - Math.abs(props.sumData.monthSum)).toFixed(2)
+    else { return loginStore.info.budget + props.sumData.monthSum }
 })
 
 const editBudget = () => {
     uni.navigateTo({
         url: '/pages/editInfo/editBudget'
     })
-}
+},
+    showNumber = (n: number) => {
+        let f = n / 100;
+        let s = n % 100;
+        let src = f + '.' + s
+        return parseFloat(src)
+    }
 </script>
 
 <style lang="less" scoped>

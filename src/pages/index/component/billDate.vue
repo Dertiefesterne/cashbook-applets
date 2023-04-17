@@ -3,7 +3,7 @@
         <view class="content" :class="{ 'mask': isEdit }">
             <view class="head ">
                 <p>{{ formattereTools.dateFormatString(dayDate[0].time) }}</p>
-                <p>总支出：{{ dataListSum }}￥</p>
+                <p>总支出：{{ showNumber(dataListSum) }}￥</p>
             </view>
             <!-- 每一项账单 -->
             <view class="bill-list" v-for="(item, index) in dayDate" @click="toBillDetial(item.bill_id, index)">
@@ -24,7 +24,7 @@
                         </view>
                     </view>
                     <view class="items text">
-                        {{ item.bill_type == 1 ? "+" : "-" }}{{ parseFloat(item.money.toFixed(2)) }}￥
+                        {{ item.bill_type == 1 ? "+" : "-" }}{{ showNumber(item.money) }}￥
                     </view>
                 </view>
             </view>
@@ -38,6 +38,8 @@ import billServer from '@/api/billApi'
 import { useloginStore } from '@/pinia-store/login'
 import { useStore } from '@/pinia-store/my'
 import formattereTools from '@/utils/dataUtils'
+
+import { showNumber } from '@/utils/funTools'
 import { Bill } from '@/entity/bill'
 import filters from '@/utils/filters'
 import { classifyType, defaultOutputClassify, customClassifyType, defaultInputClassify, CustomClassify } from '@/utils/staticData'
@@ -79,8 +81,8 @@ const props = defineProps({
 })
 
 const dataListSum = computed(() => {
-    let sum = props.dayDate.reduce((sum, e) => sum + Number(e.money * e.bill_type || 0), 0).toFixed(2)
-    return parseFloat(sum)
+    let sum = props.dayDate.reduce((sum, e) => sum + Number(e.money * e.bill_type || 0), 0)
+    return sum
 })
 
 const allChoose = ref([]),
