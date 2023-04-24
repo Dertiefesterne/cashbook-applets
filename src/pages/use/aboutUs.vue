@@ -9,9 +9,11 @@
             <view class="image-box">
                 <image src="../../static/img/appIcon.png" mode="aspectFill" />
             </view>
-            <p>简易记帐V1.2.0</p>
-            <p>更方便快捷的操作 更清晰简洁的界面</p>
-            <p>帮你养成记账好习惯~</p>
+            <view class="version">简易记帐V1.2.0</view>
+            <view class="introduce">
+                <p>方便快捷的操作 清晰简洁的界面</p>
+                <p>帮你养成记账好习惯~</p>
+            </view>
             <view>邮箱：Dertiefesterne@gmail.com</view>
         </view>
     </view>
@@ -49,6 +51,26 @@ const loginStore = useloginStore()
             image {
                 width: 100%;
                 height: 100%;
+            }
+        }
+
+        .version {
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .introduce {
+
+            p {
+                &:first-child {
+                    margin-top: 8px;
+                }
+
+                &:nth-child(2) {
+                    margin-bottom: 8px;
+
+                }
             }
         }
     }

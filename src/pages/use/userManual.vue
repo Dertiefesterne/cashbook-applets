@@ -6,6 +6,7 @@
             </template>
         </headTop>
         <view class="content">
+            gg
         </view>
     </view>
 </template>
@@ -13,7 +14,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-import { onLoad } from '@dcloudio/uni-app';
 import headTop from '@/components/headTop.vue';
 import { useloginStore } from '@/pinia-store/login'
 const loginStore = useloginStore()
@@ -32,7 +32,6 @@ const loginStore = useloginStore()
 
     .content {
         padding: 100rpx 140rpx 0;
-
     }
 }
 </style>

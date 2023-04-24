@@ -46,10 +46,10 @@
 					<p>修改密码</p>
 				</view>
 			</view>
+			<view class="menu-item" @click="exportExcel">导出账单<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item" @click="toUserManual">使用手册<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item" @click="isAdvice = true">建议反馈<u-icon name="arrow-right"></u-icon></view>
 			<view class="menu-item" @click="toAboutUs">关于我们<u-icon name="arrow-right"></u-icon></view>
-			<view class="menu-item" @click="exportExcel">导出账单<u-icon name="arrow-right"></u-icon></view>
 			<view class="cancellation-box">
 				<view class="cancellation" @click="loginOut">退出登录</view>
 			</view>

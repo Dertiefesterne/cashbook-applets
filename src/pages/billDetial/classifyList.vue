@@ -9,6 +9,7 @@
                 </billDate>
             </view>
         </view>
+        <view class="footer"></view>
     </view>
 </template>
 
@@ -64,13 +65,20 @@ const getClassifyList = async (classify: number, mon: number, type: number) => {
 <style lang="less" scoped>
 .my-container {
     height: 100vh;
-    background-color: var(--keyBoradBg);
-    padding-bottom: 100rpx;
+    background-color: var(--pickerContent);
+    padding-bottom: 80rpx;
+    overflow-y: auto;
 
     .my-content {
         padding: 130rpx 20rpx 0;
-
     }
 
+    .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 30rpx;
+        background-color: var(--pickerContent);
+    }
 }
 </style>

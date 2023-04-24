@@ -69,8 +69,12 @@ const opts = {
 const chooseMonth = (e: chooseEven) => {
     show.value = false
     chooseValue.value = e.value[0] + ''
-    console.log('改变月份', chooseValue.value)
-    emit('changeMonthGroup', e.value[0] + '')
+    console.log('改变月份2', chooseValue.value)
+    const params = {
+        year: chooseValue.value.slice(0, 4),
+        month: chooseValue.value.slice(5, 7)
+    }
+    emit('changeMonthGroup', params)
 }
 watch(
     props.rangeData,

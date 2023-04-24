@@ -15,7 +15,7 @@
                         <span v-if="item.item_budget" class="stress">￥{{ showNumber(item.item_budget) }}</span>
                     </view>
                 </view>
-                <view>已购买>></view>
+                <view class="text">已购买>></view>
                 <view v-for="(item, index) in toBuyList.filter(e => e.state == 'Y')" class="item compeleted">
                     <!-- Y-待购买  N-已买 -->
                     <u-checkbox-group v-model="checkboxValue1">
@@ -289,6 +289,11 @@ onMounted(() => {
 
         .stress2 {
             font-weight: bold;
+        }
+
+        .text {
+            font-weight: bold;
+            font-size: 30rpx;
         }
     }
 

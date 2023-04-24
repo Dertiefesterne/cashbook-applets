@@ -33,15 +33,31 @@
                 </p>
                 <!-- <p class="advice">最多设置3个</p> -->
                 <view class="label-box2" v-if="curNow == 0">
-                    <u-tag v-for="(item, index) in outputClassify" closable :text="item"
-                        :show="outputClassify.includes(item)" @close="outputClassify.splice(index, 1)"></u-tag>
+                    <u-tag v-for="(item, index) in outputClassify" closable :text="item.classify_name"
+                        :show="outputClassify.includes(item)" @close="outputClassify.splice(index, 1)"
+                        @click="modifyClassifyName(index, item)"></u-tag>
                 </view>
                 <view class="label-box2" v-else>
-                    <u-tag v-for="(item, index) in inputClassify" closable :text="item" :show="inputClassify.includes(item)"
-                        @close="inputClassify.splice(index, 1)"></u-tag>
+                    <u-tag v-for="(item, index) in inputClassify" closable :text="item.classify_name"
+                        :show="inputClassify.includes(item)" @close="inputClassify.splice(index, 1)"
+                        @click="modifyClassifyName(index, item)"></u-tag>
                 </view>
             </view>
         </view>
+        <!-- 修改自定义类别名字弹窗 -->
+        <u-popup :show="isModifyClassify" class="addClassify" mode="center" @close="isModifyClassify = false">
+            <view class="head-title">修改类别名称</view>
+            <p>分类名称:</p>
+            <view class="input-box"> <input v-model="modifyingName" maxlength="3"
+                    @input="modifyingName = modifyingName.replace(/ /g, '')" />
+                <text v-if="modifyingName.length" class="matter-num">{{
+                    modifyingName.length
+                }}/3</text>
+            </view>
+            <button hover-class='none' class="save" @click="comfireModifyClassifyName"
+                :disabled="modifyingName.length == 0">完成</button>
+            <button hover-class='none' class="cancel" @click="isModifyClassify = false">取消</button>
+        </u-popup>
     </view>
 </template>
 
@@ -71,6 +87,7 @@ const allClassify = ref<customClassifyType>(
     }
 )
 
+const isModifyClassify = ref(false), modifyingName = ref(''), modifyingId = ref(0), modifyingIndex = ref(0)
 
 onMounted(() => {
     //获取用户的自定义类别
@@ -79,8 +96,18 @@ onMounted(() => {
 
 async function getCustomClassify() {
     allClassify.value = await CustomClassify()
-    outputClassify.value = allClassify.value.inuseOutput.filter(e => e.isSys == 'N').map(e => e.classify_name)
-    inputClassify.value = allClassify.value.inuseInput.filter(e => e.isSys == 'N').map(e => e.classify_name)
+    outputClassify.value = allClassify.value.inuseOutput.filter(e => e.isSys == 'N').map(e => {
+        return {
+            classify_name: e.classify_name,
+            classify_id: e.classify_id
+        }
+    })
+    inputClassify.value = allClassify.value.inuseInput.filter(e => e.isSys == 'N').map(e => {
+        return {
+            classify_name: e.classify_name,
+            classify_id: e.classify_id
+        }
+    })
 }
 
 const addNewLabel = async () => {
@@ -92,7 +119,8 @@ const addNewLabel = async () => {
 
 }, saveLabel = async () => {
     if (curNow.value == 0) {
-        const res = userInfoApi.updataClassify({ userID: userID, outputClassify: outputClassify.value.join(',') })
+        const outputClassify1 = outputClassify.value.map(e => e.classify_name)
+        const res = userInfoApi.updataClassify({ userID: userID, outputClassify: outputClassify1.join(',') })
         if ((await res).statusCode == 200) {
             uni.showToast({ title: '保存成功', duration: 500 })
             uni.switchTab({
@@ -101,7 +129,8 @@ const addNewLabel = async () => {
         }
     }
     else {
-        const res = userInfoApi.updataClassify({ userID: userID, inputClassify: inputClassify.value.join(',') })
+        const inputClassify1 = inputClassify.value.map(e => e.classify_name)
+        const res = userInfoApi.updataClassify({ userID: userID, inputClassify: inputClassify1.join(',') })
         if ((await res).statusCode == 200) {
             uni.showToast({ title: '保存成功', duration: 500 })
             uni.switchTab({
@@ -117,12 +146,16 @@ const addNewLabel = async () => {
         uni.showToast({ title: '添加个数已达上限', icon: 'none', duration: 800 })
         return
     }
-    else if (outputClassify.value?.includes(NewClassify.value)) {
+    else if (outputClassify.value?.findIndex(e => e.classify_name == NewClassify.value) != -1) {
         uni.showToast({ title: '请勿添加重复类别', icon: 'none', duration: 800 })
         return
     }
     else {
-        outputClassify.value.push(NewClassify.value)
+        let temp = {
+            classify_name: NewClassify.value,
+            classify_id: -1
+        }
+        outputClassify.value.push(temp)
         NewClassify.value = ''
     }
 }, addinputClassify = async () => {
@@ -131,17 +164,49 @@ const addNewLabel = async () => {
         uni.showToast({ title: '添加个数已达上限', icon: 'none', duration: 800 })
         return
     }
-    else if (inputClassify.value.includes(NewClassify.value)) {
+    else if (inputClassify.value.findIndex(e => e.classify_name == NewClassify.value) != -1) {
         uni.showToast({ title: '请勿添加重复类别', icon: 'none', duration: 800 })
         return
     }
     else {
-        inputClassify.value.push(NewClassify.value)
+        let temp = {
+            classify_name: NewClassify.value,
+            classify_id: -1
+        }
+        inputClassify.value.push(temp)
         NewClassify.value = ''
     }
 }, sectionChange = (index: number) => {
     curNow.value = index;
-}
+}, modifyClassifyName = (index: number, item: any) => {
+    isModifyClassify.value = true
+    modifyingName.value = item.classify_name
+    modifyingId.value = item.classify_id
+    modifyingIndex.value = index
+    console.log('修改该类别名字---', item)
+
+},
+    comfireModifyClassifyName = () => {
+        let temp = {
+            classify_name: modifyingName.value,
+            classify_id: modifyingId.value
+        }
+        if (curNow.value == 0) {
+            outputClassify.value.splice(modifyingIndex.value, 1, temp)
+            if (modifyingId.value != -1) {
+                //发请求修改类名
+                userInfoApi.modifyClassifyName({ classify_name: modifyingName.value, classify_id: modifyingId.value })
+            }
+        }
+        else {
+            inputClassify.value.splice(modifyingIndex.value, 1, temp)
+            if (modifyingId.value != -1) {
+                //发请求修改类名
+                userInfoApi.modifyClassifyName({ classify_name: modifyingName.value, classify_id: modifyingId.value })
+            }
+        }
+        isModifyClassify.value = false
+    }
 </script>
 
 <style lang="less" scoped>
@@ -219,5 +284,68 @@ const addNewLabel = async () => {
         }
     }
 
+}
+
+.addClassify {
+    :deep(.u-popup__content) {
+        width: 70%;
+        height: 36%;
+        background-color: var(--pickerContent);
+        position: relative;
+        border-radius: 10rpx;
+        padding: 40rpx;
+
+        .head-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 32rpx;
+            margin-bottom: 20rpx;
+        }
+
+        p {
+            margin-bottom: 10rpx;
+        }
+
+        .input-box {
+            width: 80%;
+            display: flex;
+            font-size: 32rpx;
+            // border-bottom: 2px solid rgb(165, 165, 165);
+            border-bottom: 2px solid var(--borderColor);
+            align-items: center;
+            padding: 5rpx 15rpx;
+            margin: 0 auto;
+
+            input {
+                width: 100%;
+                padding: 1prpx;
+            }
+
+            .matter-num {
+                font-size: 28rpx;
+                color: var(--textLightColor);
+            }
+        }
+
+        button {
+            width: 80%;
+            border-radius: 6rem;
+
+            &::after {
+                border: none;
+            }
+        }
+
+        .save {
+            margin-top: 30rpx;
+            background: var(--buttonBg);
+            text-align: center;
+        }
+
+        .cancel {
+            background-color: var(--cancelButtonBg);
+            margin-top: 10rpx;
+        }
+    }
 }
 </style>

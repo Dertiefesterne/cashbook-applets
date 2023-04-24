@@ -22,11 +22,14 @@ import { onLoad } from '@dcloudio/uni-app';
 import headTop from '@/components/headTop.vue';
 import userInfoServer from '@/api/userInfoApi';
 import { useloginStore } from '@/pinia-store/login'
+import { showNumber } from '@/utils/funTools';
 const loginStore = useloginStore()
 const infoBudget = ref(loginStore.info.budget)
 
 const budget = ref('')
-
+onMounted(() => {
+    budget.value = showNumber(loginStore.info.budget) + ''
+})
 
 const modifyBudget = async () => {
     console.log('modifyNickName', budget.value)

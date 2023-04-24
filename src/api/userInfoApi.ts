@@ -22,6 +22,13 @@ export default {
             data
         })
     },
+    modifyClassifyName(data: any) {
+        return http.request({
+            url: '/userInfo/update/modifyClassifyName',
+            method: 'POST',
+            data
+        })
+    },
     uploadImg(data: any) {
         return http.request({
             url: '/userInfo/userAvatar/upload',

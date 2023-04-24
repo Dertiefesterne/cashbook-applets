@@ -91,7 +91,7 @@
             </view>
             <!-- 日历弹窗选择器 -->
             <u-calendar :show="showDate" mode="single" @confirm="confirmDate" @click="confirmDateClick" :minDate="minDate"
-                :maxDate="maxDate" monthNum="3" closeOnClickOverlay @close="showDate = false"></u-calendar>
+                :maxDate="maxDate" monthNum="12" closeOnClickOverlay @close="showDate = false"></u-calendar>
             <!-- 时间弹窗选择器 -->
             <u-datetime-picker :show="showTime" v-model="datetimeValue" mode="time" @confirm="confirmTime"
                 closeOnClickOverlay @cancel="showTime = false"></u-datetime-picker>
@@ -156,7 +156,7 @@ import { showNumber } from '@/utils/funTools'
 import { useloginStore } from '@/pinia-store/login'
 import BillTypeIconVue from '../../components/billTypeIcon.vue'
 const loginStore = useloginStore()
-const minDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, -1), 'sDate')
+const minDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(4, -1), 'sDate')
 const maxDate = dataUtils.dateFormattimes(dataUtils.getMonTimes(1, 1), 'sDate')
 
 const allClassify = ref<customClassifyType>(
@@ -289,12 +289,6 @@ const changeChoose = (type: number) => {
         if (moneyDisplay.value.length > 15) {
             uni.showToast({ title: '运算式长度超出上限', icon: 'none', duration: 800 })
             return
-        }
-        let dotIndex = moneyDisplay.value.indexOf('.')
-        if (moneyDisplay.value.length - dotIndex > 3) {
-            uni.showToast({ title: '最多两位小数', icon: 'none', duration: 800 })
-            //截掉超出的最后一位
-            moneyDisplay.value.slice(0, moneyDisplay.value.length - 1)
         }
         if (e == '=') {
             let lastNum = moneyDisplay.value[moneyDisplay.value.length - 1]
@@ -527,7 +521,6 @@ const deleteBill = () => {
             //截掉超出的最后一位
             console.log('截点前后', num, dotIndex, num.slice(0, dotIndex + 3))
             moneyDisplay.value = num.slice(0, dotIndex + 3)
-
         }
     }
 

@@ -47,7 +47,7 @@ const billID = ref(),
     showDate = ref(false),
     inputText = ref(''),
     show = ref(false),
-    placeholder = ref("试试输入“打车22块”、“逛超市买菜58.3元”、“买资料39.9”、“工资收入1万”")
+    placeholder = ref("试试输入“打车22块”、“吃饭58.3元”、“买衣服39.9”、“工资收入1万”")
 
 const emit = defineEmits(['update:modelValue', 'addBill']),
     props = defineProps({

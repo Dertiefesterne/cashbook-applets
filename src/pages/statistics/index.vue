@@ -25,7 +25,7 @@
 						<span class="text">| {{ item.count }}笔</span>
 					</view>
 					<view class="flex text">
-						{{ chooseType == 1 ? "+" : "-" }}{{ item.sums.toFixed(2) }}￥
+						{{ chooseType == 1 ? "+" : "-" }}{{ showNumber(item.sums) }}￥
 						<u-icon name="arrow-right"></u-icon>
 					</view>
 				</view>
@@ -50,6 +50,7 @@ import { useloginStore } from '@/pinia-store/login'
 import { chart, interSeries, sector, sectorSeries, sectorSeriesData } from '@/entity/chart'
 import filters from '@/utils/filters'
 import formattereTools from '@/utils/dataUtils'
+import { showNumber } from '@/utils/funTools'
 import histogram from './component/histogramChart.vue'
 import LineChart from './component/LineChart.vue';
 import sectorChart from './component/sectorChart.vue';
@@ -122,7 +123,7 @@ const getYearGroupData = async (year: string, mon: string) => {
 	if (!histogramRangeData.value[0].includes(year))
 		histogramRangeData.value[0].push(year)
 	if (!LineRangeData.value[0].includes(mon))
-		LineRangeData.value[0].unshift(mon)
+		LineRangeData.value[0].unshift(year + '-' + mon)
 	console.log('有数据的年\月份信息', histogramRangeData.value, LineRangeData.value)
 	setTimeout(() => {
 		ready.value = true,
@@ -143,7 +144,7 @@ const getYearGroupData = async (year: string, mon: string) => {
 			// 如果是今年的数据按月份分组的话，顺便记录下有数据的月份信息
 			// arr.push(res.data[i].date.slice(5))
 			let index = Number(res.data[i].date.slice(5)) - 1
-			myHistogramData.value.series[0].data[index] = res.data[i].sums
+			myHistogramData.value.series[0].data[index] = showNumber(res.data[i].sums)
 		}
 	},
 	initDayGroupData = (month: string) => {
@@ -165,21 +166,21 @@ const getYearGroupData = async (year: string, mon: string) => {
 		myLineData.value.series.push(temp)
 		console.log('初始化月度数据表格', myLineData.value)
 	},
-	getDayGroupData = async (month: string) => {
+	getDayGroupData = async (year: string, month: string) => {
 		initDayGroupData(month)
-		const params = { userID: Number(storeUserID), groupType: "day", billType: chooseType.value, month: month }
+		const params = { userID: Number(storeUserID), groupType: "day", billType: chooseType.value, year: year, month: month }
 		const res = await billServer.getBillChartData(params)
 		for (let i = 0; i < res.data.length; i++) {
 			let index = Number(res.data[i].date.slice(8)) - 1
-			myLineData.value.series[0].data[index] = res.data[i].sums
+			myLineData.value.series[0].data[index] = showNumber(res.data[i].sums)
 		}
 		console.log('折线图数据', myLineData.value)
 	},
-	getClassifyGroupData = async (month: string) => {
+	getClassifyGroupData = async (year: string, month: string) => {
 		// 每次切换月份，初始化图表数据
 		mySectorData.value.categories = []
 		mySectorData.value.series = []
-		const params = { userID: Number(storeUserID), groupType: "classify", billType: chooseType.value, month: month }
+		const params = { userID: Number(storeUserID), groupType: "classify", billType: chooseType.value, year: year, month: month }
 		const res = await billServer.getBillChartData(params)
 		let temp2: sectorSeries = {
 			name: month + '月分类',
@@ -189,7 +190,7 @@ const getYearGroupData = async (year: string, mon: string) => {
 		for (let i = 0; i < res.data.length; i++) {
 			mySectorData.value.categories.push(filterClassifyName(chooseType.value, res.data[i].classify))
 			// series部分
-			temp2.data.push({ name: filterClassifyName(chooseType.value, res.data[i].classify), value: res.data[i].sums })
+			temp2.data.push({ name: filterClassifyName(chooseType.value, res.data[i].classify), value: showNumber(res.data[i].sums) })
 		}
 		mySectorData.value.series.push(temp2)
 		console.log('圆饼图数据', mySectorData.value)
@@ -200,12 +201,13 @@ const getYearGroupData = async (year: string, mon: string) => {
 	},
 	changeMonthGroup = (e: any) => {
 		console.log(e, typeof e)
-		getDayGroupData(e)
+		//
+		getDayGroupData(e.year, e.month)
 	},
 	changeClassifyMonth = (e: any) => {
 		console.log(e, typeof e)
-		currentClassifyMonth.value = Number(e)
-		getClassifyGroupData(e)
+		currentClassifyMonth.value = Number(e.month)
+		getClassifyGroupData(e.year, e.month)
 	},
 	goAddBill = () => {
 		uni.navigateTo({
@@ -232,8 +234,8 @@ const getYearGroupData = async (year: string, mon: string) => {
 		getYearGroupData(year, mm)
 		getMonthGroupData(year)
 		currentClassifyMonth.value = Number(mm)
-		getDayGroupData(mm)
-		getClassifyGroupData(mm)
+		getDayGroupData(year, mm)
+		getClassifyGroupData(year, mm)
 	}
 
 async function getCustomClassify() {

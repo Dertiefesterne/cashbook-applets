@@ -1,27 +1,44 @@
 <template>
   <view class="content ">
     <view class="top">
-      <h3>登录页</h3>
+      <view class="content">
+        <view class="image-box">
+          <image src="../../static/img/appIcon.png" mode="aspectFill" />
+        </view>
+        <p>{{ registerState ? '注册页' : '登录页' }}</p>
+      </view>
     </view>
-    <view class="table">
-      <view><input maxlength="15" placeholder="用户名/账号ID" v-model="userName" @input="ifRegister" />
+    <view class="table" v-if="!registerState">
+      <view><input maxlength="15" placeholder="账号名/账号ID" v-model="userName" @input="ifRegister" />
       </view>
       <view class="info-warn" v-if="noRegister && userName.length">
         <u-icon name="info-circle" color="red"></u-icon>该账号尚未注册
       </view>
       <view><input maxlength="15" type="password" placeholder="密码" v-model="passWord" /></view>
     </view>
+    <view class="table" v-else>
+      <view><input maxlength="15" placeholder="账号名" v-model="userName" @input="ifRegister" />
+      </view>
+      <view class="info-warn" v-if="!noRegister && userName.length">
+        <u-icon name="info-circle" color="red"></u-icon>该账号已被注册
+      </view>
+      <view><input maxlength="15" type="password" placeholder="请设置密码" v-model="passWord" /></view>
+      <view><input maxlength="15" type="password" placeholder="请再次输入密码" v-model="passWord1" /></view>
+      <view class="info-warn" v-if="!passWordSame">
+        <u-icon name="info-circle" color="red"></u-icon>两次输入密码不一致
+      </view>
+    </view>
     <view class="login-btn">
-      <button @click="confirmLogin" hover-class='none' :disabled="noRegister">登录</button>
-      <button @click="registerUser" hover-class='none' :disabled="!noRegister">注册</button>
-      <!-- <button @click="test" hover-class='none'>哈哈</button>
-      <button @click="test2" hover-class='none'>哈哈2</button> -->
+      <button @click="confirmLogin" hover-class='none' :disabled="noRegister" v-if="!registerState">登录</button>
+      <button @click="registerState = false" hover-class='none' v-else>去登录</button>
+      <button @click="registerUser" hover-class='none'
+        :disabled="(!noRegister && registerState) || (!passWordSame && registerState)">注册</button>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import userServer from '@/api/userApi'
 import { debounce } from '@/utils/funTools'
 import { useloginStore } from '@/pinia-store/login'
@@ -30,7 +47,15 @@ const loginStore = useloginStore()
 
 const userName = ref(''),
   passWord = ref(''),
+  passWord1 = ref(''),
   noRegister = ref(false)
+
+const registerState = ref(false)
+
+const passWordSame = computed(() => {
+  return passWord.value === passWord1.value
+})
+
 
 const confirmLogin = async () => {
   if (userName.value == "") {
@@ -78,7 +103,10 @@ const confirmLogin = async () => {
 }
 
 const registerUser = async () => {
-  if (!noRegister) return
+  if (!registerState.value) {
+    registerState.value = true
+    return
+  }
   const res = await userServer.register({ userName: userName.value, passWord: passWord.value })
   if (res.statusCode == 200) {
     uni.showToast({
@@ -147,9 +175,35 @@ onMounted(() => {
     width: 100%;
     display: flex;
     justify-content: center;
-    padding-top: 300rpx;
+    align-items: center;
+    // padding-top: 300rpx;
+    height: 250px;
     // background-color: #aed0ee;
     background: var(--primaryColor);
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      p {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 10px 0 0 0;
+      }
+
+      .image-box {
+        width: 150rpx;
+        height: 150rpx;
+
+        image {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
   }
 
   .table {

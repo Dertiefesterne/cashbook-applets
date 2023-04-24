@@ -1,9 +1,17 @@
 <template>
   <view class="big-container">
-    <view class="head">
+    <!-- <view class="head">
       <p>记账</p>
       <p @click="change">{{ isEdit ? '取消' : '批量管理' }}</p>
-    </view>
+    </view> -->
+    <headTop>
+      <template v-slot:icon-l>
+        记账
+      </template>
+      <template v-slot:icon-r>
+        <text @click="change">{{ isEdit ? '取消' : '批量管理' }}</text>
+      </template>
+    </headTop>
     <view class="content">
       <billSum :isEdit="isEdit" :sumData="moneySum"></billSum>
       <view class="btn-box">
@@ -30,6 +38,7 @@ import {
   onLoad
 } from '@dcloudio/uni-app';
 import userServer from '@/api/userApi'
+import headTop from '@/components/headTop.vue';
 import billServer from '@/api/billApi'
 import { useloginStore } from '@/pinia-store/login'
 import { Bill, groupBill, listObject } from '@/entity/bill'

@@ -133,7 +133,7 @@ export default {
         // 今天时间戳
         var time = new Date().getTime()
         // 31天时间
-        var monTime = 31 * 24 * 3600 * 1000
+        var monTime = month * 31 * 24 * 3600 * 1000
         return time + (direction * monTime) + ''
     },
     floatToint(moneyDisplay: string) {
